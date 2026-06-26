@@ -759,6 +759,8 @@
   .topnav a{display:none}
   .topnav .badge{display:none}
   .numgrid{grid-template-columns:1fr}
+  .otpwrap{gap:8px}
+  .otpbox{flex:1 1 0;min-width:0;width:auto;max-width:50px;font-size:20px}
   .icongrid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
   .bpchip{width:100%}
   .toc{gap:7px}
