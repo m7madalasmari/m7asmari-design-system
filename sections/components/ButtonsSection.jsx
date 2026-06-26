@@ -19,7 +19,7 @@ export default function ButtonsSection({ v }) {
 <span className="cap" style={css('margin-top:28px')}>أزرار ذات حالات — اضغط وانتظر</span>
 <div className="btnrow"><button className={okBtnCls} onClick={runOk}>{(okSpin) ? (<React.Fragment><span className="btnspin"></span></React.Fragment>) : null}{(okCheck) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></React.Fragment>) : null}<span>{okLabel}</span>{(okArrow) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></React.Fragment>) : null}</button><button className={errBtnCls} onClick={runErr}>{(errSpin) ? (<React.Fragment><span className="btnspin"></span></React.Fragment>) : null}{(errX) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></React.Fragment>) : null}<span>{errLabel}</span></button></div>
 <span className="cap" style={css('margin-top:28px')}>الأساسي — كل الحالات</span>
-<div className="btnmatrix" style={css('grid-template-columns:repeat(4,max-content)')}>
+<div className="btnmatrix">
 <Button variant="primary">افتراضي</Button><Button variant="primary is-hover">مرور</Button><Button variant="primary is-active">مضغوط</Button><Button variant="primary is-disabled">معطّل</Button>
 </div>
 </ShowcasePanel>
