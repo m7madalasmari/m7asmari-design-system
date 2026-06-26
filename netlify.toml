@@ -1,0 +1,15 @@
+[build]
+  # Base directory: فارغ (جذر المستودع)
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # تثبيت نسخة Node لضمان توافق Vite 5
+  NODE_VERSION = "20"
+
+# تطبيق صفحة واحدة: أي مسار غير موجود يرجع إلى index.html
+# (الأصول الحقيقية في dist/ تُخدَم أولًا قبل تطبيق هذا التحويل)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
