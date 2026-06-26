@@ -249,7 +249,7 @@ function ButtonsSection({ v }) {
 <span className="cap" style={css('margin-top:28px')}>أزرار ذات حالات — اضغط وانتظر</span>
 <div className="btnrow"><button className={okBtnCls} onClick={runOk}>{(okSpin) ? (<React.Fragment><span className="btnspin"></span></React.Fragment>) : null}{(okCheck) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></React.Fragment>) : null}<span>{okLabel}</span>{(okArrow) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></React.Fragment>) : null}</button><button className={errBtnCls} onClick={runErr}>{(errSpin) ? (<React.Fragment><span className="btnspin"></span></React.Fragment>) : null}{(errX) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></React.Fragment>) : null}<span>{errLabel}</span></button></div>
 <span className="cap" style={css('margin-top:28px')}>الأساسي — كل الحالات</span>
-<div className="btnmatrix" style={css('grid-template-columns:repeat(4,max-content)')}>
+<div className="btnmatrix">
 <Button variant="primary">افتراضي</Button><Button variant="primary is-hover">مرور</Button><Button variant="primary is-active">مضغوط</Button><Button variant="primary is-disabled">معطّل</Button>
 </div>
 </ShowcasePanel>
@@ -805,12 +805,13 @@ function GuidelinesSection({ v }) {
 function ResponsiveSection({ v }) {
   return (
 <section className="section" id="responsive" data-screen-label="Responsive">
-<SectionHeader kicker={"04 — مرجع"} title={"التجاوب"} desc={"نقاط توقّف موحّدة. الشبكات تنهار إلى عمود واحد، والأشرطة تتكيّف على الموبايل."} />
+<SectionHeader kicker={"04 — مرجع"} title={"التجاوب"} desc={"نقاط توقّف موحّدة وطباعة مرنة. الشبكات تتدرّج من الشاشة الكبيرة إلى عمود واحد، والشريط العلوي يتكيّف."} />
 <ShowcasePanel><div className="fx wrap gap16">
-<div className="bpchip"><b>موبايل</b><code>&lt; 760px · عمود واحد</code></div>
-<div className="bpchip"><b>لوحي</b><code>760 – 1024px</code></div>
+<div className="bpchip"><b>شاشة صغيرة</b><code>&lt; 480px · أزرار أيقونات</code></div>
+<div className="bpchip"><b>موبايل</b><code>480 – 760px · عمود واحد</code></div>
+<div className="bpchip"><b>لوحي</b><code>760 – 1024px · عمودان</code></div>
 <div className="bpchip"><b>سطح المكتب</b><code>&gt; 1024px · 1120px max</code></div>
-</div><p className="t-sm" style={css('margin-top:18px')}>صغّر نافذة المتصفّح لأقل من 760 بكسل لرؤية الشبكات تتحوّل إلى عمود واحد وإخفاء روابط الشريط العلوي.</p></ShowcasePanel>
+</div><p className="t-sm" style={css('margin-top:18px')}>العناوين الكبيرة تتدرّج بسلاسة عبر <code className="mono">clamp()</code> بدل القفز عند نقطة توقّف واحدة. صغّر نافذة المتصفّح لرؤية الشبكات تتحوّل تدريجيًا إلى عمود واحد، والشريط العلوي يتقلّص حتى أزرار أيقونات فقط.</p></ShowcasePanel>
 </section>
   );
 }
@@ -818,7 +819,7 @@ function ResponsiveSection({ v }) {
 
 function TopBar({ themeLabel, toggleCmd, toggleTheme }) {
   return (
-    <div className="topbar"><div className="topbar-in"><div className="brandmark"><span className="logo">M</span>M7asmari</div><div className="topnav"><span>الأسس</span><span>المكوّنات</span><a href="#patterns" style={css('color:inherit;text-decoration:none')}>الأنماط</a><button className="themetoggle" aria-label="تبديل السمة" onClick={toggleTheme}><i data-lucide="moon"></i>{themeLabel}</button><button className="cmdtrigger" aria-label="فتح لوحة الأوامر" onClick={toggleCmd}><i data-lucide="search"></i>بحث<span className="cmdkbd">⌘K</span></button><span className="badge brand"><span className="dot"></span>v1.0</span></div></div></div>
+    <div className="topbar"><div className="topbar-in"><div className="brandmark"><span className="logo">M</span>M7asmari</div><div className="topnav"><span>الأسس</span><span>المكوّنات</span><a href="#patterns" style={css('color:inherit;text-decoration:none')}>الأنماط</a><button className="themetoggle" aria-label="تبديل السمة" onClick={toggleTheme}><i data-lucide="moon"></i><span className="tb-lbl">{themeLabel}</span></button><button className="cmdtrigger" aria-label="فتح لوحة الأوامر" onClick={toggleCmd}><i data-lucide="search"></i><span className="tb-lbl">بحث</span><span className="cmdkbd">⌘K</span></button><span className="badge brand"><span className="dot"></span>v1.0</span></div></div></div>
   );
 }
 

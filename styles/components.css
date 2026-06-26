@@ -40,7 +40,7 @@
 .btn.primary.is-active{background:#000;transform:translateY(1px) scale(.985)}
 .btn.primary.is-focus{box-shadow:var(--ring)}
 .btn.is-disabled{opacity:.42;cursor:not-allowed;pointer-events:none}
-.btnmatrix{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 14px;align-items:center}
+.btnmatrix{display:grid;grid-template-columns:repeat(4,max-content);gap:18px 14px;align-items:center}
 /* INPUTS */
 .field{display:flex;flex-direction:column;gap:7px}
 .label{font-size:14px;font-weight:700;color:var(--ink)}
@@ -128,7 +128,7 @@
 .cmdtrigger svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
 .featsec{display:grid;grid-template-columns:340px 1fr;gap:56px;align-items:start}
 .featintro{position:sticky;top:90px}
-.feat-h{font-size:38px;font-weight:800;font-family:var(--font-display);line-height:1.25;letter-spacing:-.02em}
+.feat-h{font-size:clamp(27px,3.8vw,38px);font-weight:800;font-family:var(--font-display);line-height:1.25;letter-spacing:-.02em}
 .feat-d{font-size:17px;line-height:1.75;color:var(--ink-2);margin:18px 0 0;text-wrap:pretty}
 .featgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
 @media (max-width:900px){.featsec{grid-template-columns:1fr;gap:32px}.featintro{position:static}.featgrid{grid-template-columns:1fr}}
@@ -723,4 +723,47 @@
 .num-delta.down{color:var(--red-ink)}
 .num-delta svg{width:14px;height:14px}
 .iconcell svg{width:24px;height:24px}.themetoggle svg{width:18px;height:18px}.dd-head svg{width:20px;height:20px}
-@media (max-width:760px){.cols2,.cols3,.cols4,.guide{grid-template-columns:1fr}.sectionhead{flex-direction:column;align-items:flex-start;gap:6px}.secdesc{text-align:right;max-width:none}.h1{font-size:38px}.sectitle{font-size:28px}.page{padding:0 20px 80px}.topnav span{display:none}.topbar-in{padding:14px 20px}.icongrid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}}
+/* ===== Responsive layer (tablet → mobile → small). Order matters: narrower wins. ===== */
+/* لوحي — 760–1024px: الشبكات الكثيفة تنزل لعمودين، وحشوة أنحف. */
+@media (max-width:1024px){
+  .page{padding:0 32px 100px}
+  .topbar-in{padding:16px 32px}
+  .cols3,.cols4{grid-template-columns:repeat(2,1fr)}
+  .btnmatrix{grid-template-columns:repeat(2,max-content)}
+  .hero{padding:56px 0 20px}
+  .section{margin-top:80px}
+}
+/* موبايل — أقل من 760px: عمود واحد، الشريط العلوي يتقلّص، الجداول تمرّر أفقيًا. */
+@media (max-width:760px){
+  .cols2,.cols3,.cols4,.guide{grid-template-columns:1fr}
+  .numgrid,.dashstats{grid-template-columns:repeat(2,1fr)}
+  .abgrid{grid-template-columns:repeat(2,max-content)}
+  .sectionhead{flex-direction:column;align-items:flex-start;gap:6px}
+  .secdesc{text-align:right;max-width:none}
+  .page{padding:0 20px 72px}
+  .topbar-in{padding:14px 20px}
+  .topnav{gap:14px}
+  .topnav span{display:none}
+  .cmdkbd{display:none}
+  .icongrid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+  .hero{padding:44px 0 8px}
+  .section{margin-top:64px}
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tbl{min-width:560px}
+}
+/* شاشة صغيرة — أقل من 480px: حشوة أدنى، أزرار الشريط أيقونات فقط. */
+@media (max-width:480px){
+  .page{padding:0 16px 56px}
+  .topbar-in{padding:12px 16px}
+  .topnav{gap:10px}
+  .topnav a{display:none}
+  .topnav .badge{display:none}
+  .numgrid{grid-template-columns:1fr}
+  .icongrid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
+  .bpchip{width:100%}
+  .toc{gap:7px}
+  .tocchip{font-size:13px;padding:6px 12px}
+  .hero{padding:36px 0 4px}
+  .themetoggle .tb-lbl,.cmdtrigger .tb-lbl{display:none}
+  .themetoggle,.cmdtrigger{padding:8px;gap:0}
+}
