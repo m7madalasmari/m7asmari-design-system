@@ -1,5 +1,54 @@
 # سجل التغييرات — M7asmari Design System
 
+## 2026-06-27 — المرحلة الثانية: تقوية النظام (مكوّنات قابلة لإعادة الاستخدام + وصولية + اختبارات)
+
+تحويل النظام من «موقع عرض» إلى نظام تصميم أقرب للاستخدام الحقيقي — **بلا أي تغيير في الهوية البصرية**.
+
+### مكوّنات قابلة لإعادة الاستخدام (جديدة في `components/`)
+استُخرجت الحالة والمنطق من `App.jsx` إلى مكوّنات قائمة بذاتها تدير حالتها داخليًا (`useState`)، بـAPI واضح، مع الحفاظ على نفس الأصناف والمظهر:
+
+| المكوّن | API مختصر |
+|---|---|
+| `Modal` | `open · onClose · labelledBy · describedBy · ariaLabel` |
+| `Drawer` | `open · onClose · placement(left\|right\|bottom) · ariaLabel · labelledBy` |
+| `Tabs` | `variant(pill\|seg\|und) · tabs[{id,label,panel?}] · defaultActive · showPanel · ariaLabel` |
+| `Accordion` | `items[{id,icon,title,body}] · defaultOpen · allowToggle` |
+| `OtpInput` | `length · status · onChange · onComplete · label` |
+| `Slider` | `value · onChange · min · max · step · ariaLabel` |
+| `Pagination` | `total · defaultPage · onChange · ariaLabel` |
+| `TagsInput` | `defaultTags · onChange · placeholder · ariaLabel` |
+
+دوال مساعدة نقيّة قابلة للاختبار: `app/lib/sort.js` (`sortRows`, `nextSortDir`, `ariaSortFor`) و`app/lib/calendar.js` (`buildMonth`)، وخطّافات وصولية في `app/lib/a11y.js` (`useFocusTrap`, `useInertWhenClosed`, `prefersReducedMotion`, `getFocusable`).
+
+### تنحيف `App.jsx`
+- من **685 → 560 سطرًا**، والحالة المركزية من ~40 حقلًا إلى ~27 (الباقي يخصّ أقسامًا لم تُستخرَج بعد).
+- أُزيلت الحالة/المعالِجات/مفاتيح `renderVals` الخاصّة بـ Modal/Drawer/Tabs/Accordion/OTP/Slider/Pagination/Tags/ENS/Amount.
+- التحقّق المباشر لحقلَي ENS والمبلغ نُقل لحالة محلية داخل `InputsSection`.
+
+### الوصولية (a11y)
+- **النوافذ والأدراج:** `role="dialog"` + `aria-modal` + حبس التركيز + Escape + إرجاع التركيز للزر الفاتح + `inert` عند الإغلاق.
+- **التبويبات:** `role=tablist/tab/tabpanel` + `aria-selected` + `aria-controls` + roving tabindex + أسهم (مراعية لـ RTL) + Home/End.
+- **الأكورديون:** ترويسات أزرار حقيقية + `aria-expanded`/`aria-controls` + تنقّل بالأسهم. (كانت `<div onClick>` غير وصولة بلوحة المفاتيح.)
+- **الجدول:** ترويسات فرز أزرار + `aria-sort`.
+- **التقويم:** أيام وأزرار تنقّل أزرار حقيقية + `aria-label`/`aria-current`/`aria-pressed`.
+- **عناصر الاختيار:** `role=switch/checkbox/radio` + `aria-checked` + تفعيل بـ Enter/Space + `radiogroup` (أُصلِحت أزرار التبديل الفارغة بلا اسم).
+- **OTP / المنزلق:** `role=group` بأسماء لكل خانة / `role=slider` بقيم `aria-valuemin/max/now`.
+- **الرفع:** `role=progressbar` لأشرطة التقدّم. **القوائم:** `role=listbox/option`/`combobox`.
+- **الحركة المخفّضة:** بالإضافة لقاعدة CSS العامّة، أصبح عدّ الأرقام والتمرير الناعم يحترمان `prefers-reduced-motion` في JS.
+
+### الاختبارات (جديد)
+- **Vitest + Testing Library + jsdom** — `npm test` / `npm run test:run`.
+- **47 اختبارًا (10 ملفات)** تغطّي: Modal، Drawer، Tabs، Accordion، OtpInput، Slider، Pagination، TagsInput، منطق الفرز، وبناء التقويم.
+
+### تنظيف الدين التقني
+- `index.dev.html` (مُولّد) لم يعد متعقّبًا في git (أُضيف لـ`.gitignore`) — يُعاد توليده بـ`python3 build-dev.py` (حُدِّث ليشمل `app/lib/*`). أزال ازدواجية خطر الانحراف عن المصدر.
+- أُزيلت 18 استيرادًا ميتًا (15 في `App.jsx` + 3 `css` في chrome).
+
+### ما بقي مؤجَّلًا (بوعي هندسي)
+Combobox/Select **عيّنات بصرية ساكنة** (لا حالة) → حُسّنت وصوليتها بدل استخراجها. الاستخراج الكامل لـ Calendar/FileUpload/SwipeList كمكوّنات عامّة مؤجَّل (مرتبطة بعمق ببيانات `App`)؛ حُسّنت وصوليتها في مكانها. Stepper بلا حالة فعلية.
+
+---
+
 ## المرحلة 1 — فصل التوكنز (لا تغيير بصري)
 
 نُقلت كل قواعد الـCSS من `<style>` المضمّن داخل الصفحة إلى ملفات منظمة، **حرفيًا ودون تغيير أي قيمة** (عدا إصلاحات التباين أدناه). التقسيم مثبت أنه «بلا فقد» (lossless) عبر فحص تطابق طول النص الكامل:

@@ -484,7 +484,7 @@
 .acc{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
 .acc-item{border-bottom:1px solid var(--border)}
 .acc-item:last-child{border-bottom:none}
-.acc-head{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer}
+.acc-head{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer;width:100%;border:none;background:transparent;font:inherit;color:inherit;text-align:inherit}
 .acc-head:hover{background:var(--surface-2)}
 .acc-head svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .acc-ico2{width:36px;height:36px;border-radius:var(--r-sm);background:var(--surface-2);color:var(--ink-2);display:grid;place-items:center;flex:none;transition:background .25s var(--ease),color .25s var(--ease),transform .3s var(--ease-spring)}
@@ -769,3 +769,11 @@
   .themetoggle .tb-lbl,.cmdtrigger .tb-lbl{display:none}
   .themetoggle,.cmdtrigger{padding:8px;gap:0}
 }
+
+/* ===== المرحلة الثانية — إعادة ضبط أزرار محوّلة من عناصر غير تفاعلية (وصولية) ===== */
+/* ترويسات الجدول القابلة للفرز: زرّ حقيقي بلوحة المفاتيح بدل th قابل للنقر فقط */
+.th-sort{border:none;background:transparent;font:inherit;color:inherit;cursor:pointer;padding:0;display:inline-flex;align-items:center;gap:4px}
+.tbl th.sortable:hover .th-sort{color:var(--ink)}
+/* أزرار تنقّل التقويم وأيام التقويم: حافظ على المظهر مع جعلها أزرارًا */
+.cal-btn{font:inherit;padding:0}
+button.cal-day{border:none;background:transparent;font:inherit;padding:0;width:100%}

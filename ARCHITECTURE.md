@@ -5,7 +5,7 @@
 > ## ✅ المرحلة الأولى مكتملة ومستقرة
 > التفكيك الهيكلي (الخطوات 1–7) **مُنجَز ومُتحقَّق منه**: التوكنز والـCSS مفصولة، dc-runtime حُوّل إلى React قياسي، والـChrome + مكوّنات التوثيق + المكوّنات الأساسية + الأقسام (40) + الأنماط كلها في ملفات مستقلّة. `App.jsx` = 685 سطرًا (منطق/حالة + render-قشرة). **الهوية البصرية لم تتغيّر** — تطابق DOM مؤكَّد عبر 21 جولة QA، 0 أخطاء/تحذيرات.
 >
-> **المرحلة الثانية (مؤجَّلة):** تحويل المكوّنات **ذات الحالة** (Modal, Drawer, Slider, Calendar, OTP, Table-sorting, Tabs, FileUpload, Accordion, Stepper, Select, Combobox, TagsInput, Pagination, SwipeList) إلى مكوّنات React مستقلّة عبر prop-threading — **تبدأ فقط عند حاجة فعلية لإعادة الاستخدام**.
+> **المرحلة الثانية ✅ منجَزة (2026-06-27):** استُخرجت 8 مكوّنات تفاعلية مستقلّة (Modal, Drawer, Tabs, Accordion, OtpInput, Slider, Pagination, TagsInput) تدير حالتها داخليًا بـ`useState`، مع وصولية شاملة واختبارات Vitest (47). `App.jsx` انخفض إلى **560 سطرًا**. التفاصيل في [`CHANGELOG.md`](CHANGELOG.md) والقسم «المرحلة الثانية» أدناه.
 >
 > **تمّ قبل إغلاق المرحلة الأولى:** فحص جاهزية البناء، تهيئة أصول `public/` (lucide + avatar)، QA بصري نهائي معتمَد، ثم **إزالة كامل مرجع dc وأدوات مقارنته** (`legacy.dc.html`, `support.js`, `preview.html`, `qa.html`, `build-qa.py`).
 
@@ -82,3 +82,28 @@ fonts/  assets/  (أصول)
 - **الأساسي (Vite):** `index.html` → `app/main.jsx` → `app/App.jsx` + `app/chrome/*` + `app/lib/css.js`. يستورد CSS من `tokens/` و`styles/`. للبناء/النشر: `npm i && npm run build` (يبني سحابيًا على Vercel بلا Node محلي).
 - **معاينة محلية بلا Node:** `index.dev.html` (يجمّع نفس مصادر `app/` في سكربت Babel واحد، React عام من `vendor/`). للتحديث بعد تعديل `app/`: `python3 build-dev.py`.
 - **مرجع dc الأصلي:** `legacy.dc.html` + `support.js` — **حُذِفا** بعد اعتماد QA البصري النهائي. (`preview.html` كان يعتمد عليهما فصار غير فعّال — أداة QA فقط.)
+
+## المرحلة الثانية — تقوية النظام (منجَزة 2026-06-27)
+
+**الهدف:** تحويل الأقسام التفاعلية من markup مدفوع بـ`v={V}` إلى **مكوّنات قائمة بذاتها** تدير حالتها داخليًا، بـAPI واضح ووصولية كاملة، **بلا أي تغيير بصري**.
+
+### طبقة المكوّنات الجديدة (`components/`)
+- **مكوّنات بحالة داخلية:** `Modal`, `Drawer`, `Tabs`, `Accordion`, `OtpInput`, `Slider`, `Pagination`, `TagsInput`. كلٌّ يستهلكه قسمه عبر API صريح (props) بدل قراءة `V`. الأصناف والـmarkup محفوظة حرفيًا.
+- **النمط:** بدل دمج الحالة في `App`، كل مكوّن `useState` + يبعث عبر callbacks (`onChange`/`onComplete`/`onClose`). الأقسام تحمل حالة عرض محلية صغيرة عند الحاجة (مثل `fee` للمنزلق، `status` لـOTP).
+
+### طبقة المنطق/الوصولية (`app/lib/`)
+- `a11y.js` — `useFocusTrap` (حبس تركيز + Escape + إرجاع التركيز)، `useInertWhenClosed` (inert + aria-hidden)، `prefersReducedMotion`، `getFocusable`.
+- `sort.js` — `sortRows`/`nextSortDir`/`ariaSortFor` (منطق فرز الجدول، نقيّ).
+- `calendar.js` — `buildMonth` (بناء خلايا الشهر، نقيّ).
+هذه دوال **نقيّة** → تُختبَر مباشرة بلا DOM.
+
+### الوصولية
+أدوار ARIA كاملة للنوافذ/الأدراج/التبويبات/الأكورديون/الجدول/التقويم/عناصر الاختيار/القوائم؛ تنقّل لوحة مفاتيح ومراعاة RTL؛ حبس تركيز للطبقات؛ واحترام `prefers-reduced-motion` في CSS وJS.
+
+### الاختبارات (`test/`)
+Vitest + Testing Library + jsdom — `npm run test:run`. 47 اختبارًا (10 ملفات): سلوك المكوّنات الثمانية + منطق `sort` و`calendar`.
+
+### نموذج الربط الآن (هجين، مقصود)
+- **مُستخرَج (حالة داخلية):** المكوّنات الثمانية أعلاه — لا تمرّ عبر `V`.
+- **غير مُستخرَج بعد (لا يزال `v={V}`):** الأقسام المرتبطة بعمق ببيانات `App` (الجدول، التقويم، الرفع، السحب، لوحة التحكم، الإشعارات، عناصر الاختيار، لوحة الأوامر). حُسّنت وصوليتها في مكانها.
+- **ساكن (عيّنات بصرية):** Combobox، Select، Stepper — لا حالة؛ وصولية فقط.
