@@ -1,0 +1,1481 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>M7asmari Design System — dev preview</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%2300a6ef'/%3E%3Ctext%20x='16'%20y='23'%20font-family='system-ui'%20font-size='19'%20font-weight='800'%20fill='%23fff'%20text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens/tokens.css" />
+<link rel="stylesheet" href="tokens/themes.css" />
+<link rel="stylesheet" href="styles/base.css" />
+<link rel="stylesheet" href="styles/components.css" />
+<script src="vendor/react.production.min.js"></script>
+<script src="vendor/react-dom.production.min.js"></script>
+<script src="vendor/lucide.min.js"></script>
+<script src="vendor/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+function css(v) {
+  if (v == null) return undefined;
+  if (typeof v === 'object') return v;
+  const o = {};
+  String(v).split(';').forEach((d) => {
+    const i = d.indexOf(':'); if (i < 0) return;
+    let k = d.slice(0, i).trim(); const val = d.slice(i + 1).trim();
+    if (!k) return;
+    if (k.startsWith('--')) { o[k] = val; return; }
+    k = k.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+    o[k] = val;
+  });
+  return o;
+}
+
+function CodeBlock({ children }) {
+  return (<pre className="expcode">{children}</pre>);
+}
+
+function ColorScale({ name, varLabel, children }) {
+  return (<div className="scalerow"><div className="scalehead"><span className="scalename">{name}</span><span className="scalevar">{varLabel}</span></div>{children}</div>);
+}
+
+function ColorSwatch({ copy, chip, name, hex }) {
+  return (<div className="swatch" data-copy={copy}><div className="swatch-chip" style={css(chip)}></div><div className="swatch-meta"><div className="swatch-name">{name}</div><div className="swatch-hex">{hex}</div></div></div>);
+}
+
+function SectionHeader({ kicker, title, desc }) {
+  return (<div className="sectionhead"><div><span className="kicker">{kicker}</span><h2 className="sectitle">{title}</h2></div>{desc ? <p className="secdesc">{desc}</p> : null}</div>);
+}
+
+function ShowcasePanel({ children }) {
+  return (<div className="panel panel-pad">{children}</div>);
+}
+
+function TokenTable({ copy, label, bar }) {
+  return (<div className="sparow" data-copy={copy}><span className="spalabel">{label}</span><span className="spabar" style={css(bar)}></span></div>);
+}
+
+function TypeSpecimen({ cls, sample, spec }) {
+  return (<div className="typerow"><span className={cls}>{sample}</span><span className="typespec">{spec}</span></div>);
+}
+
+function Alert({ variant = '', className = '', children, ...rest }) {
+  return (<div className={('alert ' + variant + ' ' + className).trim()} {...rest}>{children}</div>);
+}
+
+function Avatar({ variant = '', className = '', children, ...rest }) {
+  return (<span className={('avatar ' + variant + ' ' + className).trim()} {...rest}>{children}</span>);
+}
+
+function Badge({ variant = '', className = '', children, ...rest }) {
+  return (<span className={('badge ' + variant + ' ' + className).trim()} {...rest}>{children}</span>);
+}
+
+function Banner({ variant = '', className = '', children, ...rest }) {
+  return (<div className={('banner ' + variant + ' ' + className).trim()} {...rest}>{children}</div>);
+}
+
+function Button({ variant = '', className = '', children, ...rest }) {
+  return (<button className={('btn ' + variant + ' ' + className).trim()} {...rest}>{children}</button>);
+}
+
+function Card({ variant = '', className = '', children, ...rest }) {
+  return (<div className={(variant + ' ' + className).trim()} {...rest}>{children}</div>);
+}
+
+function EmptyState({ variant = '', className = '', children, ...rest }) {
+  return (<div className={('empty ' + variant + ' ' + className).trim()} {...rest}>{children}</div>);
+}
+
+function StatCard({ variant = '', className = '', children, ...rest }) {
+  return (<div className={('statcard ' + variant + ' ' + className).trim()} {...rest}>{children}</div>);
+}
+
+
+function DashboardShell({ v }) {
+  const { dashCats, dashFiles, dashFolders, dashFoldersCls, dashNotifCls, dashNotifs, dashPinnedCls, dashPinnedFolders, dashRecent, dashRecentCls, dashStats, dashTags, dashTagsCls, dashUnread, toggleDashNotif, toggleFolders, togglePinned, toggleRecent, toggleTags, toggleTheme } = v;
+  return (
+<div className="dashframe">
+<aside className="dashside">
+<div className="dashside-head"><div className="dashlogo"><i data-lucide="layers"></i></div><div><div className="dashside-title">لوحة M7asmari</div><div className="dashside-sub">الإصدار 2.0</div></div></div>
+<div className="dashsearch-wrap"><div className="dashsearch"><i data-lucide="search"></i><input placeholder="ابحث في كل شيء…" /><span className="dashkbd">⌘K</span></div></div>
+<div className="dashscroll">
+{(dashCats || []).map((c, $index) => (<React.Fragment key={$index}><button className={c.cls} onClick={c.fn}><i data-lucide={c.icon}></i><span className="dashcat-label">{c.label}</span><span className="dashcat-count">{c.count}</span></button></React.Fragment>))}
+<div className="dashsep"></div>
+<div className={`dashsecwrap ${dashPinnedCls}`}><div className="dashsec-head"><div className="dashsec-title" onClick={togglePinned}><svg className="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg><svg className="pinico" viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg>مثبّت</div></div><div className="dashsec-body"><div className="dashsec-inner">{(dashPinnedFolders || []).map((f, $index) => (<React.Fragment key={$index}><div className="dashfolder"><div className="dashfolder-ic" style={css(f.boxStyle)}><i data-lucide="folder"></i></div><div className="dashfolder-main"><div className="dashfolder-name">{f.label}</div><div className="dashfolder-meta">{f.items} عنصر • {f.size}</div></div><i data-lucide="star" style={css('width:14px;height:14px;fill:var(--amber-400);stroke:var(--amber-500)')}></i><div className="dashfolder-acts"><button className={f.pinCls} onClick={f.togglePin}><svg viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg></button><button><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button></div></div></React.Fragment>))}</div></div></div>
+<div className={`dashsecwrap ${dashFoldersCls}`}><div className="dashsec-head"><div className="dashsec-title" onClick={toggleFolders}><svg className="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg>المجلّدات</div><div className="dashsec-actions"><button><svg viewBox="0 0 24 24"><path d="M11 5h10M11 12h10M11 19h7M3 8l3-3 3 3M6 5v14"></path></svg></button><button><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2zM12 11v4M10 13h4"></path></svg></button></div></div><div className="dashsec-body"><div className="dashsec-inner">{(dashFolders || []).map((f, $index) => (<React.Fragment key={$index}><div className="dashfolder"><div className="dashfolder-ic" style={css(f.boxStyle)}><i data-lucide="folder"></i></div><div className="dashfolder-main"><div className="dashfolder-name">{f.label}{(f.pinned) ? (<React.Fragment><svg className="pinico" viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg></React.Fragment>) : null}</div><div className="dashfolder-meta">{f.items} عنصر • {f.size}</div><div className="dashfolder-bar"><span style={css(f.fillStyle)}></span></div></div><div className="dashfolder-acts"><button className={f.pinCls} onClick={f.togglePin}><svg viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg></button><button><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button></div></div></React.Fragment>))}</div></div></div>
+<div className="dashsep"></div>
+<div className={`dashsecwrap ${dashRecentCls}`}><div className="dashsec-head"><div className="dashsec-title" onClick={toggleRecent}><svg className="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg>النشاط الأخير</div></div><div className="dashsec-body"><div className="dashsec-inner">{(dashRecent || []).map((a, $index) => (<React.Fragment key={$index}><div className="dashact"><i data-lucide={a.icon}></i><div className="dashact-main"><div className="dashact-text"><span>{a.action}</span> <b>{a.file}</b></div><div className="dashact-time">{a.time}</div></div></div></React.Fragment>))}</div></div></div>
+<div className="dashsep"></div>
+<div className={`dashsecwrap ${dashTagsCls}`}><div className="dashsec-head"><div className="dashsec-title" onClick={toggleTags}><svg className="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg>الوسوم</div></div><div className="dashsec-body"><div className="dashsec-inner"><div className="dashtags">{(dashTags || []).map((t, $index) => (<React.Fragment key={$index}><span className="dashtag"><i data-lucide="tag"></i>{t}</span></React.Fragment>))}</div></div></div></div>
+</div>
+<div className="dashside-foot">
+<div className="dashstorage"><div className="dashstorage-top"><b>التخزين</b><span className="numjoin">7.5 / 10 غ.ب</span></div><div className="dashstorage-bar"><span></span></div><Button variant="outline sm w100"><i data-lucide="sparkles"></i>الترقية للنسخة الاحترافية</Button></div>
+<div className="dashuser"><Avatar variant=""><img src="assets/avatar.jpg" alt="" /></Avatar><div className="dashuser-main"><div className="dashuser-name">محمد الأسمري</div><div className="dashuser-mail">alex@company.com</div></div><div className="dashuser-acts"><button onClick={toggleTheme}><i data-lucide="moon"></i></button><button><i data-lucide="settings"></i></button></div></div>
+</div>
+</aside>
+<div className="dashmain">
+<div className="dashtop">
+<div className="dashcrumb"><i data-lucide="home"></i><svg viewBox="0 0 24 24" style={css('width:13px;height:13px')}><path d="M9 6l6 6-6 6"></path></svg><span className="here">الرئيسية</span></div>
+<div className="dashtop-acts">
+<button className="dashicobtn" aria-label="عوامل التصفية"><i data-lucide="sliders-horizontal"></i></button>
+<div className={`dashnotif ${dashNotifCls}`}><button className="dashicobtn" aria-label="الإشعارات" onClick={toggleDashNotif}><i data-lucide="bell"></i>{(dashUnread) ? (<React.Fragment><span className="dashbell-badge">{dashUnread}</span></React.Fragment>) : null}</button><div className="dashnotif-pop"><div className="dashnotif-head"><b>الإشعارات</b><button>تعليم الكل كمقروء</button></div>{(dashNotifs || []).map((n, $index) => (<React.Fragment key={$index}><div className={n.cls}><span className="dashnotif-dot"></span><div><div className="dashnotif-b">{n.title}</div><div className="dashnotif-m">{n.msg}</div><div className="dashnotif-t">{n.time}</div></div></div></React.Fragment>))}</div></div>
+<Avatar variant="sm"><img src="assets/avatar.jpg" alt="" /></Avatar>
+</div>
+</div>
+<div className="dashbody">
+<div className="dashwelcome"><div><h3>مرحبًا من جديد، محمد!</h3><p>إليك ما يجري في مساحة عملك اليوم.</p></div><Button variant="primary"><i data-lucide="plus"></i>عنصر جديد</Button></div>
+<div className="dashstats">{(dashStats || []).map((s, $index) => (<React.Fragment key={$index}><div className="dashstat"><div className="dashstat-top"><div className="dashstat-ic" style={css(s.iconStyle)}><i data-lucide={s.icon}></i></div><svg className={`dashstat-trend ${s.trend}`} viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M21 7v6M21 7h-6"></path></svg></div><div className="dashstat-v">{s.val}</div><div className="dashstat-l">{s.label}</div><div className={s.deltaCls}><i data-lucide="trending-up"></i><span className="numjoin">{s.delta}</span></div></div></React.Fragment>))}</div>
+<div className="dashfiles"><div className="dashfiles-head"><b>أحدث الملفات</b><Button variant="ghost sm">عرض الكل</Button></div>{(dashFiles || []).map((f, $index) => (<React.Fragment key={$index}><div className="dashfile"><div className="dashfile-ic" style={css(f.iconStyle)}><i data-lucide={f.icon}></i></div><div className="dashfile-main"><div className="dashfile-name">{f.name}</div><div className="dashfile-meta">{f.size} • عُدّل {f.mod}</div></div><button className="dashfile-more" aria-label="خيارات الملف"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button></div></React.Fragment>))}</div>
+</div>
+</div>
+</div>
+  );
+}
+
+
+function FeatureSection({ v }) {
+  return (
+<div className="featsec">
+<div className="featintro"><div className="feat-h">مزايا قويّة لمنتجك</div><p className="feat-d">اكتشف المزايا التي تجعل منصّتنا تتميّز عن غيرها — مبنية بأحدث التقنيات ومصمّمة لأقصى إنتاجية.</p><span className="arrowlink" style={css('margin-top:24px')}>احجز عرضًا<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></span></div>
+<div className="featgrid">
+<Card variant="fcard"><div className="fcard-img"><span className="ph-tag">صورة 16:9</span></div><div className="fcard-body"><div className="fcard-title">تصميم عصري</div><p className="fcard-text">واجهة نظيفة وبديهية مبنية على أحدث مبادئ التصميم، مهيّأة لأفضل تجربة استخدام.</p></div></Card>
+<Card variant="fcard"><div className="fcard-img" style={css('background-color:#e1f4ff')}><span className="ph-tag">صورة 16:9</span></div><div className="fcard-body"><div className="fcard-title">تخطيط متجاوب</div><p className="fcard-text">تصميم متجاوب بالكامل يعمل بسلاسة عبر كل الأجهزة والمقاسات — مثالي لأي منصّة.</p></div></Card>
+<Card variant="fcard"><div className="fcard-img" style={css('background-color:#e0f7ed')}><span className="ph-tag">صورة 16:9</span></div><div className="fcard-body"><div className="fcard-title">تكامل سهل</div><p className="fcard-text">عملية تكامل بسيطة مع توثيق شامل وفريق دعم مخصّص لمساعدتك في كل خطوة.</p></div></Card>
+<Card variant="fcard"><div className="fcard-img" style={css('background-color:#fdf0d8')}><span className="ph-tag">صورة 16:9</span></div><div className="fcard-body"><div className="fcard-title">تحليلات متقدّمة</div><p className="fcard-text">أدوات تحليل قوية تساعدك على فهم مستخدميك واتخاذ قرارات مبنية على البيانات.</p></div></Card>
+</div>
+</div>
+  );
+}
+
+
+function AccordionSection({ v }) {
+  const { accCls, accH, bouncy } = v;
+  return (
+<section className="section" id="accordion" data-screen-label="Accordion">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الأكورديون"} desc={"قائمة قابلة للطيّ بحركة مرنة (bouncy)، عنصر واحد مفتوح في كل مرة، وأيقونة لكل بند."} />
+<div className="acc">
+<div className={accCls.brief}><div className="acc-head" onClick={accH.brief}><span className="acc-ico2"><i data-lucide="file-text"></i></span><span className="acc-title2">موجز الإصدار</span><span className="acc-chev"><i data-lucide="chevron-down"></i></span></div><div className="acc-wrap"><div className="acc-inner"><div className="acc-body">اجمع ملاحظات الإطلاق والمسؤولين والمخاطر في تسليم واحد موجز قبل فتح نافذة الإصدار.</div></div></div></div>
+<div className={accCls.launch}><div className="acc-head" onClick={accH.launch}><span className="acc-ico2"><i data-lucide="shield-check"></i></span><span className="acc-title2">قائمة الإطلاق</span><span className="acc-chev"><i data-lucide="chevron-down"></i></span></div><div className="acc-wrap"><div className="acc-inner"><div className="acc-body">تحقّق من النصوص والروابط والتحليلات وخطوات التراجع والموافقات النهائية دون مغادرة القائمة.</div></div></div></div>
+<div className={accCls.campaign}><div className="acc-head" onClick={accH.campaign}><span className="acc-ico2"><i data-lucide="radio-tower"></i></span><span className="acc-title2">ملاحظات الحملة</span><span className="acc-chev"><i data-lucide="chevron-down"></i></span></div><div className="acc-wrap"><div className="acc-inner"><div className="acc-body">احتفظ بملاحظات كل قناة قريبة من المهمة مع إبقاء القائمة المطوية هادئة.</div></div></div></div>
+<div className={accCls.calendar}><div className="acc-head" onClick={accH.calendar}><span className="acc-ico2"><i data-lucide="calendar-clock"></i></span><span className="acc-title2">تقويم الطرح</span><span className="acc-chev"><i data-lucide="chevron-down"></i></span></div><div className="acc-wrap"><div className="acc-inner"><div className="acc-body">خطّط للإعلانات وفحوص التجهيز والتذكيرات والفترات الهادئة على نفس الجدول الزمني.</div></div></div></div>
+<div className={accCls.ship}><div className="acc-head" onClick={accH.ship}><span className="acc-ico2"><i data-lucide="package-check"></i></span><span className="acc-title2">إطلاق النسخة</span><span className="acc-chev"><i data-lucide="chevron-down"></i></span></div><div className="acc-wrap"><div className="acc-inner"><div className="acc-body">تتبّع النسخة الحالية وحالة النشر والموافقة النهائية قبل اعتماد اكتمال الإصدار.</div></div></div></div>
+<div className={accCls.archive}><div className="acc-head" onClick={accH.archive}><span className="acc-ico2"><i data-lucide="folder-kanban"></i></span><span className="acc-title2">أرشفة الأصول</span><span className="acc-chev"><i data-lucide="chevron-down"></i></span></div><div className="acc-wrap"><div className="acc-inner"><div className="acc-body">انقل النصوص والصور والملفات المصدرية إلى مجلّد الحملة بعد انتهاء الطرح.</div></div></div></div>
+</div>
+</section>
+  );
+}
+
+
+function AlertsSection({ v }) {
+  return (
+<section className="section" id="alerts" data-screen-label="Alerts">
+<SectionHeader kicker={"02 — المكوّنات"} title={"التنبيهات والرسائل"} desc={"أربع نبرات دلالية، لكلٍّ منها سطح ملوّن وحدّ مطابق وأيقونة دائرية."} />
+<div className="grid cols2">
+<Alert variant="ok"><span className="alert-ico">✓</span><div><div className="alert-title">تم تأكيد المعاملة</div><p className="alert-text">اكتمل تحويلك البالغ 0.5 ETH بنجاح.</p></div></Alert>
+<Alert variant="info"><span className="alert-ico">i</span><div><div className="alert-title">تحديث الشبكة</div><p className="alert-text">رسوم الغاز منخفضة حاليًا — وقت مناسب للمبادلة.</p></div></Alert>
+<Alert variant="warn"><span className="alert-ico">!</span><div><div className="alert-title">انسخ محفظتك احتياطيًا</div><p className="alert-text">احفظ عبارة الاسترداد قبل إرسال مبالغ كبيرة.</p></div></Alert>
+<Alert variant="err"><span className="alert-ico">×</span><div><div className="alert-title">فشلت المعاملة</div><p className="alert-text">الرصيد غير كافٍ لتغطية رسوم الشبكة. حاول مجددًا.</p></div></Alert>
+</div>
+</section>
+  );
+}
+
+
+function AvatarsSection({ v }) {
+  return (
+<section className="section" id="avatars" data-screen-label="Avatars">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الصور الرمزية"} desc={"ثلاثة أحجام، ومؤشّر حالة، ومجموعة متراكبة."} />
+<ShowcasePanel><div className="grid cols3" style={css('align-items:center')}>
+<div><p className="subhead">الأحجام</p><div className="fx ac gap16"><Avatar variant="sm"><img src="assets/avatar.jpg" alt="" /></Avatar><Avatar variant=""><img src="assets/avatar.jpg" alt="" /></Avatar><Avatar variant="lg"><img src="assets/avatar.jpg" alt="" /></Avatar></div></div>
+<div><p className="subhead">مع حالة</p><div className="fx ac gap16"><Avatar variant="lg"><img src="assets/avatar.jpg" alt="" /><span className="stat"></span></Avatar><Avatar variant="lg" style={css('background:#fb3d18')}>د<span className="stat" style={css('background:var(--ink-3)')}></span></Avatar></div></div>
+<div><p className="subhead">مجموعة</p><div className="avgroup"><Avatar variant="" title="محمد الحسمري"><img src="assets/avatar.jpg" alt="" /></Avatar><Avatar variant="" style={css('background:#16bd74')} title="بدر">ب</Avatar><Avatar variant="" style={css('background:#f5a623')} title="منى">م</Avatar><Avatar variant="avmore" title="5 آخرون">5+</Avatar></div></div>
+</div></ShowcasePanel>
+</section>
+  );
+}
+
+
+function BadgesSection({ v }) {
+  const { heroCls, heroDanger, heroLabel, heroLoading, heroSuccess, heroWarning } = v;
+  return (
+<section className="section" id="badges" data-screen-label="Badges">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الشارات"} desc={"حبوب ملوّنة فاتحة للحالة، وتعبئة صلبة للتأكيد."} />
+<ShowcasePanel>
+<span className="cap">متحرّكة — تدور تلقائيًا كل 1.6 ثانية</span>
+<div className="fx ac" style={css('height:54px')}><div className={heroCls}>{(heroLoading) ? (<React.Fragment><span className="abspin"></span></React.Fragment>) : null}{(heroSuccess) ? (<React.Fragment><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></React.Fragment>) : null}{(heroWarning) ? (<React.Fragment><svg viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3zM12 10v4M12 17v.5"></path></svg></React.Fragment>) : null}{(heroDanger) ? (<React.Fragment><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></React.Fragment>) : null}<span>{heroLabel}</span></div></div>
+<span className="cap" style={css('margin-top:22px')}>حالات بأيقونات</span>
+<div className="abgrid"><span className="abadge ab-neutral"><span className="abdot"></span>في الطابور</span><span className="abadge ab-info"><span className="abdot pulse"></span>مباشر</span><span className="abadge ab-loading"><span className="abspin"></span>فهرسة</span><span className="abadge ab-success"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>موثّق</span><span className="abadge ab-warning"><svg viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3zM12 10v4M12 17v.5"></path></svg>قيد الانتظار</span><span className="abadge ab-danger"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg>محظور</span></div>
+<span className="cap" style={css('margin-top:26px')}>فاتحة — الحالة</span>
+<div className="btnrow"><Badge variant="brand"><span className="dot"></span>مُرسَل</Badge><Badge variant="gold"><span className="dot"></span>قيد الانتظار</Badge><Badge variant="green"><span className="dot"></span>مكتمل</Badge><Badge variant="red"><span className="dot"></span>فشل</Badge><Badge variant="neutral"><span className="dot"></span>مسودّة</Badge></div>
+<span className="cap" style={css('margin-top:26px')}>صلبة — تأكيد</span>
+<div className="btnrow"><Badge variant="solid-ink">جديد</Badge><Badge variant="solid-brand">تجريبي</Badge><Badge variant="solid-green numjoin">+12.4%</Badge><Badge variant="solid-gold">احترافي</Badge><Badge variant="solid-red numjoin">−3.1%</Badge></div>
+</ShowcasePanel>
+</section>
+  );
+}
+
+
+function BannerSection({ v }) {
+  return (
+<section className="section" id="banner" data-screen-label="Notification banner">
+<SectionHeader kicker={"02 — المكوّنات"} title={"بانر الإشعار"} desc={"إشعار بعرض الصفحة بإجراء وزر إغلاق — مختلف عن التنبيهات والإشعارات العائمة."} />
+<div className="fx col gap12">
+<Banner variant="brand"><span className="bi2">✦</span><div className="btxt"><b>إصدار جديد متاح.</b> حدّث الآن للحصول على أحدث ميزات الأمان.</div><Button variant="brand sm">تحديث</Button><span className="bx">×</span></Banner>
+<Banner variant="warn"><span className="bi2">!</span><div className="btxt"><b>صيانة مجدوَلة.</b> قد تتأثّر الخدمة الجمعة 2:00 صباحًا حتى 4:00 صباحًا.</div><Button variant="secondary sm">التفاصيل</Button><span className="bx">×</span></Banner>
+<Banner variant="ok"><span className="bi2">✓</span><div className="btxt"><b>تم التحقّق من حسابك.</b> أصبح بإمكانك الآن رفع حدود المعاملات.</div><span className="bx">×</span></Banner>
+</div>
+</section>
+  );
+}
+
+
+function ButtonsSection({ v }) {
+  const { errBtnCls, errLabel, errSpin, errX, okArrow, okBtnCls, okCheck, okLabel, okSpin, ripple, runErr, runOk } = v;
+  return (
+<section className="section" id="buttons" data-screen-label="Buttons">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الأزرار"} desc={"أزرار دائرية بالكامل مع أيقونات، أربعة أنواع، أربعة أحجام، وتأثير نبضة عند النقر."} />
+<ShowcasePanel>
+<span className="cap">الأنواع — مع أيقونات Lucide</span>
+<div className="btnrow"><Button variant="primary">متابعة<i data-lucide="arrow-left"></i></Button><Button variant="secondary"><i data-lucide="download"></i>تنزيل</Button><Button variant="outline">محدّد</Button><Button variant="ghost">شفاف</Button><Button variant="brand">العلامة</Button><Button variant="danger">حذف</Button></div>
+<span className="cap" style={css('margin-top:28px')}>الأحجام</span>
+<div className="btnrow"><Button variant="primary sm">صغير</Button><Button variant="primary">متوسط</Button><Button variant="primary lg">كبير</Button><Button variant="secondary icon" aria-label="حذف"><i data-lucide="trash-2"></i></Button><Button variant="primary icon" aria-label="متابعة"><i data-lucide="arrow-left"></i></Button></div>
+<span className="cap" style={css('margin-top:28px')}>نبضة عند النقر — جرّبها</span>
+<div className="btnrow"><Button variant="primary rip" onClick={ripple}>نبضة</Button><Button variant="outline rip" onClick={ripple}>اضغط هنا</Button><Button variant="brand rip" onClick={ripple}>العلامة</Button></div>
+<span className="cap" style={css('margin-top:28px')}>أزرار ذات حالات — اضغط وانتظر</span>
+<div className="btnrow"><button className={okBtnCls} onClick={runOk}>{(okSpin) ? (<React.Fragment><span className="btnspin"></span></React.Fragment>) : null}{(okCheck) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></React.Fragment>) : null}<span>{okLabel}</span>{(okArrow) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></React.Fragment>) : null}</button><button className={errBtnCls} onClick={runErr}>{(errSpin) ? (<React.Fragment><span className="btnspin"></span></React.Fragment>) : null}{(errX) ? (<React.Fragment><svg className="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg></React.Fragment>) : null}<span>{errLabel}</span></button></div>
+<span className="cap" style={css('margin-top:28px')}>الأساسي — كل الحالات</span>
+<div className="btnmatrix" style={css('grid-template-columns:repeat(4,max-content)')}>
+<Button variant="primary">افتراضي</Button><Button variant="primary is-hover">مرور</Button><Button variant="primary is-active">مضغوط</Button><Button variant="primary is-disabled">معطّل</Button>
+</div>
+</ShowcasePanel>
+</section>
+  );
+}
+
+
+function CalendarSection({ v }) {
+  const { calDays, calNext, calPrev, calTitle } = v;
+  return (
+<section className="section" id="calendar" data-screen-label="Calendar">
+<SectionHeader kicker={"02 — المكوّنات"} title={"التقويم ومنتقي التاريخ"} desc={"شبكة شهرية مع تمييز اليوم الحالي والتاريخ المحدّد، تتدفّق من اليمين."} />
+<div className="cal">
+<div className="cal-head"><div className="cal-nav"><div className="cal-btn" onClick={calNext}>›</div><div className="cal-btn" onClick={calPrev}>‹</div></div><div className="cal-title">{calTitle}</div></div>
+<div className="cal-grid">
+<div className="cal-wd">أحد</div><div className="cal-wd">إثن</div><div className="cal-wd">ثلا</div><div className="cal-wd">أرب</div><div className="cal-wd">خمي</div><div className="cal-wd">جمع</div><div className="cal-wd">سبت</div>
+{(calDays || []).map((d, $index) => (<React.Fragment key={$index}><div className={d.cls} onClick={d.fn}>{d.label}</div></React.Fragment>))}
+</div>
+</div>
+</section>
+  );
+}
+
+
+function CardsSection({ v }) {
+  return (
+<section className="section" id="cards" data-screen-label="Cards">
+<SectionHeader kicker={"02 — المكوّنات"} title={"البطاقات"} desc={"أسطح مرتفعة ومستديرة ترتفع عند المرور — حاوية النظام الأساسية."} />
+<p className="subhead">بطاقة منتج</p>
+<div className="grid cols3">
+<Card variant="pcard"><div className="ph"><span className="ph-tag">عمل فني</span></div><div className="pcard-body"><div className="fx ac jb" style={css('display: flex')}><span className="pcard-title" style={css('padding-left: 8px')}>Pixel M7 #204</span><Badge variant="green"><span className="dot"></span>موثّق</Badge></div><p className="pcard-text">مقتنى رقمي توليدي على السلسلة من مجموعة M7asmari التأسيسية.</p><div className="pcard-foot"><span className="price numjoin">1.24 ETH</span><Button variant="brand sm">اقتناء</Button></div></div></Card>
+<Card variant="pcard"><div className="ph" style={css('background-color:#e1f4ff')}><span className="ph-tag">معاينة المحفظة</span></div><div className="pcard-body"><div className="fx ac jb" style={css('display: flex')}><span className="pcard-title" style={css('padding-left: 8px')}>المحفظة الرئيسية</span><Badge variant="neutral">افتراضية</Badge></div><p className="pcard-text">تابِع الأرصدة والنشاط الأخير بنظرة واحدة، في مكان واحد.</p><div className="pcard-foot"><span className="price mono numjoin">$4,820.55</span><Button variant="secondary sm">فتح</Button></div></div></Card>
+<Card variant="pcard"><div className="ph" style={css('background-color:#e0f7ed')}><span className="ph-tag">تجمّع التخزين</span></div><div className="pcard-body" style={css('display: block')}><div className="fx ac jb" style={css('display: flex')}><span className="pcard-title" style={css('padding-left: 8px')}>التخزين</span><Badge variant="gold"><span className="dot"></span><span className="numjoin">4.1% APY</span></Badge></div><p className="pcard-text">اكسب مكافآت بتأمين الشبكة عبر حماية لا تتوقّف.</p><div><br /></div><p></p><div className="pcard-foot"><span className="price">يكسب</span><Button variant="ghost sm">إدارة</Button></div></div></Card>
+</div>
+<p className="subhead" style={css('margin-top:34px')}>بطاقة مزية — صورة 16:9 + رابط متحرّك</p>
+<div className="grid cols2">
+<Card variant="fcard"><div className="fcard-img"><span className="ph-tag">صورة 16:9</span></div><div className="fcard-body"><div className="fcard-title">تصميم عصري</div><p className="fcard-text">واجهة نظيفة وبديهية مبنية على أحدث مبادئ التصميم، مهيّأة لأفضل تجربة استخدام.</p><span className="arrowlink">اعرف المزيد<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></span></div></Card>
+<Card variant="fcard"><div className="fcard-img" style={css('background-color:#e1f4ff')}><span className="ph-tag">صورة 16:9</span></div><div className="fcard-body"><div className="fcard-title">تحليلات متقدّمة</div><p className="fcard-text">أدوات تحليل قوية تساعدك على فهم مستخدميك واتخاذ قرارات مبنية على البيانات.</p><span className="arrowlink">احجز عرضًا<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></span></div></Card>
+</div>
+<p className="subhead" style={css('margin-top:34px')}>بطاقة سير عمل — تكشف الوصف والوسوم عند المرور</p>
+<div className="grid cols3">
+<Card variant="wcard"><div className="wcard-img"><div className="ph"></div></div><div className="wcard-body"><div className="wcard-top"><div><div className="wcard-meta"><span>حُدّث قبل ساعتين</span><span>•</span><span className="wstat on"></span><span>نشِط</span></div><div className="wcard-title">سير عمل الإطلاق</div></div><button className="wmore" aria-label="خيارات"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg></button></div><div className="wreveal"><div className="wreveal-in"><p className="wcard-desc">أتمتة كاملة لخطوات الإصدار: من تجهيز المحتوى حتى النشر والمراجعة النهائية.</p><div className="wtags"><Badge variant="neutral">أتمتة</Badge><Badge variant="neutral">إصدار</Badge><Badge variant="neutral">مراجعة</Badge></div></div></div></div><div className="wcard-foot"><div className="avgroup"><Avatar variant="sm"><img src="assets/avatar.jpg" alt="" /></Avatar><Avatar variant="sm" style={css('background:#16bd74')}>ب</Avatar><Avatar variant="sm" style={css('background:#f5a623')}>م</Avatar></div><div className="wact"><span className="wactbtn" data-action="تم" data-tone="success" style={css('background:var(--green)')}><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span className="wactbtn" data-action="تثبيت" data-tone="info" style={css('background:var(--brand)')}><svg viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg></span></div></div></Card>
+<Card variant="wcard"><div className="wcard-img"><div className="ph" style={css('background-color:#e0f7ed')}></div></div><div className="wcard-body"><div className="wcard-top"><div><div className="wcard-meta"><span>حُدّث أمس</span><span>•</span><span className="wstat off"></span><span>متوقّف</span></div><div className="wcard-title">مزامنة البيانات</div></div><button className="wmore" aria-label="خيارات"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg></button></div><div className="wreveal"><div className="wreveal-in"><p className="wcard-desc">تزامن دوري للأصول بين المحافظ مع سجلّ كامل لكل عملية وإمكانية التراجع.</p><div className="wtags"><Badge variant="neutral">مزامنة</Badge><Badge variant="neutral">جدولة</Badge></div></div></div></div><div className="wcard-foot"><div className="avgroup"><Avatar variant="sm" style={css('background:#627eea')}>س</Avatar><Avatar variant="sm" style={css('background:#fb3d18')}>د</Avatar></div><div className="wact"><span className="wactbtn" data-action="تذكير" data-tone="info" style={css('background:var(--gold)')}><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg></span></div></div></Card>
+<Card variant="wcard"><div className="wcard-img"><div className="ph" style={css('background-color:#fdf0d8')}></div></div><div className="wcard-body"><div className="wcard-top"><div><div className="wcard-meta"><span>حُدّث الآن</span><span>•</span><span className="wstat on"></span><span>نشِط</span></div><div className="wcard-title">تنبيهات الأمان</div></div><button className="wmore" aria-label="خيارات"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg></button></div><div className="wreveal"><div className="wreveal-in"><p className="wcard-desc">مراقبة لحظية للمعاملات المشبوهة مع إشعارات فورية وإجراءات حماية تلقائية.</p><div className="wtags"><Badge variant="neutral">أمان</Badge><Badge variant="neutral">مراقبة</Badge><Badge variant="neutral">تنبيه</Badge></div></div></div></div><div className="wcard-foot"><div className="avgroup"><Avatar variant="sm" style={css('background:#16bd74')}>ن</Avatar><Avatar variant="sm"><img src="assets/avatar.jpg" alt="" /></Avatar></div><div className="wact"><span className="wactbtn" data-action="تنبيه" data-tone="error" style={css('background:var(--red)')}><svg viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3zM12 10v4M12 17v.5"></path></svg></span><span className="wactbtn" data-action="تثبيت" data-tone="info" style={css('background:var(--brand)')}><svg viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg></span></div></div></Card>
+</div>
+</section>
+  );
+}
+
+
+function ComboboxSection({ v }) {
+  return (
+<section className="section" id="combobox" data-screen-label="Combobox">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الإكمال التلقائي"} desc={"حقل بحث يقترح نتائج فورية مع إبراز الجزء المطابق."} />
+<div className="combo">
+<div className="search"><span className="mgicon"></span><input value="إيث" style={css('font-weight:600')} readOnly /></div>
+<div className="menu" style={css('margin-top:8px')}><div className="menuitem sel"><span><span className="combohi">إيث</span>يريوم · ETH</span><span>✓</span></div><div className="menuitem"><span><span className="combohi">إيث</span>يريوم كلاسيك · ETC</span></div><div className="menuitem"><span>stETH · <span className="combohi">إيث</span>يريوم مرهون</span></div></div>
+</div>
+</section>
+  );
+}
+
+
+function ControlsSection({ v }) {
+  const { cbTermsCls, cbUpdatesCls, pickPro, pickStarter, pickTeam, rProCls, rStarterCls, rTeamCls, swNotifCls, toggleNotif, toggleTerms, toggleUpdates } = v;
+  return (
+<section className="section" id="controls" data-screen-label="Selection controls">
+<SectionHeader kicker={"02 — المكوّنات"} title={"عناصر الاختيار"} desc={"مفاتيح التبديل ومربعات الاختيار وأزرار الراديو، مع كل حالاتها."} />
+<div className="grid cols3">
+<ShowcasePanel><p className="subhead">مفتاح تبديل</p><div className="fx col gap16"><div className="cbx" onClick={toggleNotif}><button className={swNotifCls}></button><span>تفعيل الإشعارات</span></div><div className="cbx"><button className="switch"></button><span>متوقّف</span></div><div className="cbx dis"><button className="switch on dis"></button><span>معطّل</span></div></div></ShowcasePanel>
+<ShowcasePanel><p className="subhead">مربع اختيار</p><div className="fx col gap16"><div className={cbTermsCls} onClick={toggleTerms}><span className="cbx-box"><svg viewBox="0 0 24 24"><path className="ck" d="M5 13l4 4L19 7"></path></svg></span><span>أوافق على الشروط والأحكام</span></div><div className={cbUpdatesCls} onClick={toggleUpdates}><span className="cbx-box"><svg viewBox="0 0 24 24"><path className="ck" d="M5 13l4 4L19 7"></path></svg></span><span>راسلني بتحديثات المنتج</span></div><div className="cbx on"><span className="cbx-box"><svg viewBox="0 0 24 24"><path className="dash" d="M6 12h12"></path></svg></span><span>تحديد الكل (جزئي)</span></div><div className="cbx on dis"><span className="cbx-box"><svg viewBox="0 0 24 24"><path className="ck" d="M5 13l4 4L19 7"></path></svg></span><span>معطّل</span></div></div></ShowcasePanel>
+<ShowcasePanel><p className="subhead">زر راديو</p><div className="fx col gap16"><div className="cbx" onClick={pickStarter}><span className={rStarterCls}></span><span className="f1">المبتدئ</span><span className="t-sm">مجاني</span></div><div className="cbx" onClick={pickPro}><span className={rProCls}></span><span className="f1">الاحترافي</span><span className="t-sm numjoin">12$ / شهر</span></div><div className="cbx" onClick={pickTeam}><span className={rTeamCls}></span><span className="f1">الفريق</span><span className="t-sm numjoin">29$ / شهر</span></div><div className="cbx dis"><span className="radio dis"></span><span className="f1">الخطة القديمة</span></div></div></ShowcasePanel>
+</div>
+</section>
+  );
+}
+
+
+function DrawerSection({ v }) {
+  const { closeDrawer, closeSheet, drawerCls, drawerHint, drawerScrimCls, openLeft, openRight, openSheet, scrimCls, sheetCls } = v;
+  return (
+<section className="section" id="drawer" data-screen-label="Drawer &amp; Sheet">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الأدراج والأوراق السفلية"} desc={"درج جانبي يدخل من اليمين، وورقة سفلية للموبايل — كلاهما فوق خلفية معتمة."} />
+<div className="grid cols2">
+<div><p className="subhead">درج جانبي</p><div className="framedemo"><div className="sheetwrap"><Button variant="secondary" onClick={openLeft}>افتح يسارًا</Button><Button variant="brand" onClick={openRight}>افتح يمينًا</Button></div><div className={drawerScrimCls} onClick={closeDrawer}></div><div className={drawerCls}><div className="fx ac jb"><span className="pcard-title" style={css('font-size:17px')}>القائمة</span><span className="bx" onClick={closeDrawer} style={css('opacity:.5;cursor:pointer')}>×</span></div><p className="t-sm" style={css('margin:0')}>{drawerHint}</p><div className="sideitem on"><span className="sideicon"></span>المحفظة</div><div className="sideitem"><span className="sideicon"></span>المقتنيات</div><div className="sideitem"><span className="sideicon"></span>الإعدادات</div></div></div></div>
+<div><p className="subhead">ورقة سفلية</p><div className="framedemo"><div className="sheetwrap"><Button variant="secondary" onClick={openSheet}>افتح الورقة السفلية</Button></div><div className={scrimCls} onClick={closeSheet}></div><div className={sheetCls}><div className="grabber"></div><div className="sheet-title">إجراءات سريعة</div><p className="sheet-desc">اسحب المقبض أو مرّر للأسفل للإغلاق.</p><div className="sli">مشاركة</div><div className="sli">تكرار</div><div className="sli">نقل إلى مجلد</div><div className="sli">إعادة تسمية</div><div className="sli">أرشفة</div><div className="sli danger">حذف</div><div className="sheet-foot">اسحب للأعلى للتوسيع، وللأسفل للإغلاق.</div></div></div></div>
+</div>
+</section>
+  );
+}
+
+
+function EmptySection({ v }) {
+  return (
+<section className="section" id="empty" data-screen-label="Empty states">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الحالات الفارغة"} desc={"ودودة ومطمئِنة، ومقترنة دائمًا بإجراء تالٍ واضح."} />
+<div className="grid cols2">
+<EmptyState variant=""><span className="empty-ico">✦</span><div className="empty-title">لا مقتنيات بعد</div><p className="empty-text">عندما تقتني أو تستقبل عملة NFT، ستظهر هنا مباشرةً في محفظتك.</p><Button variant="brand">استكشف السوق</Button></EmptyState>
+<EmptyState variant=""><span className="empty-ico" style={css('background:var(--surface-2);color:var(--ink-3)')}>↑</span><div className="empty-title">نشاطك خالٍ</div><p className="empty-text">لا توجد معاملات لعرضها. نفّذ أول تحويل لتبدأ الحركة.</p><Button variant="secondary">إرسال عملات</Button></EmptyState>
+</div>
+</section>
+  );
+}
+
+
+function FeedbackSection({ v }) {
+  const { clearToasts, posList, stackCls, toastError, toastPromise, toastSuccess, toasts } = v;
+  return (
+<section className="section" id="feedback" data-screen-label="Tooltip &amp; Toast">
+<SectionHeader kicker={"02 — المكوّنات"} title={"التلميحات والإشعارات"} desc={"تلميح داكن بسهم، وإشعارات عائمة بثلاث نبرات."} />
+<div className="grid cols2" style={css('align-items:start')}>
+<ShowcasePanel><p className="subhead">تلميح</p><div className="fx wrap ac jc gap16" style={css('padding:18px 0')}><span className="tipwrap"><button className="tipbtn"><i data-lucide="heart"></i></button><span className="tip2 top">أعجبني</span></span><span className="tipwrap"><button className="tipbtn"><i data-lucide="share-2"></i></button><span className="tip2 bottom">مشاركة</span></span><span className="tipwrap"><button className="tipbtn"><i data-lucide="settings"></i></button><span className="tip2 left">الإعدادات</span></span><span className="tipwrap"><button className="tipbtn"><i data-lucide="trash-2"></i></button><span className="tip2 right">نقل للسلة</span></span></div><p className="t-cap" style={css('text-align:center;margin-top:6px')}>مرّر أو ركّز على كل زر — يظهر التلميح بتلاشٍ وإزالة ضباب.</p></ShowcasePanel>
+<div><p className="subhead">إشعارات عائمة</p><p className="t-sm" style={css('margin:0 0 14px')}>إشعارات حقيقية تظهر ثابتة على الشاشة. غيّر الموضع لتفتح من تلك الحافة.</p><div className="fx wrap gap8"><Button variant="secondary sm" onClick={toastPromise}><i data-lucide="loader-circle"></i>وعد</Button><Button variant="secondary sm" onClick={toastSuccess}><i data-lucide="check"></i>نجاح</Button><Button variant="secondary sm" onClick={toastError}><i data-lucide="x"></i>خطأ</Button><Button variant="ghost sm" onClick={clearToasts}>مسح</Button></div><div className="fx wrap gap8" style={css('margin-top:12px')}>{(posList || []).map((p, $index) => (<React.Fragment key={$index}><button className={p.cls} onClick={p.fn}>{p.label}</button></React.Fragment>))}</div><div className={stackCls}>{(toasts || []).map((t, $index) => (<React.Fragment key={$index}><div className={t.cls}><span className="ti2"><span className="tspin2"></span><i data-lucide="check"></i><i data-lucide="x"></i><i data-lucide="sparkles"></i></span><div className="tt"><b>{t.title}</b><span>{t.desc}</span></div><span className="tx2" onClick={t.dismiss}>×</span></div></React.Fragment>))}</div></div>
+</div>
+</section>
+  );
+}
+
+
+function InputsSection({ v }) {
+  const { addTag, amtInputCls, amtMsg, amtMsgCls, amtVal, ensInputCls, ensMsg, ensMsgCls, ensVal, onAmt, onEns, tagList } = v;
+  return (
+<section className="section" id="inputs" data-screen-label="Inputs">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الحقول"} desc={"حقول ناعمة مع تحقّق مباشر أثناء الكتابة — جرّب حقلي ENS والمبلغ."} />
+<ShowcasePanel><div className="grid cols3" style={css('gap:26px')}>
+<div className="field"><label className="label">اسم المحفظة</label><input className="input" placeholder="مثال: التوفير" /><span className="hint">مرئي لك فقط.</span></div>
+<div className="field"><label className="label">مركّز</label><input className="input is-focus" value="المحفظة الرئيسية" readOnly /><span className="hint">حلقة تركيز نشطة.</span></div>
+<div className="field"><label className="label">معطّل</label><input className="input is-disabled" value="حقل مقفل" disabled /><span className="hint">غير قابل للتعديل.</span></div>
+<div className="field"><label className="label">اسم ENS</label><input className={ensInputCls} value={ensVal} onChange={onEns} placeholder="اكتب اسمًا…" dir="ltr" /><span className={ensMsgCls}>{ensMsg}</span></div>
+<div className="field"><label className="label">عنوان المستلِم</label><input className="input is-error" value="0x71C…zz" dir="ltr" readOnly /><span className="hint err">عنوان غير صالح.</span></div>
+<div className="field"><label className="label">المبلغ</label><input className={amtInputCls} value={amtVal} onChange={onAmt} placeholder="0.00 ETH" dir="ltr" /><span className={amtMsgCls}>{amtMsg}</span></div>
+</div>
+<div className="grid cols2" style={css('gap:26px;margin-top:24px')}>
+<div className="field"><label className="label">حقل وسوم</label><div className="tagsbox">{(tagList || []).map((t, $index) => (<React.Fragment key={$index}><span className="tagchip">{t.label}<button onClick={t.remove}>×</button></span></React.Fragment>))}<input className="taginput" onKeyDown={addTag} placeholder="أضف وسماً ثم Enter…" /></div><span className="hint">اضغط Enter لإضافة وسم، × لحذفه.</span></div>
+<div className="field"><label className="label">منطقة نص</label><textarea className="input textarea" placeholder="اكتب وصفًا…"></textarea><span className="hint">قابلة لتغيير الارتفاع.</span></div>
+</div></ShowcasePanel>
+</section>
+  );
+}
+
+
+function KpiSection({ v }) {
+  return (
+<section className="section" id="kpi" data-screen-label="KPI cards">
+<SectionHeader kicker={"02 — المكوّنات"} title={"بطاقات الإحصاء"} desc={"قيمة كبيرة، وتسمية، وشارة تغيّر، ورسم بياني مصغّر."} />
+<div className="grid cols4">
+<StatCard variant=""><div className="stat-label">الرصيد الكلي</div><div className="stat-val">$48,250</div><div className="fx ac gap8" style={css('margin-top:10px')}><Badge variant="green numjoin">+8.4%</Badge><span className="t-sm">هذا الشهر</span></div><div className="spark"><span style={css('height:40%')}></span><span style={css('height:55%')}></span><span style={css('height:35%')}></span><span style={css('height:70%')}></span><span style={css('height:60%')}></span><span style={css('height:85%')}></span><span style={css('height:100%')}></span></div></StatCard>
+<StatCard variant=""><div className="stat-label">المعاملات</div><div className="stat-val">1,284</div><div className="fx ac gap8" style={css('margin-top:10px')}><Badge variant="green numjoin">+2.1%</Badge><span className="t-sm">هذا الشهر</span></div><div className="spark"><span style={css('height:50%')}></span><span style={css('height:45%')}></span><span style={css('height:65%')}></span><span style={css('height:55%')}></span><span style={css('height:75%')}></span><span style={css('height:70%')}></span><span style={css('height:90%')}></span></div></StatCard>
+<StatCard variant=""><div className="stat-label">العملات النشطة</div><div className="stat-val">36</div><div className="fx ac gap8" style={css('margin-top:10px')}><Badge variant="neutral numjoin">0%</Badge><span className="t-sm">مستقر</span></div><div className="spark"><span style={css('height:60%')}></span><span style={css('height:62%')}></span><span style={css('height:58%')}></span><span style={css('height:61%')}></span><span style={css('height:59%')}></span><span style={css('height:60%')}></span><span style={css('height:60%')}></span></div></StatCard>
+<StatCard variant=""><div className="stat-label">العائد السنوي</div><div className="stat-val">4.1%</div><div className="fx ac gap8" style={css('margin-top:10px')}><Badge variant="red numjoin">−0.3%</Badge><span className="t-sm">هذا الشهر</span></div><div className="spark"><span style={css('height:80%')}></span><span style={css('height:72%')}></span><span style={css('height:78%')}></span><span style={css('height:65%')}></span><span style={css('height:60%')}></span><span style={css('height:55%')}></span><span style={css('height:50%')}></span></div></StatCard>
+</div>
+</section>
+  );
+}
+
+
+function LoadingSection({ v }) {
+  return (
+<section className="section" id="loading" data-screen-label="Loading">
+<SectionHeader kicker={"02 — المكوّنات"} title={"حالات التحميل"} desc={"أشرطة تقدّم، ومؤشّر دوّار، وهياكل تحميل وامضة."} />
+<div className="grid cols2" style={css('align-items:start')}>
+<ShowcasePanel><p className="subhead">شريط تقدّم ومؤشّر</p><div className="fx col gap16"><div className="progress"><span className="bar" style={css('width:72%')}></span></div><div className="progress green"><span className="bar" style={css('width:40%')}></span></div><div className="spinner"></div></div></ShowcasePanel>
+<ShowcasePanel><p className="subhead">هيكل تحميل</p><div className="fx ac gap12" style={css('margin-bottom:16px')}><span className="skel" style={css('width:44px;height:44px;border-radius:50%;flex:none')}></span><div className="fx col gap8 f1"><span className="skel" style={css('width:55%;height:13px')}></span><span className="skel" style={css('width:32%;height:11px')}></span></div></div><span className="skel" style={css('display:block;width:100%;height:11px;margin-bottom:9px')}></span><span className="skel" style={css('display:block;width:78%;height:11px')}></span></ShowcasePanel>
+</div>
+</section>
+  );
+}
+
+
+function ModalSection({ v }) {
+  const { closeModal, modalScrimCls, openModal, stop } = v;
+  return (
+<section className="section" id="modal" data-screen-label="Modal">
+<SectionHeader kicker={"02 — المكوّنات"} title={"النوافذ المنبثقة"} desc={"نافذة حوار مرتفعة فوق خلفية معتمة — فتح/إغلاق فعلي، إغلاق بالنقر خارجها أو Esc."} />
+<ShowcasePanel><Button variant="danger" onClick={openModal}><i data-lucide="trash-2"></i>حذف المحفظة</Button></ShowcasePanel>
+<div className={modalScrimCls} onClick={closeModal}><div className="mdialog" onClick={stop}><div className="dialog-ico">!</div><div className="dialog-title">حذف المحفظة؟</div><p className="dialog-text">سيؤدي هذا إلى إزالة المحفظة نهائيًا من جهازك، ولا يمكن التراجع عن هذا الإجراء.</p><div className="dialog-foot"><Button variant="danger" onClick={closeModal}>حذف نهائي</Button><Button variant="secondary" onClick={closeModal}>إلغاء</Button></div></div></div>
+</section>
+  );
+}
+
+
+function NavSection({ v }) {
+  const { pageItems, pageNext, pagePrev } = v;
+  return (
+<section className="section" id="nav" data-screen-label="Navigation">
+<SectionHeader kicker={"02 — المكوّنات"} title={"التنقّل"} desc={"شريط علوي ثابت، وشريط جانبي، وفتات خبز تتشارك حالة التحديد الزرقاء الفاتحة."} />
+<span className="cap">الشريط العلوي</span>
+<div className="navdemo"><div className="brandmark"><span className="logo">M</span>M7asmari</div><div className="topnav"><span style={css('color:var(--ink)')}>المحفظة</span><span>استكشاف</span><span>النشاط</span></div><div className="fx ac gap12"><Button variant="ghost sm">تسجيل الدخول</Button><Button variant="primary sm">ابدأ الآن</Button></div></div>
+<div className="grid cols2 blockgap" style={css('align-items:start')}>
+<div><span className="cap">الشريط الجانبي</span><div className="sidenav"><div className="sideitem on"><span className="sideicon"></span>المحفظة</div><div className="sideitem"><span className="sideicon"></span>إرسال واستقبال</div><div className="sideitem"><span className="sideicon"></span>مبادلة</div><div className="sideitem"><span className="sideicon"></span>المقتنيات</div><div className="sideitem"><span className="sideicon"></span>الإعدادات</div></div></div>
+<div><span className="cap">فتات الخبز</span><div className="navdemo" style={css('justify-content:flex-start')}><div className="breadcrumb"><span>المحفظة</span><span className="crumbsep">/</span><span>المقتنيات</span><span className="crumbsep">/</span><span className="here">Pixel M7 #204</span></div></div>
+<span className="cap" style={css('margin-top:24px')}>ترقيم الصفحات</span><div className="btnrow"><Button variant="secondary sm" onClick={pageNext}>→</Button>{(pageItems || []).map((p, $index) => (<React.Fragment key={$index}><button className={p.cls} onClick={p.fn}>{p.n}</button></React.Fragment>))}<Button variant="secondary sm" onClick={pagePrev}>←</Button></div></div>
+</div>
+</section>
+  );
+}
+
+
+function NumAnimSection({ v }) {
+  const { numConvRef, numMrrRef, numUsersRef, replayNums } = v;
+  return (
+<section className="section" id="numanim" data-screen-label="Number animation">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الأرقام المتحرّكة"} desc={"أرقام تعدّ تصاعديًا بتسارع تباطؤ أسّي عند ظهورها على الشاشة. اضغط «إعادة» لتشغيلها مجددًا."} />
+<ShowcasePanel>
+<div className="fx ac jb" style={css('margin-bottom:18px')}><span className="cap" style={css('margin:0')}>مؤشّرات حيّة</span><Button variant="secondary sm" onClick={replayNums}><i data-lucide="rotate-ccw"></i>إعادة</Button></div>
+<div className="numgrid">
+<div className="numcard"><div className="num-label">الإيراد الشهري المتكرّر</div><div className="num-val" ref={numMrrRef}>$0</div><div className="num-delta up"><i data-lucide="trending-up"></i><span className="numjoin">+12.4% عن الشهر الماضي</span></div></div>
+<div className="numcard"><div className="num-label">المستخدمون النشطون</div><div className="num-val" ref={numUsersRef}>0</div><div className="num-delta up"><i data-lucide="trending-up"></i><span className="numjoin">+5.1% هذا الأسبوع</span></div></div>
+<div className="numcard"><div className="num-label">معدّل التحويل</div><div className="num-val" ref={numConvRef}>0%</div><div className="num-delta down"><i data-lucide="trending-down"></i><span className="numjoin">−0.6% عن الأمس</span></div></div>
+</div>
+</ShowcasePanel>
+</section>
+  );
+}
+
+
+function OtpSection({ v }) {
+  const { otpBoxes, otpMsg, otpMsgCls, otpPaste, otpWrapCls, resetOtp } = v;
+  return (
+<section className="section" id="otp" data-screen-label="OTP input">
+<SectionHeader kicker={"02 — المكوّنات"} title={"رمز التحقّق"} desc={"ستّ خانات بتقدّم تلقائي ودعم اللصق و Backspace. الرمز الصحيح 123456 — يتحقّق فور اكتمال الإدخال."} />
+<ShowcasePanel><div className="field" style={css('gap:14px')}><label className="label">رمز التحقّق</label><div className={otpWrapCls} onPaste={otpPaste}>{(otpBoxes || []).map((b, $index) => (<React.Fragment key={$index}><input className="otpbox" inputMode="numeric" autoComplete="one-time-code" value={b.d} ref={b.ref} onChange={b.onInput} onKeyDown={b.onKey} /></React.Fragment>))}</div><div className="fx ac jb"><span className={otpMsgCls}>{otpMsg}</span><Button variant="ghost sm" onClick={resetOtp}>مسح</Button></div></div></ShowcasePanel>
+</section>
+  );
+}
+
+
+function PatternsSection({ v }) {
+  return (
+<section className="section" id="patterns" data-screen-label="Patterns">
+<SectionHeader kicker={"03 — الأنماط"} title={"قسم المزايا"} desc={"تركيب صفحة هبوط حقيقي من أوّليّات النظام: طباعة + رابط متحرّك + شبكة بطاقات."} />
+<FeatureSection v={v} />
+<p className="subhead" style={css('margin-top:44px')}>هيكل لوحة تحكّم — شريط جانبي + رأس + محتوى</p>
+<DashboardShell v={v} />
+</section>
+  );
+}
+
+
+function SearchSliderSection({ v }) {
+  const { sliderDown, sliderFill, sliderKnob, sliderMove, sliderPct, sliderRef, sliderUp } = v;
+  return (
+<section className="section" id="searchslider" data-screen-label="Search &amp; Slider">
+<SectionHeader kicker={"02 — المكوّنات"} title={"البحث والمنزلق"} desc={"حقل بحث دائري ومنزلق نطاق بمقبض واضح."} />
+<div className="grid cols2" style={css('align-items:start')}>
+<div><p className="subhead">حقل بحث</p><div className="search"><span className="mgicon"></span><input placeholder="ابحث عن أصل أو عنوان…" /></div></div>
+<ShowcasePanel><p className="subhead">منزلق — اسحب المقبض</p><div className="fx ac jb"><span className="t-sm">الرسوم</span><span className="tnum">{sliderPct}</span></div><div className="sliderlive" ref={sliderRef} onPointerDown={sliderDown} onPointerMove={sliderMove} onPointerUp={sliderUp}><div className="slider"><span className="fill" style={css(sliderFill)}></span><span className="knob" style={css(sliderKnob)}></span></div></div><div className="fx ac jb" style={css('margin-top:14px')}><span className="t-sm">الانزلاق</span><span className="tnum">30%</span></div><div className="slider"><span className="fill" style={css('width:30%')}></span><span className="knob" style={css('right:30%')}></span></div></ShowcasePanel>
+</div>
+</section>
+  );
+}
+
+
+function SelectSection({ v }) {
+  return (
+<section className="section" id="select" data-screen-label="Select &amp; Menu">
+<SectionHeader kicker={"02 — المكوّنات"} title={"القوائم المنسدلة"} desc={"قائمة اختيار مفتوحة وقائمة إجراءات تتشارك نمط التحديد الزرقاء الفاتحة."} />
+<div className="grid cols2" style={css('align-items:start')}>
+<div><p className="subhead">قائمة اختيار</p><div className="selectbox open"><span>الشبكة: إيثيريوم</span><span className="chev">▾</span></div><div className="menu" style={css('margin-top:8px')}><div className="menuitem sel">إيثيريوم<span>✓</span></div><div className="menuitem">أربيتروم</div><div className="menuitem">أوبتيميزم</div><div className="menuitem">بوليجون</div></div></div>
+<div><p className="subhead">قائمة إجراءات</p><div className="menu" style={css('max-width:280px')}><div className="menuitem">تعديل</div><div className="menuitem">مشاركة</div><div className="menuitem">تكرار</div><div className="menusep"></div><div className="menuitem danger">حذف</div></div></div>
+</div>
+</section>
+  );
+}
+
+
+function StepperSection({ v }) {
+  return (
+<section className="section" id="stepper" data-screen-label="Stepper &amp; Divider">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الخطوات والفواصل"} desc={"مؤشّر خطوات متعدّد المراحل، وفواصل عادية ونصية."} />
+<ShowcasePanel><p className="subhead">مؤشّر خطوات</p><div className="stepper"><div className="step done"><span className="step-dot">✓</span><span className="step-label">الحساب</span></div><span className="step-line done"></span><div className="step active"><span className="step-dot">2</span><span className="step-label">التحقّق</span></div><span className="step-line"></span><div className="step"><span className="step-dot">3</span><span className="step-label">تم</span></div></div>
+<p className="subhead" style={css('margin:30px 0 16px')}>فواصل</p><div className="divider"></div><div className="divider-tx" style={css('margin-top:18px')}>أو</div></ShowcasePanel>
+</section>
+  );
+}
+
+
+function SwipeSection({ v }) {
+  const { resetSwipe, swCount, swLast, swMove, swRows, swUp } = v;
+  return (
+<section className="section" id="swipe" data-screen-label="Swipeable list">
+<SectionHeader kicker={"02 — المكوّنات"} title={"قائمة قابلة للسحب"} desc={"اسحب أي صفّ يميناً للكشف عن (تم/تثبيت) أو يساراً عن (لاحقًا/حذف). السحب الكامل يطلق الإجراء مباشرة."} />
+<div className="swcard"><div className="swhead"><div><div className="swhead-t">طابور الأولوية</div><div className="swhead-s">{swLast}</div></div><Button variant="ghost sm" onClick={resetSwipe}><svg className="ic" viewBox="0 0 24 24"><path d="M4 12a8 8 0 108-8 8 8 0 00-6 2.7M4 4v4h4"></path></svg>إعادة</Button></div>
+<div className="swlist">{(swRows || []).map((r, $index) => (<React.Fragment key={$index}><div className={r.rowCls}><div className="swactions left"><button className="swact success" onClick={r.actDone}><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>تم</button><button className="swact primary" onClick={r.actPin}><svg viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg>تثبيت</button></div><div className="swactions right"><button className="swact warning" onClick={r.actLater}><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>لاحقًا</button><button className="swact danger" onClick={r.actTrash}><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"></path></svg>حذف</button></div><div className="swfg" ref={r.ref} onPointerDown={r.down} onPointerMove={swMove} onPointerUp={swUp}><span className="swlead">{(r.isFile) ? (<React.Fragment><svg viewBox="0 0 24 24"><path d="M14 3v5h5M14 3H6v18h12V8M9 13h6M9 17h4"></path></svg></React.Fragment>) : null}{(r.isMail) ? (<React.Fragment><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M4 7l8 6 8-6"></path></svg></React.Fragment>) : null}{(r.isUser) ? (<React.Fragment><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M5 20c0-4 3.5-6 7-6s7 2 7 6"></path></svg></React.Fragment>) : null}{(r.isFlag) ? (<React.Fragment><svg viewBox="0 0 24 24"><path d="M5 21V4h13l-3 5 3 5H5"></path></svg></React.Fragment>) : null}</span><div className="swbody"><div className="swtitle">{r.title}</div><div className="swdesc">{r.desc}</div></div><span className="swmeta">{r.meta}</span></div></div></React.Fragment>))}</div>
+<div className="swfoot"><span>{swCount}</span><span>اليوم</span></div>
+<div className="swhint">↔ اسحب الصفّ يميناً أو يساراً</div></div>
+</section>
+  );
+}
+
+
+function TablesSection({ v }) {
+  const { sortBal, sortChg, sortName, sortPrice, tblRows, thBal, thChg, thName, thPrice } = v;
+  return (
+<section className="section" id="tables" data-screen-label="Tables">
+<SectionHeader kicker={"02 — المكوّنات"} title={"الجداول"} desc={"حدود هادئة، أرقام أحادية المسافة، وصفوف تتفاعل عند المرور لبيانات سهلة المسح."} />
+<div className="tablewrap"><table className="tbl"><thead><tr><th className="sortable" onClick={sortName}>{thName}</th><th className="sortable" style={css('text-align: center')} onClick={sortBal}>{thBal}</th><th className="sortable" style={css('text-align: center')} onClick={sortPrice}>{thPrice}</th><th className="sortable" style={css('text-align: center')} onClick={sortChg}>{thChg}</th><th style={css('text-align: center')}>الحالة</th></tr></thead><tbody>
+{(tblRows || []).map((r, $index) => (<React.Fragment key={$index}><tr><td><div className="fx ac gap16"><span className="av" style={css(`background:${r.avc}`)}>{r.av}</span><span className="cellname" style={css('padding-right: 8px')}>{r.name}</span></div></td><td className="tnum" style={css('text-align: center')}>{r.bal}</td><td className="tnum" style={css('text-align: center')}>{r.price}</td><td style={css('text-align: center')}><span className={r.chgCls}>{r.chg}</span></td><td style={css('text-align: center')}><span className={r.statusCls}><span className="dot"></span>{r.status}</span></td></tr></React.Fragment>))}
+</tbody></table></div>
+</section>
+  );
+}
+
+
+function TabsSection({ v }) {
+  const { pillIndStyle, pillTabs, pillText, segIndStyle, segTabs, undIndRef, undTabs } = v;
+  return (
+<section className="section" id="tabs" data-screen-label="Tabs">
+<SectionHeader kicker={"02 — المكوّنات"} title={"التبويبات"} desc={"ثلاثة أنواع — حبّة، مقسّم، وخط سفلي — بمؤشّر منزلق متحرّك. كلها تفاعلية."} />
+<ShowcasePanel><div className="fx col gap24">
+<div className="tabsec"><span className="cap">حبّة</span><div className="tablist pill"><div className="tabind" style={css(pillIndStyle)}></div>{(pillTabs || []).map((tb, $index) => (<React.Fragment key={$index}><button className={tb.cls} onClick={tb.fn}>{tb.label}</button></React.Fragment>))}</div><div className="tabpanel2">{pillText}</div></div>
+<div className="tabsec"><span className="cap">مقسّم</span><div className="tablist seg"><div className="tabind" style={css(segIndStyle)}></div>{(segTabs || []).map((tb, $index) => (<React.Fragment key={$index}><button className={tb.cls} onClick={tb.fn}>{tb.label}</button></React.Fragment>))}</div></div>
+<div className="tabsec"><span className="cap">خط سفلي</span><div className="tablist und"><div className="tabind" ref={undIndRef}></div>{(undTabs || []).map((tb, $index) => (<React.Fragment key={$index}><button className={tb.cls} ref={tb.ref} onClick={tb.fn}>{tb.label}</button></React.Fragment>))}</div></div>
+</div></ShowcasePanel>
+</section>
+  );
+}
+
+
+function UploadSection({ v }) {
+  const { dzCls, resetUpload, setUpC, setUpR, upCenteredCls, upCounter, upFiles, upRowCls } = v;
+  return (
+<section className="section" id="upload" data-screen-label="Upload">
+<SectionHeader kicker={"02 — المكوّنات"} title={"رفع الملفات"} desc={"بطاقة رفع كاملة: منطقة إفلات، وقائمة ملفات بحالات (مكتمل، جارٍ الرفع، خطأ مع إعادة المحاولة)، وتبديل للتخطيط."} />
+<div className="upcard"><div className="uphead"><div><div className="filename" style={css('font-size:15px')}>حزمة الرفع</div><div className="filemeta">{upCounter}</div></div><div className="fx ac gap8"><div className="upseg"><button className={upCenteredCls} onClick={setUpC}>مركّز</button><button className={upRowCls} onClick={setUpR}>صف</button></div><button className="upreset" onClick={resetUpload} aria-label="إعادة تعيين"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12a8 8 0 108-8 8 8 0 00-6 2.7M4 4v4h4"></path></svg></button></div></div><div className={dzCls}><div className="dz-ico">↑</div><div className="dz-title">أفلِت الملفات للرفع</div><div className="dz-sub">PDF، صور، فيديو أو ملفات مضغوطة</div></div>{(upFiles || []).map((f, $index) => (<React.Fragment key={$index}><div className="fileitem"><span className={f.icoCls}>{f.ext}</span><div className="filemain"><div className="filename">{f.name}</div><div className={f.metaCls}>{f.meta}</div>{(f.showBar) ? (<React.Fragment><div className="fileprog"><span style={css(`width:${f.progPct}`)}></span></div></React.Fragment>) : null}</div>{(f.showCheck) ? (<React.Fragment><span className="filestat ok"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span></React.Fragment>) : null}{(f.showRetry) ? (<React.Fragment><button className="fileretry" onClick={f.retry}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12a8 8 0 108-8 8 8 0 00-6 2.7M4 4v4h4"></path></svg>إعادة</button></React.Fragment>) : null}</div></React.Fragment>))}</div>
+</section>
+  );
+}
+
+
+function Colors({ v }) {
+  const { copyExport, exportCssCls, exportJsonCls, exportText, exportTwCls, setExpCss, setExpJson, setExpTw } = v;
+  return (
+<section className="section" id="colors" data-screen-label="Colors">
+<SectionHeader kicker={"01 — الأسس"} title={"الألوان"} desc={"سلالم بأسلوب Tailwind من 50 إلى 950 لكل لون، مع طبقة توكنز دلالية. انقر أي درجة لنسخها."} />
+<ColorScale name={"العلامة / Sky"} varLabel={"--sky-50 … --sky-950"}><div className="scale"><div className="scell" data-copy="#ECF9FF"><div className="scell-chip" style={css('background:#ecf9ff')}></div><div className="scell-n">50</div></div><div className="scell" data-copy="#D3F0FF"><div className="scell-chip" style={css('background:#d3f0ff')}></div><div className="scell-n">100</div></div><div className="scell" data-copy="#B1E6FF"><div className="scell-chip" style={css('background:#b1e6ff')}></div><div className="scell-n">200</div></div><div className="scell" data-copy="#7DD6FF"><div className="scell-chip" style={css('background:#7dd6ff')}></div><div className="scell-n">300</div></div><div className="scell" data-copy="#38C0FB"><div className="scell-chip" style={css('background:#38c0fb')}></div><div className="scell-n">400</div></div><div className="scell" data-copy="#00A6EF"><div className="scell-chip" style={css('background:#00a6ef')}></div><div className="scell-n">500</div></div><div className="scell" data-copy="#0084C4"><div className="scell-chip" style={css('background:#0084c4')}></div><div className="scell-n">600</div></div><div className="scell" data-copy="#0A6A9E"><div className="scell-chip" style={css('background:#0a6a9e')}></div><div className="scell-n">700</div></div><div className="scell" data-copy="#115A82"><div className="scell-chip" style={css('background:#115a82')}></div><div className="scell-n">800</div></div><div className="scell" data-copy="#15496C"><div className="scell-chip" style={css('background:#15496c')}></div><div className="scell-n">900</div></div><div className="scell" data-copy="#0D2F47"><div className="scell-chip" style={css('background:#0d2f47')}></div><div className="scell-n">950</div></div></div></ColorScale><ColorScale name={"محايد دافئ / Neutral"} varLabel={"--neutral-50 … --neutral-950"}><div className="scale"><div className="scell" data-copy="#FBFAF9"><div className="scell-chip" style={css('background:#fbfaf9')}></div><div className="scell-n">50</div></div><div className="scell" data-copy="#F3F1ED"><div className="scell-chip" style={css('background:#f3f1ed')}></div><div className="scell-n">100</div></div><div className="scell" data-copy="#EAE7E1"><div className="scell-chip" style={css('background:#eae7e1')}></div><div className="scell-n">200</div></div><div className="scell" data-copy="#DCD7CE"><div className="scell-chip" style={css('background:#dcd7ce')}></div><div className="scell-n">300</div></div><div className="scell" data-copy="#B8B2A8"><div className="scell-chip" style={css('background:#b8b2a8')}></div><div className="scell-n">400</div></div><div className="scell" data-copy="#8F8D86"><div className="scell-chip" style={css('background:#8f8d86')}></div><div className="scell-n">500</div></div><div className="scell" data-copy="#6E6C66"><div className="scell-chip" style={css('background:#6e6c66')}></div><div className="scell-n">600</div></div><div className="scell" data-copy="#54534E"><div className="scell-chip" style={css('background:#54534e')}></div><div className="scell-n">700</div></div><div className="scell" data-copy="#3A3833"><div className="scell-chip" style={css('background:#3a3833')}></div><div className="scell-n">800</div></div><div className="scell" data-copy="#1B1B19"><div className="scell-chip" style={css('background:#1b1b19')}></div><div className="scell-n">900</div></div><div className="scell" data-copy="#121210"><div className="scell-chip" style={css('background:#121210')}></div><div className="scell-n">950</div></div></div></ColorScale><ColorScale name={"نجاح / Emerald"} varLabel={"--emerald-50 … --emerald-950"}><div className="scale"><div className="scell" data-copy="#E6F9F0"><div className="scell-chip" style={css('background:#e6f9f0')}></div><div className="scell-n">50</div></div><div className="scell" data-copy="#C7F2DD"><div className="scell-chip" style={css('background:#c7f2dd')}></div><div className="scell-n">100</div></div><div className="scell" data-copy="#93E6BF"><div className="scell-chip" style={css('background:#93e6bf')}></div><div className="scell-n">200</div></div><div className="scell" data-copy="#57D59C"><div className="scell-chip" style={css('background:#57d59c')}></div><div className="scell-n">300</div></div><div className="scell" data-copy="#28C885"><div className="scell-chip" style={css('background:#28c885')}></div><div className="scell-n">400</div></div><div className="scell" data-copy="#16BD74"><div className="scell-chip" style={css('background:#16bd74')}></div><div className="scell-n">500</div></div><div className="scell" data-copy="#0E9A5D"><div className="scell-chip" style={css('background:#0e9a5d')}></div><div className="scell-n">600</div></div><div className="scell" data-copy="#0C7C4C"><div className="scell-chip" style={css('background:#0c7c4c')}></div><div className="scell-n">700</div></div><div className="scell" data-copy="#0C623D"><div className="scell-chip" style={css('background:#0c623d')}></div><div className="scell-n">800</div></div><div className="scell" data-copy="#0A4F33"><div className="scell-chip" style={css('background:#0a4f33')}></div><div className="scell-n">900</div></div><div className="scell" data-copy="#042C1C"><div className="scell-chip" style={css('background:#042c1c')}></div><div className="scell-n">950</div></div></div></ColorScale><ColorScale name={"تحذير / Amber"} varLabel={"--amber-50 … --amber-950"}><div className="scale"><div className="scell" data-copy="#FEF7E7"><div className="scell-chip" style={css('background:#fef7e7')}></div><div className="scell-n">50</div></div><div className="scell" data-copy="#FDEDC4"><div className="scell-chip" style={css('background:#fdedc4')}></div><div className="scell-n">100</div></div><div className="scell" data-copy="#FBDB8C"><div className="scell-chip" style={css('background:#fbdb8c')}></div><div className="scell-n">200</div></div><div className="scell" data-copy="#F9C652"><div className="scell-chip" style={css('background:#f9c652')}></div><div className="scell-n">300</div></div><div className="scell" data-copy="#F7B332"><div className="scell-chip" style={css('background:#f7b332')}></div><div className="scell-n">400</div></div><div className="scell" data-copy="#F5A623"><div className="scell-chip" style={css('background:#f5a623')}></div><div className="scell-n">500</div></div><div className="scell" data-copy="#C97F06"><div className="scell-chip" style={css('background:#c97f06')}></div><div className="scell-n">600</div></div><div className="scell" data-copy="#A3640A"><div className="scell-chip" style={css('background:#a3640a')}></div><div className="scell-n">700</div></div><div className="scell" data-copy="#854F0F"><div className="scell-chip" style={css('background:#854f0f')}></div><div className="scell-n">800</div></div><div className="scell" data-copy="#6F4210"><div className="scell-chip" style={css('background:#6f4210')}></div><div className="scell-n">900</div></div><div className="scell" data-copy="#3F2305"><div className="scell-chip" style={css('background:#3f2305')}></div><div className="scell-n">950</div></div></div></ColorScale><ColorScale name={"خطر / Red"} varLabel={"--red-50 … --red-950"}><div className="scale"><div className="scell" data-copy="#FFEEE9"><div className="scell-chip" style={css('background:#ffeee9')}></div><div className="scell-n">50</div></div><div className="scell" data-copy="#FFD6CB"><div className="scell-chip" style={css('background:#ffd6cb')}></div><div className="scell-n">100</div></div><div className="scell" data-copy="#FFB3A1"><div className="scell-chip" style={css('background:#ffb3a1')}></div><div className="scell-n">200</div></div><div className="scell" data-copy="#FF8A6E"><div className="scell-chip" style={css('background:#ff8a6e')}></div><div className="scell-n">300</div></div><div className="scell" data-copy="#FD5E3A"><div className="scell-chip" style={css('background:#fd5e3a')}></div><div className="scell-n">400</div></div><div className="scell" data-copy="#FB3D18"><div className="scell-chip" style={css('background:#fb3d18')}></div><div className="scell-n">500</div></div><div className="scell" data-copy="#D22D0D"><div className="scell-chip" style={css('background:#d22d0d')}></div><div className="scell-n">600</div></div><div className="scell" data-copy="#AD2410"><div className="scell-chip" style={css('background:#ad2410')}></div><div className="scell-n">700</div></div><div className="scell" data-copy="#8E2113"><div className="scell-chip" style={css('background:#8e2113')}></div><div className="scell-n">800</div></div><div className="scell" data-copy="#761F14"><div className="scell-chip" style={css('background:#761f14')}></div><div className="scell-n">900</div></div><div className="scell" data-copy="#400B05"><div className="scell-chip" style={css('background:#400b05')}></div><div className="scell-n">950</div></div></div></ColorScale>
+<div className="contrastnote"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16v.5"></path></svg><div><b>تباين وإتاحة:</b> استخدم درجة 500 للخلفيات والحدود، ودرجة 600–700 للنصوص الملوّنة على خلفية فاتحة (تستوفي WCAG AA). الدرجات 50–100 للأسطح الخفيفة، و800–950 للوضع الداكن.</div></div>
+<p className="subhead" style={css('margin-top:30px')}>توكنز دلالية</p>
+<div className="grid cols4">
+<ColorSwatch copy={"var(--surface)"} chip={"background:var(--surface);box-shadow:inset 0 0 0 1px var(--border)"} name={"سطح"} hex={"--surface"} />
+<ColorSwatch copy={"var(--canvas)"} chip={"background:var(--canvas);box-shadow:inset 0 0 0 1px var(--border)"} name={"خلفية"} hex={"--canvas"} />
+<ColorSwatch copy={"var(--border)"} chip={"background:var(--border)"} name={"حدود"} hex={"--border"} />
+<ColorSwatch copy={"var(--ink)"} chip={"background:var(--ink)"} name={"نص أساسي"} hex={"--ink"} />
+<ColorSwatch copy={"var(--brand)"} chip={"background:var(--brand)"} name={"العلامة"} hex={"--brand"} />
+<ColorSwatch copy={"var(--green)"} chip={"background:var(--green)"} name={"نجاح"} hex={"--green"} />
+<ColorSwatch copy={"var(--gold)"} chip={"background:var(--gold)"} name={"تحذير"} hex={"--gold"} />
+<ColorSwatch copy={"var(--red)"} chip={"background:var(--red)"} name={"خطر"} hex={"--red"} />
+</div>
+<p className="subhead" style={css('margin-top:30px')}>palette تصنيفية — للرسوم والبيانات</p>
+<div className="grid cols4"><div className="swatch" data-copy="#00A6EF"><div className="swatch-chip" style={css('background:#00a6ef;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-1</div></div></div><div className="swatch" data-copy="#16BD74"><div className="swatch-chip" style={css('background:#16bd74;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-2</div></div></div><div className="swatch" data-copy="#F5A623"><div className="swatch-chip" style={css('background:#f5a623;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-3</div></div></div><div className="swatch" data-copy="#FB3D18"><div className="swatch-chip" style={css('background:#fb3d18;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-4</div></div></div><div className="swatch" data-copy="#8B5CF6"><div className="swatch-chip" style={css('background:#8b5cf6;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-5</div></div></div><div className="swatch" data-copy="#EC4899"><div className="swatch-chip" style={css('background:#ec4899;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-6</div></div></div><div className="swatch" data-copy="#0EA5A4"><div className="swatch-chip" style={css('background:#0ea5a4;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-7</div></div></div><div className="swatch" data-copy="#6366F1"><div className="swatch-chip" style={css('background:#6366f1;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--cat-8</div></div></div></div>
+<p className="subhead" style={css('margin-top:30px')}>تصدير الرموز</p>
+<div className="exportbar"><div className="expfmts"><button className={exportTwCls} onClick={setExpTw}>Tailwind</button><button className={exportCssCls} onClick={setExpCss}>CSS</button><button className={exportJsonCls} onClick={setExpJson}>JSON</button></div><Button variant="primary sm" onClick={copyExport}><i data-lucide="copy"></i>نسخ</Button></div>
+<CodeBlock>{exportText}</CodeBlock>
+</section>
+  );
+}
+
+
+function Elevation({ v }) {
+  return (
+<section className="section" id="elevation" data-screen-label="Elevation &amp; Z-index">
+<SectionHeader kicker={"01 — الأسس"} title={"الطبقات والارتفاع"} desc={"سلّم z-index موحّد يمنع تضارب الطبقات، وثلاثة مستويات ظلّ للارتفاع."} />
+<div className="grid cols2" style={css('align-items:start')}>
+<ShowcasePanel><p className="subhead">سلّم z-index</p>
+<div className="zrow"><span className="zname">المحتوى الأساسي</span><span className="zval">1</span></div>
+<div className="zrow"><span className="zname">القوائم المنسدلة</span><span className="zval">1000</span></div>
+<div className="zrow"><span className="zname">الأشرطة الثابتة</span><span className="zval">1100</span></div>
+<div className="zrow"><span className="zname">الأدراج</span><span className="zval">1200</span></div>
+<div className="zrow"><span className="zname">النوافذ المنبثقة</span><span className="zval">1300</span></div>
+<div className="zrow"><span className="zname">الإشعارات العائمة</span><span className="zval">1400</span></div>
+<div className="zrow" style={css('border:none')}><span className="zname">التلميحات</span><span className="zval">1500</span></div>
+</ShowcasePanel>
+<ShowcasePanel><p className="subhead">مستويات الارتفاع</p><div className="grid cols3" style={css('gap:14px')}><div className="shadowdemo" data-copy="var(--sh-sm)" style={css('box-shadow:var(--sh-sm)')}>sm</div><div className="shadowdemo" data-copy="var(--sh-md)" style={css('box-shadow:var(--sh-md)')}>md</div><div className="shadowdemo" data-copy="var(--sh-lg)" style={css('box-shadow:var(--sh-lg)')}>lg</div></div><p className="t-sm" style={css('margin-top:18px')}>الظلال ترتفع مع الطبقة: البطاقات تستخدم sm، والقوائم md، والنوافذ والأدراج lg.</p></ShowcasePanel>
+</div>
+</section>
+  );
+}
+
+
+function Icons({ v }) {
+  return (
+<section className="section" id="icons" data-screen-label="Icons">
+<SectionHeader kicker={"01 — الأسس"} title={"الأيقونات"} desc={"مجموعة خطّية موحّدة: شبكة 24px، سُمك حدّ 2px، نهايات وزوايا دائرية."} />
+<ShowcasePanel><div className="icongrid">
+<div className="iconcell"><i data-lucide="plus"></i><span>plus</span></div>
+<div className="iconcell"><i data-lucide="minus"></i><span>minus</span></div>
+<div className="iconcell"><i data-lucide="check"></i><span>check</span></div>
+<div className="iconcell"><i data-lucide="x"></i><span>close</span></div>
+<div className="iconcell"><i data-lucide="chevron-down"></i><span>chevron</span></div>
+<div className="iconcell"><i data-lucide="arrow-left"></i><span>arrow</span></div>
+<div className="iconcell"><i data-lucide="search"></i><span>search</span></div>
+<div className="iconcell"><i data-lucide="download"></i><span>download</span></div>
+<div className="iconcell"><i data-lucide="user"></i><span>user</span></div>
+<div className="iconcell"><i data-lucide="lock"></i><span>lock</span></div>
+<div className="iconcell"><i data-lucide="trash-2"></i><span>trash</span></div>
+<div className="iconcell"><i data-lucide="clock"></i><span>clock</span></div>
+</div></ShowcasePanel>
+</section>
+  );
+}
+
+
+function Motion({ v }) {
+  const { spring } = v;
+  return (
+<section className="section" id="motion" data-screen-label="Motion">
+<SectionHeader kicker={"01 — الأسس"} title={"الحركة"} desc={"مدد وتسارعات قياسية لكل الانتقالات. مرّر فوق البطاقات للمعاينة."} />
+<div className="grid cols2" style={css('align-items:start')}>
+<div className="fx col gap16">
+<div className="motiontile fast"><div className="mhead">سريع<code>120ms</code></div><div className="mtrack"><div className="mfill"></div></div></div>
+<div className="motiontile"><div className="mhead">أساسي<code>180ms</code></div><div className="mtrack"><div className="mfill"></div></div></div>
+<div className="motiontile slow"><div className="mhead">بطيء<code>320ms</code></div><div className="mtrack"><div className="mfill"></div></div></div>
+<div className="motiontile spring"><div className="mhead">مرتدّ (spring)<code>ease-spring</code></div><div className="mtrack"><div className="mfill"></div></div></div>
+</div>
+<ShowcasePanel><p className="subhead">رموز الحركة</p>
+<div className="mtokrow">سريع<code>--dur-fast · 120ms</code></div>
+<div className="mtokrow">أساسي<code>--dur · 180ms</code></div>
+<div className="mtokrow">بطيء<code>--dur-slow · 320ms</code></div>
+<div className="mtokrow">قياسي<code>--ease · (.4,0,.2,1)</code></div>
+<div className="mtokrow">خروج<code>--ease-out</code></div>
+<div className="mtokrow" style={css('border:none')}>مرتدّ<code>--ease-spring</code></div>
+</ShowcasePanel>
+</div>
+</section>
+  );
+}
+
+
+function Radius({ v }) {
+  return (
+<section id="radius" data-screen-label="Radius">
+<SectionHeader kicker={"01 — الأسس"} title={"الزوايا"} desc={""} />
+<div className="grid cols4">
+<div className="radbox" data-copy="10px"><div className="radshape" style={css('border-radius:10px')}></div><span className="radlabel">sm · 10</span></div>
+<div className="radbox" data-copy="14px"><div className="radshape" style={css('border-radius:14px')}></div><span className="radlabel">md · 14</span></div>
+<div className="radbox" data-copy="20px"><div className="radshape" style={css('border-radius:20px')}></div><span className="radlabel">lg · 20</span></div>
+<div className="radbox" data-copy="999px"><div className="radshape" style={css('border-radius:999px')}></div><span className="radlabel">full</span></div>
+</div>
+</section>
+  );
+}
+
+
+function Shadow({ v }) {
+  return (
+<section id="shadow" data-screen-label="Shadows">
+<SectionHeader kicker={"01 — الأسس"} title={"الظلال"} desc={""} />
+<div className="grid cols3">
+<div className="shadowdemo" data-copy="var(--sh-sm)" style={css('box-shadow:var(--sh-sm)')}>sm</div>
+<div className="shadowdemo" data-copy="var(--sh-md)" style={css('box-shadow:var(--sh-md)')}>md</div>
+<div className="shadowdemo" data-copy="var(--sh-lg)" style={css('box-shadow:var(--sh-lg)')}>lg</div>
+</div>
+</section>
+  );
+}
+
+
+function Spacing({ v }) {
+  return (
+<section className="section" id="spacing" data-screen-label="Spacing">
+<SectionHeader kicker={"01 — الأسس"} title={"المسافات"} desc={"مقياس أساسه 4 بكسل. التخطيطات تتنفّس — صفحة المصدر تعتمد على مساحات بيضاء كبيرة وواثقة."} />
+<ShowcasePanel>
+<TokenTable copy={"4px"} label={"space-1 · 4"} bar={"width:4px"} />
+<TokenTable copy={"8px"} label={"space-2 · 8"} bar={"width:8px"} />
+<TokenTable copy={"12px"} label={"space-3 · 12"} bar={"width:12px"} />
+<TokenTable copy={"16px"} label={"space-4 · 16"} bar={"width:16px"} />
+<TokenTable copy={"24px"} label={"space-6 · 24"} bar={"width:24px"} />
+<TokenTable copy={"32px"} label={"space-8 · 32"} bar={"width:32px"} />
+<TokenTable copy={"48px"} label={"space-12 · 48"} bar={"width:48px"} />
+<TokenTable copy={"64px"} label={"space-16 · 64"} bar={"width:64px"} />
+</ShowcasePanel>
+</section>
+  );
+}
+
+
+function States({ v }) {
+  return (
+<section className="section" id="states" data-screen-label="States">
+<SectionHeader kicker={"01 — الأسس"} title={"حالات التفاعل"} desc={"كل عنصر تفاعلي يتحدّث اللغة نفسها: تغيّر خفيف في التعبئة عند المرور، ضغطة عند النقر، وحلقة تركيز زرقاء ناعمة."} />
+<div className="grid cols3">
+<div className="statecard"><div className="statelabel">افتراضي</div><div className="statebox">عنصر</div></div>
+<div className="statecard"><div className="statelabel">مرور</div><div className="statebox b-hover">عنصر</div></div>
+<div className="statecard"><div className="statelabel">نشِط / مضغوط</div><div className="statebox b-active">عنصر</div></div>
+<div className="statecard"><div className="statelabel">حلقة التركيز</div><div className="statebox b-focus">عنصر</div></div>
+<div className="statecard"><div className="statelabel">محدّد</div><div className="statebox b-selected">عنصر</div></div>
+<div className="statecard"><div className="statelabel">معطّل</div><div className="statebox b-disabled">عنصر</div></div>
+</div>
+</section>
+  );
+}
+
+
+function Typography({ v }) {
+  return (
+<section className="section" id="type" data-screen-label="Typography">
+<SectionHeader kicker={"01 — الأسس"} title={"الطباعة"} desc={"خط ثمانية Serif للعناوين، وثمانية Sans للنصوص والواجهة، وJetBrains Mono للأرقام والبيانات."} />
+<ShowcasePanel>
+<TypeSpecimen cls={"t-display"} sample={"محمد الاسمري"} spec={"عرض · 54 / 800"} />
+<TypeSpecimen cls={"t-h1"} sample={"نظامك المفضّل"} spec={"عنوان 1 · 40 / 800"} />
+<TypeSpecimen cls={"t-h2"} sample={"أرسل، استقبل، بادل"} spec={"عنوان 2 · 30 / 700"} />
+<TypeSpecimen cls={"t-h3"} sample={"تفاصيل تهمّك"} spec={"عنوان 3 · 22 / 700"} />
+<TypeSpecimen cls={"t-lg"} sample={"استكشف إيثيريوم بطريقة جديدة كليًا."} spec={"نص كبير · 18 / 500"} />
+<TypeSpecimen cls={"t-body"} sample={"التعامل مع العملات الرقمية لم يكن بهذه البساطة — إعدادات افتراضية أنيقة ومسافات سخيّة."} spec={"نص · 16 / 400"} />
+<TypeSpecimen cls={"t-sm"} sample={"نص ثانوي مساند ونصوص توضيحية."} spec={"صغير · 14 / 500"} />
+<div className="typerow" style={css('border:none')}><span className="t-cap">BACKED UP · 2.4 ETH · 0x71C…9aF</span><span className="typespec">Mono · 12 / 500</span></div>
+</ShowcasePanel>
+</section>
+  );
+}
+
+
+function DarkModeSection({ v }) {
+  return (
+<section className="section" id="darkmode" data-screen-label="Dark mode">
+<SectionHeader kicker={"04 — مرجع"} title={"الوضع الداكن"} desc={"مجموعة رموز ثانية كاملة. بدّل الثيم من الزر في الشريط العلوي، أو عاين هنا."} />
+<div className="dark" style={css('border-radius:var(--r-lg);padding:30px;border:1px solid #2e2e34')}>
+<div className="grid cols2" style={css('align-items:start')}>
+<div className="fx col gap16">
+<div className="btnrow"><Button variant="brand">العلامة</Button><Button variant="secondary">ثانوي</Button><Button variant="ghost">شفاف</Button></div>
+<div className="field"><label className="label">اسم المحفظة</label><input className="input" placeholder="مثال: التوفير" /></div>
+<div className="btnrow"><Badge variant="brand"><span className="dot"></span>مُرسَل</Badge><Badge variant="green"><span className="dot"></span>مكتمل</Badge><Badge variant="gold"><span className="dot"></span>قيد الانتظار</Badge></div>
+</div>
+<Card variant="pcard"><div className="ph" style={css('background-color:#27272c')}><span className="ph-tag">معاينة داكنة</span></div><div className="pcard-body"><div className="fx ac jb"><span className="pcard-title">المحفظة الرئيسية</span><button className="switch on"></button></div><p className="pcard-text">نفس المكوّنات، رموز ألوان داكنة. التباين والوضوح محفوظان.</p></div></Card>
+</div>
+</div>
+</section>
+  );
+}
+
+
+function GuidelinesSection({ v }) {
+  return (
+<section className="section" id="guidelines" data-screen-label="Guidelines">
+<SectionHeader kicker={"04 — مرجع"} title={"دليل الاستخدام"} desc={"مبادئ موجزة للحفاظ على اتّساق النظام، ومقتطف كود للبدء."} />
+<div className="guide">
+<div className="dodont do"><div className="dd-head do"><i data-lucide="check"></i>افعل</div><div className="dd-li"><span className="dd-mk do">✓</span>استخدم زرًّا أساسيًا واحدًا في كل شاشة.</div><div className="dd-li"><span className="dd-mk do">✓</span>اعتمد رموز المسافات (مضاعفات 4) لكل الفراغات.</div><div className="dd-li"><span className="dd-mk do">✓</span>استخدم الألوان الدلالية لمعناها فقط.</div><div className="dd-li"><span className="dd-mk do">✓</span>حافظ على ارتفاع لمس لا يقلّ عن 44 بكسل.</div></div>
+<div className="dodont dont"><div className="dd-head dont"><i data-lucide="x"></i>لا تفعل</div><div className="dd-li"><span className="dd-mk dont">×</span>لا تكدّس عدة أزرار أساسية متجاورة.</div><div className="dd-li"><span className="dd-mk dont">×</span>لا تخترع ألوانًا أو زوايا خارج الرموز.</div><div className="dd-li"><span className="dd-mk dont">×</span>لا تستخدم الأحمر لغير الأخطاء والحذف.</div><div className="dd-li"><span className="dd-mk dont">×</span>لا تضف مسافات بين حروف النص العربي.</div></div>
+</div>
+<div className="code"><span className="c2">&lt;!-- زر أساسي --&gt;</span>
+&lt;<span className="c1">button</span> <span className="c3">class</span>=<span className="c2">"btn primary"</span>&gt;حفظ&lt;/<span className="c1">button</span>&gt;
+
+<span className="c2">&lt;!-- بطاقة --&gt;</span>
+&lt;<span className="c1">div</span> <span className="c3">class</span>=<span className="c2">"pcard"</span>&gt;
+  &lt;<span className="c1">div</span> <span className="c3">class</span>=<span className="c2">"pcard-body"</span>&gt;…&lt;/<span className="c1">div</span>&gt;
+&lt;/<span className="c1">div</span>&gt;</div>
+</section>
+  );
+}
+
+
+function ResponsiveSection({ v }) {
+  return (
+<section className="section" id="responsive" data-screen-label="Responsive">
+<SectionHeader kicker={"04 — مرجع"} title={"التجاوب"} desc={"نقاط توقّف موحّدة. الشبكات تنهار إلى عمود واحد، والأشرطة تتكيّف على الموبايل."} />
+<ShowcasePanel><div className="fx wrap gap16">
+<div className="bpchip"><b>موبايل</b><code>&lt; 760px · عمود واحد</code></div>
+<div className="bpchip"><b>لوحي</b><code>760 – 1024px</code></div>
+<div className="bpchip"><b>سطح المكتب</b><code>&gt; 1024px · 1120px max</code></div>
+</div><p className="t-sm" style={css('margin-top:18px')}>صغّر نافذة المتصفّح لأقل من 760 بكسل لرؤية الشبكات تتحوّل إلى عمود واحد وإخفاء روابط الشريط العلوي.</p></ShowcasePanel>
+</section>
+  );
+}
+
+
+function TopBar({ themeLabel, toggleCmd, toggleTheme }) {
+  return (
+    <div className="topbar"><div className="topbar-in"><div className="brandmark"><span className="logo">M</span>M7asmari</div><div className="topnav"><span>الأسس</span><span>المكوّنات</span><a href="#patterns" style={css('color:inherit;text-decoration:none')}>الأنماط</a><button className="themetoggle" aria-label="تبديل السمة" onClick={toggleTheme}><i data-lucide="moon"></i>{themeLabel}</button><button className="cmdtrigger" aria-label="فتح لوحة الأوامر" onClick={toggleCmd}><i data-lucide="search"></i>بحث<span className="cmdkbd">⌘K</span></button><span className="badge brand"><span className="dot"></span>v1.0</span></div></div></div>
+  );
+}
+
+
+function SideRail({ navItems }) {
+  return (
+    <nav className="siderail">{(navItems || []).map((n, $index) => (<React.Fragment key={$index}><a className={n.cls} href={n.href}>{n.label}</a></React.Fragment>))}</nav>
+  );
+}
+
+
+function Hero({}) {
+  return (
+    <header className="hero" data-screen-label="Hero">
+<span className="eyebrow">نظام تصميم</span>
+<h1 className="h1">M7asmari — نظام تصميم ودود ومتناسق لواجهات منتجات ممتعة.</h1>
+<p className="lead">مجموعة كاملة من الرموز التصميمية والمكوّنات، مستوحاة من صفحة هبوط مرحة لمحفظة عملات رقمية: ألوان محايدة دافئة، أزرق سماوي واثق، أزرار دائرية بالكامل، وأسطح ناعمة وملموسة.</p>
+
+<nav className="toc"><a className="tocchip" href="#colors">الألوان</a><a className="tocchip" href="#type">الطباعة</a><a className="tocchip" href="#spacing">المسافات</a><a className="tocchip" href="#radius">الزوايا</a><a className="tocchip" href="#shadow">الظلال</a><a className="tocchip" href="#states">الحالات</a><a className="tocchip" href="#buttons">الأزرار</a><a className="tocchip" href="#inputs">الحقول</a><a className="tocchip" href="#otp">رمز التحقّق</a><a className="tocchip" href="#cards">البطاقات</a><a className="tocchip" href="#tabs">التبويبات</a><a className="tocchip" href="#badges">الشارات</a><a className="tocchip" href="#tables">الجداول</a><a className="tocchip" href="#nav">التنقّل</a><a className="tocchip" href="#empty">الحالات الفارغة</a><a className="tocchip" href="#alerts">التنبيهات</a><a className="tocchip" href="#controls">عناصر الاختيار</a><a className="tocchip" href="#select">القوائم</a><a className="tocchip" href="#searchslider">البحث والمنزلق</a><a className="tocchip" href="#upload">رفع الملفات</a><a className="tocchip" href="#avatars">الصور الرمزية</a><a className="tocchip" href="#feedback">التلميحات والإشعارات</a><a className="tocchip" href="#loading">التحميل</a><a className="tocchip" href="#modal">النوافذ</a><a className="tocchip" href="#accordion">الأكورديون</a><a className="tocchip" href="#stepper">الخطوات والفواصل</a><a className="tocchip" href="#kpi">بطاقات الإحصاء</a><a className="tocchip" href="#numanim">الأرقام المتحرّكة</a><a className="tocchip" href="#banner">بانر الإشعار</a><a className="tocchip" href="#combobox">إكمال تلقائي</a><a className="tocchip" href="#calendar">التقويم</a><a className="tocchip" href="#drawer">الأدراج</a><a className="tocchip" href="#swipe">قائمة قابلة للسحب</a><a className="tocchip" href="#icons">الأيقونات</a><a className="tocchip" href="#motion">الحركة</a><a className="tocchip" href="#elevation">الطبقات</a><a className="tocchip" href="#darkmode">الوضع الداكن</a><a className="tocchip" href="#responsive">التجاوب</a><a className="tocchip" href="#patterns">الأنماط</a><a className="tocchip" href="#guidelines">دليل الاستخدام</a></nav>
+</header>
+  );
+}
+
+
+function CommandPalette({ closeCmd, cmdQuery, cmdResults, cmdScrimCls, onCmdInput, stop }) {
+  return (
+    <div className={cmdScrimCls} onClick={closeCmd}><div className="cmdbox" onClick={stop}><div className="cmdfield"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.5-4.5"></path></svg><input value={cmdQuery} onChange={onCmdInput} placeholder="ابحث عن مكوّن أو قسم…" /><span className="cmdkbd">Esc</span></div><div className="cmdlist">{(cmdResults || []).map((c, $index) => (<React.Fragment key={$index}><div className="cmditem" onClick={c.go}><span>{c.label}</span><span className="cmdcat">{c.cat}</span></div></React.Fragment>))}</div></div></div>
+  );
+}
+
+
+
+class App extends React.Component {
+  state = { tab: 0, theme: this.props.theme ?? 'light', cbTerms: true, cbUpdates: false, swNotif: true, radioPlan: 'pro', sheetOpen: false, drawerOpen: false, drawerSide: 'right', accOpen: 'calendar', upVariant: 'centered', toasts: [], toastPos: 'bottom-right', tabPill: 'overview', tabSeg: 'day', tabUnder: 'all', btnOk: 'idle', btnErr: 'idle', badgeIdx: 0, otp: ['', '', '', '', '', ''], otpStatus: 'idle', ensVal: '', ensStatus: 'idle', amtVal: '', amtStatus: 'idle', files: [], swItems: [], swOpen: null, swSide: null, swLast: 'جاهز', modalOpen: false, sliderVal: 65, calMonth: 5, calYear: 2026, calSel: 14, pageActive: 1, tags: ['تصميم', 'واجهات', 'عربي'], sortKey: null, sortDir: 1, activeSection: 'colors', cmdOpen: false, cmdQuery: '', dashSec: { pinned: true, folders: true, recent: true, tags: true }, dashCat: 'all', dashNotif: false, dashPinned: ['العمل'], exportFmt: 'tailwind' };
+  _filesInit = false;
+  _sliderRef = React.createRef();
+  _tid = 0;
+  _tos = {};
+  _undBtns = {};
+  _undInd = React.createRef();
+  _numRefs = { mrr: React.createRef(), users: React.createRef(), conv: React.createRef() };
+  _otpRefs = [0, 1, 2, 3, 4, 5].map(() => React.createRef());
+  _otpSetChar(i, ch) {
+    const otp = [...this.state.otp]; otp[i] = ch;
+    this.setState({ otp, otpStatus: 'idle' });
+    if (otp.every(d => d !== '')) setTimeout(() => this.setState({ otpStatus: otp.join('') === '123456' ? 'success' : 'error' }), 20);
+  }
+  onOtpInput(i) { return (e) => {
+    const v = (e.target.value || '').replace(/\D/g, '');
+    if (!v) { this._otpSetChar(i, ''); return; }
+    this._otpSetChar(i, v[v.length - 1]);
+    if (i < 5) { const n = this._otpRefs[i + 1].current; if (n) n.focus(); }
+  }; }
+  onOtpKey(i) { return (e) => {
+    if (e.key === 'Backspace' && !this.state.otp[i] && i > 0) { const p = this._otpRefs[i - 1].current; if (p) p.focus(); this._otpSetChar(i - 1, ''); }
+  }; }
+  onOtpPaste(e) {
+    e.preventDefault();
+    const t = ((e.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '').slice(0, 6);
+    if (!t) return;
+    const otp = ['', '', '', '', '', ''];
+    for (let k = 0; k < t.length; k++) otp[k] = t[k];
+    this.setState({ otp, otpStatus: 'idle' });
+    const idx = Math.min(t.length, 5); const el = this._otpRefs[idx].current; if (el) el.focus();
+    if (t.length === 6) setTimeout(() => this.setState({ otpStatus: t === '123456' ? 'success' : 'error' }), 20);
+  }
+  resetOtp() { this.setState({ otp: ['', '', '', '', '', ''], otpStatus: 'idle' }); const el = this._otpRefs[0].current; if (el) el.focus(); }
+  onEns(e) {
+    const v = e.target.value; let st = 'idle';
+    if (v) { const taken = ['admin', 'satoshi', 'vitalik', 'm7asmari']; if (v.length < 3) st = 'short'; else if (taken.includes(v.toLowerCase())) st = 'taken'; else st = 'ok'; }
+    this.setState({ ensVal: v, ensStatus: st });
+  }
+  onAmt(e) {
+    const v = e.target.value; let st = 'idle';
+    if (v !== '') { const n = parseFloat(v); if (isNaN(n) || n <= 0) st = 'bad'; else if (n > 2.4) st = 'over'; else st = 'ok'; }
+    this.setState({ amtVal: v, amtStatus: st });
+  }
+  _numFmt = {
+    mrr: (n) => '$' + Math.round(n).toLocaleString('en-US'),
+    users: (n) => Math.round(n).toLocaleString('en-US'),
+    conv: (n) => n.toFixed(1) + '%'
+  };
+  _runNums() {
+    clearInterval(this._numRAF);
+    const targets = { mrr: 129480, users: 8420, conv: 3.8 };
+    const start = performance.now(), dur = 1500;
+    const tick = () => {
+      const p = Math.min(1, (performance.now() - start) / dur);
+      const e = p >= 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      for (const k in targets) {
+        const el = this._numRefs[k].current;
+        if (el) el.textContent = this._numFmt[k](targets[k] * e);
+      }
+      if (p >= 1) clearInterval(this._numRAF);
+    };
+    this._numRAF = setInterval(tick, 16);
+    tick();
+  }
+  _watchNums() {
+    const el = document.getElementById('numanim');
+    if (!el || !window.IntersectionObserver) { this._runNums(); return; }
+    this._numIO = new IntersectionObserver((ents) => {
+      ents.forEach(en => { if (en.isIntersecting) { this._runNums(); this._numIO.disconnect(); } });
+    }, { threshold: 0.4 });
+    this._numIO.observe(el);
+  }
+  _posUnder() {
+    const el = this._undBtns[this.state.tabUnder], ind = this._undInd.current;
+    if (el && ind) { ind.style.width = el.offsetWidth + 'px'; ind.style.left = el.offsetLeft + 'px'; }
+  }
+  setUndRef = (id) => (el) => { if (el) this._undBtns[id] = el; };
+  runStateful(which) {
+    const key = which === 'ok' ? 'btnOk' : 'btnErr';
+    if (this.state[key] !== 'idle') return;
+    this.setState({ [key]: 'loading' });
+    setTimeout(() => {
+      this.setState({ [key]: which === 'ok' ? 'success' : 'error' });
+      setTimeout(() => this.setState({ [key]: 'idle' }), 1800);
+    }, 1400);
+  }
+  _upTimers = {};
+  _swRefs = {};
+  _swInit() {
+    return [
+      { id: 'brief', title: 'موجز الإطلاق', desc: 'إنهاء نصّ الإعلان', meta: '9:41', icon: 'file' },
+      { id: 'feedback', title: 'ملاحظات العميل', desc: 'ثلاثة تعليقات تنتظر الرد', meta: '11:08', icon: 'mail' },
+      { id: 'review', title: 'مراجعة التصميم', desc: 'تحقّق من المسافات قبل التسليم', meta: '13:20', icon: 'user' },
+      { id: 'incident', title: 'تشغيل مُعلَّم', desc: 'طابور الإعادة فيه مهمّة فاشلة', meta: 'الآن', icon: 'flag' }
+    ];
+  }
+  _getSwRef(id) { if (!this._swRefs[id]) this._swRefs[id] = React.createRef(); return this._swRefs[id]; }
+  _swAction(id, actId) {
+    const labels = { done: 'تم', pin: 'تثبيت', later: 'لاحقًا', trash: 'حذف' };
+    const item = this.state.swItems.find(i => i.id === id); if (!item) return;
+    const tone = actId === 'trash' ? 'error' : actId === 'done' ? 'success' : 'info';
+    this._add({ status: tone, title: labels[actId], description: item.title });
+    const fg = this._swRefs[id] && this._swRefs[id].current; if (fg) fg.style.transform = '';
+    this.setState(s => ({ swItems: actId === 'trash' ? s.swItems.filter(i => i.id !== id) : s.swItems, swLast: labels[actId] + ' · ' + item.title, swOpen: null, swSide: null }));
+  }
+  swDown(id) { return (e) => {
+    const fg = this._swRefs[id] && this._swRefs[id].current; if (!fg) return;
+    this._drag = { id, startX: e.clientX, dx: 0, fg };
+    fg.style.transition = 'none';
+    if (fg.setPointerCapture && e.pointerId != null) { try { fg.setPointerCapture(e.pointerId); } catch (_) {} }
+  }; }
+  swMove(e) { const d = this._drag; if (!d) return; let dx = e.clientX - d.startX; dx = Math.max(-150, Math.min(150, dx)); d.dx = dx; d.fg.style.transform = 'translateX(' + dx + 'px)'; }
+  swUp() {
+    const d = this._drag; if (!d) return; this._drag = null;
+    const fg = d.fg; fg.style.transition = ''; const dx = d.dx, trig = 118, reveal = 50;
+    if (dx >= trig) { this._swAction(d.id, 'done'); }
+    else if (dx <= -trig) { this._swAction(d.id, 'trash'); }
+    else if (dx >= reveal) { fg.style.transform = ''; this.setState({ swOpen: d.id, swSide: 'left' }); }
+    else if (dx <= -reveal) { fg.style.transform = ''; this.setState({ swOpen: d.id, swSide: 'right' }); }
+    else { fg.style.transform = ''; this.setState({ swOpen: null, swSide: null }); }
+  }
+  resetSwipe() { this.setState({ swItems: this._swInit(), swLast: 'تمت الاستعادة', swOpen: null, swSide: null }); }
+  _initialFiles() {
+    return [
+      { id: 'brand', name: 'brand-assets.zip', sizeLabel: '18.4 MB', ext: 'ZIP', kind: 'zip', progress: 100, status: 'success', error: null },
+      { id: 'release', name: 'release-cut.mov', sizeLabel: '84.2 MB', ext: 'MOV', kind: 'mov', progress: 58, status: 'uploading', error: null },
+      { id: 'contract', name: 'vendor-contract.pdf', sizeLabel: '2.8 MB', ext: 'PDF', kind: 'pdf', progress: 32, status: 'error', error: 'انقطع الاتصال' }
+    ];
+  }
+  _stopUpload(id) { if (this._upTimers[id]) { clearInterval(this._upTimers[id]); delete this._upTimers[id]; } }
+  _startUpload(id) {
+    this._stopUpload(id);
+    this._upTimers[id] = setInterval(() => {
+      const cur = this.state.files, tg = cur.find(f => f.id === id);
+      if (!tg || tg.status !== 'uploading') { this._stopUpload(id); return; }
+      const np = Math.min(100, (tg.progress || 0) + 7 + Math.random() * 12), done = np >= 100;
+      this.setState({ files: cur.map(f => f.id === id ? { ...f, progress: np, status: done ? 'success' : 'uploading', error: null } : f) });
+      if (done) { this._stopUpload(id); this._add({ status: 'success', title: 'اكتمل الرفع', description: tg.name }); }
+    }, 520);
+  }
+  retryFile(id) {
+    this.setState(s => ({ files: s.files.map(f => f.id === id ? { ...f, status: 'uploading', error: null } : f) }));
+    setTimeout(() => this._startUpload(id), 0);
+  }
+  resetUpload() {
+    Object.keys(this._upTimers).forEach(id => this._stopUpload(id));
+    this.setState({ files: this._initialFiles() });
+    setTimeout(() => this._startUpload('release'), 0);
+  }
+  copyToken(v) { try { navigator.clipboard && navigator.clipboard.writeText(v); } catch (_) {} this._add({ status: 'success', title: 'تم النسخ', description: v }); }
+  openModal() { this.setState({ modalOpen: true }); }
+  closeModal() { this.setState({ modalOpen: false }); }
+  sliderDown(e) { this._sliding = true; this.sliderMove(e); if (e.currentTarget.setPointerCapture && e.pointerId != null) { try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {} } }
+  sliderMove(e) {
+    if (!this._sliding) return;
+    const t = this._sliderRef && this._sliderRef.current; if (!t) return;
+    const r = t.getBoundingClientRect();
+    let pct = Math.round((r.right - e.clientX) / r.width * 100);
+    pct = Math.max(0, Math.min(100, pct));
+    this.setState({ sliderVal: pct });
+  }
+  sliderUp() { this._sliding = false; }
+  calPrev() { this.setState(s => { let m = s.calMonth - 1, y = s.calYear; if (m < 0) { m = 11; y--; } return { calMonth: m, calYear: y }; }); }
+  calNext() { this.setState(s => { let m = s.calMonth + 1, y = s.calYear; if (m > 11) { m = 0; y++; } return { calMonth: m, calYear: y }; }); }
+  calSelect(d) { this.setState({ calSel: d }); }
+  setPage(p) { if (p >= 1 && p <= 5) this.setState({ pageActive: p }); }
+  addTag(e) { if (e.key === 'Enter') { e.preventDefault(); const v = e.target.value.trim(); if (v) { this.setState(s => ({ tags: [...s.tags, v] })); e.target.value = ''; } } }
+  removeTag(i) { this.setState(s => ({ tags: s.tags.filter((_, k) => k !== i) })); }
+  setSort(key) { this.setState(s => ({ sortKey: key, sortDir: s.sortKey === key ? -s.sortDir : 1 })); }
+  toggleCmd() { this.setState(s => ({ cmdOpen: !s.cmdOpen, cmdQuery: '' })); }
+  _scaleDefs() {
+    return {
+      sky: ['#ecf9ff','#d3f0ff','#b1e6ff','#7dd6ff','#38c0fb','#00a6ef','#0084c4','#0a6a9e','#115a82','#15496c','#0d2f47'],
+      neutral: ['#fbfaf9','#f3f1ed','#eae7e1','#dcd7ce','#b8b2a8','#8f8d86','#6e6c66','#54534e','#3a3833','#1b1b19','#121210'],
+      emerald: ['#e6f9f0','#c7f2dd','#93e6bf','#57d59c','#28c885','#16bd74','#0e9a5d','#0c7c4c','#0c623d','#0a4f33','#042c1c'],
+      amber: ['#fef7e7','#fdedc4','#fbdb8c','#f9c652','#f7b332','#f5a623','#c97f06','#a3640a','#854f0f','#6f4210','#3f2305'],
+      red: ['#ffeee9','#ffd6cb','#ffb3a1','#ff8a6e','#fd5e3a','#fb3d18','#d22d0d','#ad2410','#8e2113','#761f14','#400b05']
+    };
+  }
+  _exportText(fmt) {
+    const steps = [50,100,200,300,400,500,600,700,800,900,950];
+    const sc = this._scaleDefs();
+    const radii = { sm: '10px', md: '14px', lg: '20px', xl: '28px', full: '999px' };
+    const space = { 1: '4px', 2: '8px', 3: '12px', 4: '16px', 6: '24px', 8: '32px', 12: '48px', 16: '64px' };
+    if (fmt === 'tailwind') {
+      let c = '';
+      for (const k in sc) { c += '        ' + k + ': {\n'; steps.forEach((s, i) => { c += '          ' + s + ": '" + sc[k][i] + "',\n"; }); c += '        },\n'; }
+      let r = ''; for (const k in radii) r += "        '" + k + "': '" + radii[k] + "',\n";
+      return '// tailwind.config.js — M7asmari\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n' + c + '      },\n      borderRadius: {\n' + r + '      },\n    },\n  },\n};';
+    }
+    if (fmt === 'css') {
+      let v = ':root {\n';
+      for (const k in sc) { steps.forEach((s, i) => { v += '  --' + k + '-' + s + ': ' + sc[k][i] + ';\n'; }); }
+      for (const k in radii) v += '  --r-' + k + ': ' + radii[k] + ';\n';
+      for (const k in space) v += '  --space-' + k + ': ' + space[k] + ';\n';
+      return v + '}';
+    }
+    const obj = { color: {}, radius: radii, spacing: {} };
+    for (const k in sc) { obj.color[k] = {}; steps.forEach((s, i) => obj.color[k][s] = sc[k][i]); }
+    for (const k in space) obj.spacing[k] = space[k];
+    return JSON.stringify(obj, null, 2);
+  }
+  copyExport() { const t = this._exportText(this.state.exportFmt); try { navigator.clipboard && navigator.clipboard.writeText(t); } catch (_) {} this._add({ status: 'success', title: 'نُسخت الرموز', description: 'صيغة ' + this.state.exportFmt + ' في الحافظة.' }); }
+  closeCmd() { this.setState({ cmdOpen: false }); }
+  cmdGo(id) { this.setState({ cmdOpen: false }); const el = document.getElementById(id); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); }
+  _tableVals() {
+    const rows = [
+      { name: 'إيثيريوم', av: 'E', avc: '#627eea', bal: '2.40 ETH', balN: 2.40, price: '$3,180', priceN: 3180, chg: '+4.2%', chgN: 4.2, chgCls: 'badge green numjoin', status: 'مكتمل', statusCls: 'badge green' },
+      { name: 'USDC', av: 'U', avc: '#16bd74', bal: '820.00', balN: 820, price: '$1.00', priceN: 1, chg: '0.0%', chgN: 0, chgCls: 'badge neutral numjoin', status: 'قيد الانتظار', statusCls: 'badge gold' },
+      { name: 'أربيتروم', av: 'A', avc: '#f5a623', bal: '145.5 ARB', balN: 145.5, price: '$0.92', priceN: 0.92, chg: '−3.1%', chgN: -3.1, chgCls: 'badge red numjoin', status: 'فشل', statusCls: 'badge red' },
+      { name: 'أوبتيميزم', av: 'O', avc: '#fb3d18', bal: '60.00 OP', balN: 60, price: '$2.14', priceN: 2.14, chg: '+1.8%', chgN: 1.8, chgCls: 'badge green numjoin', status: 'مُرسَل', statusCls: 'badge brand' }
+    ];
+    const k = this.state.sortKey;
+    if (k) { const d = this.state.sortDir; rows.sort((a, b) => { const av = a[k], bv = b[k]; return (typeof av === 'number' ? av - bv : String(av).localeCompare(bv, 'ar')) * d; }); }
+    const arrow = (key) => this.state.sortKey === key ? (this.state.sortDir > 0 ? ' ↑' : ' ↓') : '';
+    return {
+      tblRows: rows,
+      thName: 'الأصل' + arrow('name'), thBal: 'الرصيد' + arrow('balN'), thPrice: 'السعر' + arrow('priceN'), thChg: '24س' + arrow('chgN'),
+      sortName: () => this.setSort('name'), sortBal: () => this.setSort('balN'), sortPrice: () => this.setSort('priceN'), sortChg: () => this.setSort('chgN')
+    };
+  }
+  toggleDash(key) { this.setState(s => ({ dashSec: { ...s.dashSec, [key]: !s.dashSec[key] } })); }
+  setDashCat(id) { this.setState({ dashCat: id }); }
+  toggleDashNotif() { this.setState(s => ({ dashNotif: !s.dashNotif })); }
+  closeDashNotif() { this.setState({ dashNotif: false }); }
+  toggleDashPin(label) { this.setState(s => ({ dashPinned: s.dashPinned.includes(label) ? s.dashPinned.filter(f => f !== label) : [...s.dashPinned, label] })); }
+  _dashVals() {
+    const secCls = (k) => this.state.dashSec[k] ? 'dashsec open' : 'dashsec';
+    const cats = [['all', 'كل العناصر', 'layout-grid', 48], ['favorites', 'المفضّلة', 'star', 12], ['recent', 'الأخيرة', 'clock', 8], ['shared', 'المشتركة', 'share-2', 5]];
+    const folders = [
+      ['العمل', 'var(--sky-500)', 24, '2.4 غ.ب', 65],
+      ['شخصي', 'var(--emerald-500)', 15, '1.2 غ.ب', 35],
+      ['الأرشيف', 'var(--neutral-500)', 9, '850 م.ب', 20],
+      ['أعمال العملاء', 'var(--cat-5)', 32, '3.1 غ.ب', 85]
+    ];
+    const mkFolder = (f) => {
+      const [label, color, items, size, prog] = f;
+      const pinned = this.state.dashPinned.includes(label);
+      return { label, color, items, size, prog, pinned,
+        boxStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color },
+        fillStyle: { width: prog + '%', background: color },
+        pinCls: pinned ? 'dashpin on' : 'dashpin',
+        togglePin: () => this.toggleDashPin(label) };
+    };
+    const notifs = [
+      ['ملف جديد مُشارك', 'شاركت سارة «ميزانية 2024»', 'قبل 5 دقائق', true],
+      ['تنبيه التخزين', 'تستخدم 85% من المساحة', 'قبل ساعة', true],
+      ['تحديث متاح', 'صدر Dashboard Pro v2.1', 'قبل ساعتين', false]
+    ].map(([title, msg, time, unread]) => ({ title, msg, time, unread, cls: unread ? 'dashnotif-item unread' : 'dashnotif-item' }));
+    const files = [
+      ['مقترح_المشروع.pdf', '2.4 م.ب', 'قبل ساعتين', 'file-text', 'var(--red-500)'],
+      ['نظام_التصميم.fig', '5.1 م.ب', 'قبل 5 ساعات', 'palette', 'var(--cat-5)'],
+      ['ملاحظات_الاجتماع.docx', '124 ك.ب', 'قبل يوم', 'file-text', 'var(--sky-500)'],
+      ['الميزانية_2024.xlsx', '856 ك.ب', 'قبل يومين', 'bar-chart-2', 'var(--emerald-500)']
+    ].map(([name, size, mod, icon, color]) => ({ name, size, mod, icon, iconStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color } }));
+    const stats = [
+      ['48', 'إجمالي الملفات', '+12% هذا الأسبوع', 'folder', 'var(--sky-500)', 'up'],
+      ['24', 'العناصر المشتركة', '+8% هذا الأسبوع', 'share-2', 'var(--cat-5)', 'up'],
+      ['7.5 غ.ب', 'التخزين المستخدم', '75% من 10 غ.ب', 'hard-drive', 'var(--amber-500)', 'flat']
+    ].map(([val, label, delta, icon, color, trend]) => ({ val, label, delta, icon, trend,
+      iconStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color },
+      deltaCls: trend === 'up' ? 'dashstat-d up' : 'dashstat-d flat' }));
+    return {
+      dashCats: cats.map(([id, label, icon, count]) => ({ id, label, icon, count, cls: this.state.dashCat === id ? 'dashcat on' : 'dashcat', fn: () => this.setDashCat(id) })),
+      dashPinnedCls: secCls('pinned'), dashFoldersCls: secCls('folders'), dashRecentCls: secCls('recent'), dashTagsCls: secCls('tags'),
+      togglePinned: () => this.toggleDash('pinned'), toggleFolders: () => this.toggleDash('folders'), toggleRecent: () => this.toggleDash('recent'), toggleTags: () => this.toggleDash('tags'),
+      dashPinnedFolders: folders.filter(f => this.state.dashPinned.includes(f[0])).map(mkFolder),
+      dashFolders: folders.map(mkFolder),
+      dashRecent: [['رفع', 'Design_v2.fig', 'قبل دقيقتين', 'upload'], ['تعديل', 'Presentation.pptx', 'قبل 15 دقيقة', 'pencil'], ['مشاركة', 'Q4_Report.pdf', 'قبل ساعة', 'share-2']].map(([action, file, time, icon]) => ({ action, file, time, icon })),
+      dashTags: ['تصميم', 'تطوير', 'تسويق', 'مبيعات', 'دعم'],
+      dashNotifs: notifs,
+      dashUnread: notifs.filter(n => n.unread).length,
+      dashNotifCls: this.state.dashNotif ? 'dashnotif open' : 'dashnotif',
+      toggleDashNotif: () => this.toggleDashNotif(), closeDashNotif: () => this.closeDashNotif(),
+      dashFiles: files,
+      dashStats: stats
+    };
+  }
+  _cmdVals() {
+    const all = [['colors', 'الألوان', 'الأسس'], ['type', 'الطباعة', 'الأسس'], ['buttons', 'الأزرار', 'مكوّنات'], ['inputs', 'الحقول', 'مكوّنات'], ['cards', 'البطاقات', 'مكوّنات'], ['tabs', 'التبويبات', 'مكوّنات'], ['badges', 'الشارات', 'مكوّنات'], ['tables', 'الجداول', 'مكوّنات'], ['otp', 'رمز التحقّق', 'مكوّنات'], ['numanim', 'الأرقام المتحرّكة', 'مكوّنات'], ['calendar', 'التقويم', 'مكوّنات'], ['swipe', 'قائمة قابلة للسحب', 'مكوّنات'], ['modal', 'النوافذ المنبثقة', 'مكوّنات'], ['icons', 'الأيقونات', 'الأسس'], ['motion', 'الحركة', 'الأسس'], ['darkmode', 'الوضع الداكن', 'الأسس'], ['guidelines', 'دليل الاستخدام', 'الأسس']];
+    const q = this.state.cmdQuery.trim();
+    const list = q ? all.filter(x => x[1].includes(q)) : all;
+    return {
+      cmdScrimCls: this.state.cmdOpen ? 'cmdscrim open' : 'cmdscrim',
+      cmdQuery: this.state.cmdQuery,
+      onCmdInput: (e) => this.setState({ cmdQuery: e.target.value }),
+      closeCmd: () => this.closeCmd(),
+      cmdResults: list.map(([id, label, cat]) => ({ label, cat, go: () => this.cmdGo(id) }))
+    };
+  }
+  ripple(e) {
+    const b = e.currentTarget, r = b.getBoundingClientRect(), d = Math.max(r.width, r.height);
+    const s = document.createElement('span');
+    s.className = 'rippledot';
+    s.style.width = s.style.height = d + 'px';
+    s.style.left = (e.clientX - r.left) + 'px';
+    s.style.top = (e.clientY - r.top) + 'px';
+    b.appendChild(s);
+    setTimeout(() => s.remove(), 600);
+  }
+  componentDidMount() {
+    this._esc = (e) => { if (e.key === 'Escape') this.setState({ drawerOpen: false, sheetOpen: false, modalOpen: false, cmdOpen: false }); if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); this.toggleCmd(); } };
+    window.addEventListener('keydown', this._esc);
+    this._copyClick = (e) => { const c = e.target.closest && e.target.closest('[data-copy]'); if (c) { this.copyToken(c.getAttribute('data-copy')); return; } const a = e.target.closest && e.target.closest('[data-action]'); if (a) this._add({ status: a.getAttribute('data-tone') || 'info', title: a.getAttribute('data-action') }); };
+    document.addEventListener('click', this._copyClick);
+    if (window.IntersectionObserver) {
+      this._spy = new IntersectionObserver((ents) => {
+        ents.forEach(en => { if (en.isIntersecting && en.target.id) this.setState({ activeSection: en.target.id }); });
+      }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+      document.querySelectorAll('.section[id]').forEach(s => this._spy.observe(s));
+    }
+    this._renderIcons();
+    this._posUnder();
+    this._watchNums();
+    this.setState({ files: this._initialFiles(), swItems: this._swInit() });
+    setTimeout(() => this._startUpload('release'), 300);
+    this._badgeTimer = setInterval(() => this.setState(s => ({ badgeIdx: (s.badgeIdx + 1) % 4 })), 1600);
+    window.addEventListener('resize', this._rz = () => this._posUnder());
+  }
+  componentDidUpdate() {
+    this._renderIcons(); this._posUnder();
+    if (this.state.theme !== this._lastTheme) {
+      this._lastTheme = this.state.theme;
+      const root = document.querySelector('.ds');
+      if (root) { root.style.display = 'none'; void root.offsetHeight; root.style.display = ''; }
+    }
+  }
+  _renderIcons() {
+    if (window.lucide && window.lucide.createIcons) {
+      if (document.querySelector('i[data-lucide]')) window.lucide.createIcons();
+    } else { clearTimeout(this._lt); this._lt = setTimeout(() => this._renderIcons(), 150); }
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._esc); clearTimeout(this._lt); clearInterval(this._numRAF); if (this._numIO) this._numIO.disconnect(); Object.keys(this._upTimers).forEach(id => this._stopUpload(id)); clearInterval(this._badgeTimer); document.removeEventListener('click', this._copyClick); if (this._spy) this._spy.disconnect(); }
+  _scls(s){ return s === 'loading' ? 'load' : s === 'success' ? 'ok' : s === 'error' ? 'err' : 'info'; }
+  _add(input){ const id = ++this._tid; this.setState(s => ({ toasts: [...s.toasts, { id, ...input }].slice(-5) })); const dur = input.duration === undefined ? 3600 : input.duration; if (dur > 0) this._tos[id] = setTimeout(() => this.dismiss(id), dur); return id; }
+  dismiss(id){ clearTimeout(this._tos[id]); delete this._tos[id]; this.setState(s => ({ toasts: s.toasts.filter(t => t.id !== id) })); }
+  toastPromise(){ const id = this._add({ status: 'loading', title: 'جارٍ نشر المكوّن', description: 'حزم المصدر والمعاينة وبيانات السجل.', duration: 0 }); setTimeout(() => { this.setState(s => ({ toasts: s.toasts.map(t => t.id === id ? { ...t, status: 'success', title: 'اكتمل النشر', description: 'تم تحديث الإشعار في مكانه من تحميل إلى نجاح.' } : t) })); this._tos[id] = setTimeout(() => this.dismiss(id), 3200); }, 1800); }
+  toastSuccess(){ this._add({ status: 'success', title: 'تم نشر المكوّن', description: 'نقطة السجل والمصدر الخام متاحان الآن.' }); }
+  toastError(){ this._add({ status: 'error', title: 'فشل الالتقاط', description: 'أعد المحاولة بعد استقرار المتصفّح.' }); }
+  clearToasts(){ Object.values(this._tos).forEach(clearTimeout); this._tos = {}; this.setState({ toasts: [] }); }
+  moveStack(pos, label){ this.setState({ toastPos: pos }); this._add({ status: 'info', title: 'تغيّر الموضع', description: 'الإشعارات الجديدة تفتح من ' + label + '.' }); }
+  _tabVals() {
+    const idx = (arr, v) => arr.indexOf(v);
+    const pillItems = [['overview', 'نظرة عامة'], ['activity', 'النشاط'], ['settings', 'الإعدادات']];
+    const segItems = [['day', 'يوم'], ['week', 'أسبوع'], ['month', 'شهر']];
+    const undItems = [['all', 'الكل'], ['open', 'مفتوحة'], ['closed', 'مغلقة']];
+    const pillText = { overview: 'ملخّص عام لأهم المؤشّرات والأرصدة في لمحة واحدة.', activity: 'أحدث الأحداث والمعاملات على محفظتك مرتّبة زمنيًا.', settings: 'التفضيلات وخيارات الأمان والشبكة الافتراضية.' };
+    const pi = idx(pillItems.map(x => x[0]), this.state.tabPill);
+    const si = idx(segItems.map(x => x[0]), this.state.tabSeg);
+    return {
+      pillTabs: pillItems.map(([v, label]) => ({ v, label, cls: this.state.tabPill === v ? 'ttab on' : 'ttab', fn: () => this.setState({ tabPill: v }) })),
+      segTabs: segItems.map(([v, label]) => ({ v, label, cls: this.state.tabSeg === v ? 'ttab on' : 'ttab', fn: () => this.setState({ tabSeg: v }) })),
+      undTabs: undItems.map(([v, label]) => ({ v, label, cls: this.state.tabUnder === v ? 'ttab on' : 'ttab', fn: () => this.setState({ tabUnder: v }), ref: this.setUndRef(v) })),
+      pillIndStyle: { transform: 'translateX(' + (pi * -100) + '%)' },
+      segIndStyle: { transform: 'translateX(' + (si * -100) + '%)' },
+      undIndRef: this._undInd,
+      pillText: pillText[this.state.tabPill]
+    };
+  }
+  renderVals() {
+    const acc = this.props.accent ?? 'blue';
+    const corners = this.props.corners ?? 'rounded';
+    const accClass = acc === 'blue' ? '' : 'acc-' + acc;
+    const radClass = corners === 'rounded' ? '' : 'sharp';
+    const theme = this.state.theme;
+    const accIds = ['brief', 'launch', 'campaign', 'calendar', 'ship', 'archive'];
+    const accCls = {}, accH = {};
+    accIds.forEach(id => {
+      accCls[id] = this.state.accOpen === id ? 'acc-item open' : 'acc-item';
+      accH[id] = () => this.setState(s => ({ accOpen: s.accOpen === id ? null : id }));
+    });
+    const posDefs = [['top-left','أعلى يسار','tl'],['top-center','أعلى وسط','tc'],['top-right','أعلى يمين','tr'],['bottom-left','أسفل يسار','bl'],['bottom-center','أسفل وسط','bc'],['bottom-right','أسفل يمين','br']];
+    const posMap = {};
+    posDefs.forEach(([id, , k]) => { posMap[id] = k; });
+    const posList = posDefs.map(([id, label]) => ({ id, label, cls: this.state.toastPos === id ? 'posbtn on' : 'posbtn', fn: () => this.moveStack(id, label) }));
+    const toasts = this.state.toasts.slice(-4).map(t => ({ id: t.id, title: t.title, desc: t.description, cls: 'toast2 ' + this._scls(t.status), dismiss: () => this.dismiss(t.id) }));
+    return {
+      accCls, accH, posList, toasts,
+      stackCls: 'tstack ' + posMap[this.state.toastPos],
+      toastPromise: () => this.toastPromise(),
+      toastSuccess: () => this.toastSuccess(),
+      toastError: () => this.toastError(),
+      clearToasts: () => this.clearToasts(),
+      rootClass: ['ds', accClass, radClass, theme === 'dark' ? 'dark' : ''].filter(Boolean).join(' '),
+      toggleTheme: () => this.setState(s => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
+      themeLabel: theme === 'dark' ? 'فاتح' : 'داكن',
+      cbTermsCls: this.state.cbTerms ? 'cbx on' : 'cbx',
+      cbUpdatesCls: this.state.cbUpdates ? 'cbx on' : 'cbx',
+      toggleTerms: () => this.setState(s => ({ cbTerms: !s.cbTerms })),
+      toggleUpdates: () => this.setState(s => ({ cbUpdates: !s.cbUpdates })),
+      swNotifCls: this.state.swNotif ? 'switch on' : 'switch',
+      toggleNotif: () => this.setState(s => ({ swNotif: !s.swNotif })),
+      rStarterCls: this.state.radioPlan === 'starter' ? 'radio on' : 'radio',
+      rProCls: this.state.radioPlan === 'pro' ? 'radio on' : 'radio',
+      rTeamCls: this.state.radioPlan === 'team' ? 'radio on' : 'radio',
+      pickStarter: () => this.setState({ radioPlan: 'starter' }),
+      pickPro: () => this.setState({ radioPlan: 'pro' }),
+      pickTeam: () => this.setState({ radioPlan: 'team' }),
+      scrimCls: this.state.sheetOpen ? 'scrim2 open' : 'scrim2',
+      sheetCls: this.state.sheetOpen ? 'sheet2 open' : 'sheet2',
+      openSheet: () => this.setState({ sheetOpen: true }),
+      closeSheet: () => this.setState({ sheetOpen: false }),
+      drawerScrimCls: this.state.drawerOpen ? 'scrim2 open' : 'scrim2',
+      drawerCls: 'drawer2 ' + this.state.drawerSide + (this.state.drawerOpen ? ' open' : ''),
+      drawerHint: this.state.drawerSide === 'left' ? 'ينزلق من اليسار. اضغط Esc أو انقر خارجه للإغلاق.' : 'ينزلق من اليمين. اضغط Esc أو انقر خارجه للإغلاق.',
+      openLeft: () => this.setState({ drawerOpen: true, drawerSide: 'left' }),
+      openRight: () => this.setState({ drawerOpen: true, drawerSide: 'right' }),
+      closeDrawer: () => this.setState({ drawerOpen: false }),
+      upCenteredCls: this.state.upVariant === 'centered' ? 'on' : '',
+      upRowCls: this.state.upVariant === 'row' ? 'on' : '',
+      dzCls: this.state.upVariant === 'row' ? 'dropzone row' : 'dropzone',
+      setUpC: () => this.setState({ upVariant: 'centered' }),
+      setUpR: () => this.setState({ upVariant: 'row' }),
+      upFiles: this.state.files.map(f => {
+        const pct = Math.round(f.progress);
+        return {
+          id: f.id, name: f.name, ext: f.ext, icoCls: 'fileico fico-' + f.kind,
+          meta: f.status === 'success' ? f.sizeLabel + ' · مكتمل' : f.status === 'uploading' ? f.sizeLabel + ' · جارٍ الرفع · ' + pct + '%' : (f.error || 'خطأ') + ' — ' + f.sizeLabel,
+          metaCls: 'filemeta' + (f.status === 'error' ? ' err' : ''),
+          showBar: f.status === 'uploading', progPct: pct + '%',
+          showCheck: f.status === 'success', showRetry: f.status === 'error',
+          retry: () => this.retryFile(f.id)
+        };
+      }),
+      upCounter: this.state.files.filter(f => f.status === 'success').length + ' من ' + this.state.files.length + ' جاهز',
+      resetUpload: () => this.resetUpload(),
+      modalScrimCls: this.state.modalOpen ? 'mscrim open' : 'mscrim',
+      modalCls: this.state.modalOpen ? 'mdialog open' : 'mdialog',
+      openModal: () => this.openModal(), closeModal: () => this.closeModal(),
+      toggleCmd: () => this.toggleCmd(),
+      stop: (e) => e.stopPropagation(),
+      sliderRef: this._sliderRef,
+      sliderVal: this.state.sliderVal,
+      sliderFill: { width: this.state.sliderVal + '%' },
+      sliderKnob: { right: this.state.sliderVal + '%' },
+      sliderPct: this.state.sliderVal + '%',
+      sliderDown: (e) => this.sliderDown(e), sliderMove: (e) => this.sliderMove(e), sliderUp: () => this.sliderUp(),
+      ...((() => {
+        const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+        const y = this.state.calYear, m = this.state.calMonth;
+        const first = new Date(y, m, 1).getDay(), dim = new Date(y, m + 1, 0).getDate(), pdim = new Date(y, m, 0).getDate();
+        const cells = [];
+        for (let i = first - 1; i >= 0; i--) cells.push({ label: pdim - i, cls: 'cal-day muted', fn: () => {} });
+        for (let d = 1; d <= dim; d++) {
+          const isToday = (y === 2026 && m === 5 && d === 8), isSel = (d === this.state.calSel);
+          cells.push({ label: d, cls: 'cal-day' + (isSel ? ' sel' : isToday ? ' today' : ''), fn: () => this.calSelect(d) });
+        }
+        let t = 1; while (cells.length % 7 !== 0) cells.push({ label: t++, cls: 'cal-day muted', fn: () => {} });
+        return { calTitle: months[m] + ' ' + y, calDays: cells, calPrev: () => this.calPrev(), calNext: () => this.calNext() };
+      })()),
+      pageItems: [1, 2, 3, 4, 5].map(p => ({ n: p, cls: p === this.state.pageActive ? 'btn brand sm' : 'btn ghost sm', fn: () => this.setPage(p) })),
+      pagePrev: () => this.setPage(this.state.pageActive - 1), pageNext: () => this.setPage(this.state.pageActive + 1),
+      tagList: this.state.tags.map((t, i) => ({ label: t, remove: () => this.removeTag(i) })),
+      addTag: (e) => this.addTag(e),
+      navItems: [['colors', 'الألوان'], ['type', 'الطباعة'], ['motion', 'الحركة'], ['icons', 'الأيقونات'], ['states', 'الحالات'], ['buttons', 'الأزرار'], ['inputs', 'الحقول'], ['otp', 'رمز التحقّق'], ['calendar', 'التقويم'], ['cards', 'البطاقات'], ['tables', 'الجداول'], ['badges', 'الشارات'], ['numanim', 'الأرقام'], ['alerts', 'التنبيهات'], ['modal', 'النوافذ'], ['tabs', 'التبويبات'], ['swipe', 'السحب'], ['patterns', 'الأنماط'], ['darkmode', 'الوضع الداكن']].map(([id, label]) => ({ id, label, href: '#' + id, cls: this.state.activeSection === id ? 'nvi on' : 'nvi' })),
+      ...this._tableVals(),
+      ...this._cmdVals(),
+      ...this._dashVals(),
+      exportText: this._exportText(this.state.exportFmt),
+      exportTwCls: this.state.exportFmt === 'tailwind' ? 'expfmt on' : 'expfmt',
+      exportCssCls: this.state.exportFmt === 'css' ? 'expfmt on' : 'expfmt',
+      exportJsonCls: this.state.exportFmt === 'json' ? 'expfmt on' : 'expfmt',
+      setExpTw: () => this.setState({ exportFmt: 'tailwind' }),
+      setExpCss: () => this.setState({ exportFmt: 'css' }),
+      setExpJson: () => this.setState({ exportFmt: 'json' }),
+      copyExport: () => this.copyExport(),
+      swRows: this.state.swItems.map(it => ({
+        title: it.title, desc: it.desc, meta: it.meta, ref: this._getSwRef(it.id),
+        rowCls: 'swrow' + (this.state.swOpen === it.id ? ' open-' + this.state.swSide : ''),
+        down: this.swDown(it.id),
+        isFile: it.icon === 'file', isMail: it.icon === 'mail', isUser: it.icon === 'user', isFlag: it.icon === 'flag',
+        actDone: () => this._swAction(it.id, 'done'), actPin: () => this._swAction(it.id, 'pin'),
+        actLater: () => this._swAction(it.id, 'later'), actTrash: () => this._swAction(it.id, 'trash')
+      })),
+      swMove: (e) => this.swMove(e),
+      swUp: () => this.swUp(),
+      swLast: this.state.swLast,
+      swCount: this.state.swItems.length + ' مفتوح',
+      resetSwipe: () => this.resetSwipe(),
+      ...((() => { const bs = [['loading', 'تتم المزامنة'], ['success', 'تمت المزامنة'], ['warning', 'مراجعة'], ['danger', 'فشل']][this.state.badgeIdx % 4]; return { heroCls: 'abadge lg ab-' + bs[0], heroLabel: bs[1], heroLoading: bs[0] === 'loading', heroSuccess: bs[0] === 'success', heroWarning: bs[0] === 'warning', heroDanger: bs[0] === 'danger' }; })()),
+      numMrrRef: this._numRefs.mrr,
+      numUsersRef: this._numRefs.users,
+      numConvRef: this._numRefs.conv,
+      replayNums: () => this._runNums(),
+      ripple: (e) => this.ripple(e),
+      otpBoxes: this.state.otp.map((d, i) => ({ d, ref: this._otpRefs[i], onInput: this.onOtpInput(i), onKey: this.onOtpKey(i) })),
+      otpWrapCls: 'otpwrap' + (this.state.otpStatus === 'success' ? ' ok' : '') + (this.state.otpStatus === 'error' ? ' err' : ''),
+      otpPaste: (e) => this.onOtpPaste(e),
+      otpMsg: this.state.otpStatus === 'success' ? 'تم التحقّق ✓' : this.state.otpStatus === 'error' ? 'رمز خاطئ، حاول مجددًا.' : 'أدخل 123456 للتحقّق.',
+      otpMsgCls: 'hint' + (this.state.otpStatus === 'success' ? ' ok' : '') + (this.state.otpStatus === 'error' ? ' err' : ''),
+      resetOtp: () => this.resetOtp(),
+      ensVal: this.state.ensVal,
+      onEns: (e) => this.onEns(e),
+      ensInputCls: 'input' + (this.state.ensStatus === 'ok' ? ' is-success' : (this.state.ensStatus === 'short' || this.state.ensStatus === 'taken') ? ' is-error' : ''),
+      ensMsg: this.state.ensStatus === 'ok' ? '✓ الاسم متاح' : this.state.ensStatus === 'short' ? '3 أحرف على الأقل' : this.state.ensStatus === 'taken' ? 'هذا الاسم محجوز بالفعل' : 'متاح إذا كان 3 أحرف فأكثر وغير محجوز.',
+      ensMsgCls: 'hint' + (this.state.ensStatus === 'ok' ? ' ok' : (this.state.ensStatus === 'short' || this.state.ensStatus === 'taken') ? ' err' : ''),
+      amtVal: this.state.amtVal,
+      onAmt: (e) => this.onAmt(e),
+      amtInputCls: 'input' + (this.state.amtStatus === 'ok' ? ' is-success' : (this.state.amtStatus === 'bad' || this.state.amtStatus === 'over') ? ' is-error' : ''),
+      amtMsg: this.state.amtStatus === 'ok' ? '✓ المبلغ متاح للإرسال' : this.state.amtStatus === 'over' ? 'الرصيد غير كافٍ (2.4 ETH)' : this.state.amtStatus === 'bad' ? 'أدخل مبلغًا صحيحًا' : 'الرصيد: 2.4 ETH',
+      amtMsgCls: 'hint' + (this.state.amtStatus === 'ok' ? ' ok' : (this.state.amtStatus === 'bad' || this.state.amtStatus === 'over') ? ' err' : ''),
+      okBtnCls: 'btn primary' + (this.state.btnOk === 'success' ? ' is-ok' : '') + (this.state.btnOk === 'loading' ? ' is-load' : ''),
+      okLabel: this.state.btnOk === 'loading' ? 'جارٍ الحفظ' : this.state.btnOk === 'success' ? 'تم الحفظ' : 'حفظ التغييرات',
+      okSpin: this.state.btnOk === 'loading',
+      okCheck: this.state.btnOk === 'success',
+      okArrow: this.state.btnOk === 'idle',
+      runOk: () => this.runStateful('ok'),
+      errBtnCls: 'btn secondary' + (this.state.btnErr === 'error' ? ' is-err' : '') + (this.state.btnErr === 'loading' ? ' is-load' : ''),
+      errLabel: this.state.btnErr === 'loading' ? 'جارٍ الإرسال' : this.state.btnErr === 'error' ? 'فشل' : 'إرسال',
+      errSpin: this.state.btnErr === 'loading',
+      errX: this.state.btnErr === 'error',
+      runErr: () => this.runStateful('err'),
+      ...this._tabVals()
+    };
+  }
+
+  render() {
+    const V = Object.assign({}, this.props, this.renderVals());
+    const { closeCmd, cmdQuery, cmdResults, cmdScrimCls, navItems, onCmdInput, rootClass, stop, themeLabel, toggleCmd, toggleTheme } = V;
+    return (
+
+<div className={rootClass} dir="rtl" lang="ar">
+<TopBar themeLabel={themeLabel} toggleCmd={toggleCmd} toggleTheme={toggleTheme} />
+<SideRail navItems={navItems} />
+<div className="page">
+
+<Hero />
+
+
+<Colors v={V} />
+
+<Typography v={V} />
+
+<Spacing v={V} />
+
+<div className="grid cols2 section" style={css('align-items:start')}>
+<Radius v={V} />
+<Shadow v={V} />
+</div>
+
+<Motion v={V} />
+
+<Elevation v={V} />
+
+<Icons v={V} />
+
+<States v={V} />
+
+<ButtonsSection v={V} />
+
+<InputsSection v={V} />
+
+<OtpSection v={V} />
+
+<ControlsSection v={V} />
+
+<SelectSection v={V} />
+
+<ComboboxSection v={V} />
+
+<SearchSliderSection v={V} />
+
+<CalendarSection v={V} />
+
+<UploadSection v={V} />
+
+<CardsSection v={V} />
+
+<TablesSection v={V} />
+
+<BadgesSection v={V} />
+
+<NumAnimSection v={V} />
+
+<AvatarsSection v={V} />
+
+<KpiSection v={V} />
+
+<AlertsSection v={V} />
+
+<BannerSection v={V} />
+
+<FeedbackSection v={V} />
+
+<ModalSection v={V} />
+
+<DrawerSection v={V} />
+
+<LoadingSection v={V} />
+
+<EmptySection v={V} />
+
+<TabsSection v={V} />
+
+<NavSection v={V} />
+
+<StepperSection v={V} />
+
+<AccordionSection v={V} />
+
+<SwipeSection v={V} />
+
+<PatternsSection v={V} />
+
+<DarkModeSection v={V} />
+
+<ResponsiveSection v={V} />
+
+<GuidelinesSection v={V} />
+
+<CommandPalette closeCmd={closeCmd} cmdQuery={cmdQuery} cmdResults={cmdResults} cmdScrimCls={cmdScrimCls} onCmdInput={onCmdInput} stop={stop} />
+
+</div>
+</div>
+
+    );
+  }
+}
+
+
+const { createRoot } = ReactDOM;
+createRoot(document.getElementById("root")).render(<App />);
+
+</script>
+</body>
+</html>

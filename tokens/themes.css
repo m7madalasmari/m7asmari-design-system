@@ -1,0 +1,14 @@
+/* M7asmari — Themes & Variants
+   Dark mode token overrides + brand-accent + corner-style variants. Extracted verbatim. */
+
+/* ---- Dark mode (applied via .dark on the root .ds element) ---- */
+.dark{--ink:#f3f1ec;--ink-2:#b6b2a9;--ink-3:#83807a;--canvas:#161619;--surface:#1f1f23;--surface-2:#27272c;--surface-3:#323239;--border:#2e2e34;--border-2:#3b3b43;--brand:#3db8f5;--brand-ink:#7fd0ff;--brand-soft:#13314b;--green-soft:#12331f;--gold-ink:#f9c652;--gold-soft:#33270a;--red-soft:#3a160c;background:var(--canvas);color:var(--ink)}
+.dark .topbar{background:rgba(22,22,25,.94);border-color:var(--border)}
+.dark .siderail{background:rgba(31,31,35,.7)}
+
+/* ---- Brand-accent variants ---- */
+.ds.acc-green{--brand:#16bd74;--brand-ink:#0e9a5d;--brand-soft:#e0f7ed;--ring:0 0 0 3px rgba(22,189,116,.18)}
+.ds.acc-red{--brand:#fb3d18;--brand-ink:#d22d0d;--brand-soft:#ffe7e0;--ring:0 0 0 3px rgba(251,61,24,.18)}
+
+/* ---- Corner-style variant ---- */
+.ds.sharp{--r-xs:3px;--r-sm:4px;--r-md:6px;--r-lg:8px;--r-xl:10px;--r-full:8px}
