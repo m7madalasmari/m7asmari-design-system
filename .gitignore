@@ -9,4 +9,5 @@ dist/
 # معاينة بلا Node: أعد توليدها بـ python3 build-dev.py
 index.dev.html
 requests.dev.html
+formkit.dev.html
 coverage/
