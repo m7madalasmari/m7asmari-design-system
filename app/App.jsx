@@ -332,7 +332,8 @@ class App extends React.Component {
     if (this.state.theme !== this._lastTheme) {
       this._lastTheme = this.state.theme;
       const root = document.querySelector('.ds');
-      if (root) { root.style.display = 'none'; void root.offsetHeight; root.style.display = ''; }
+      // إعادة طلاء عند تبديل السمة مع الحفاظ على موضع التمرير (display:none يصفّر التمرير)
+      if (root) { const y = window.scrollY; root.style.display = 'none'; void root.offsetHeight; root.style.display = ''; window.scrollTo(0, y); }
     }
   }
   _renderIcons() {
