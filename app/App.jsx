@@ -206,8 +206,8 @@ class App extends React.Component {
   _tableVals() {
     const rows = [
       { name: 'إيثيريوم', av: 'E', avc: '#627eea', bal: '2.40 ETH', balN: 2.40, price: '$3,180', priceN: 3180, chg: '+4.2%', chgN: 4.2, chgCls: 'badge green numjoin', status: 'مكتمل', statusCls: 'badge green' },
-      { name: 'USDC', av: 'U', avc: '#16bd74', bal: '820.00', balN: 820, price: '$1.00', priceN: 1, chg: '0.0%', chgN: 0, chgCls: 'badge neutral numjoin', status: 'قيد الانتظار', statusCls: 'badge gold' },
-      { name: 'أربيتروم', av: 'A', avc: '#f5a623', bal: '145.5 ARB', balN: 145.5, price: '$0.92', priceN: 0.92, chg: '−3.1%', chgN: -3.1, chgCls: 'badge red numjoin', status: 'فشل', statusCls: 'badge red' },
+      { name: 'USDC', av: 'U', avc: '#16bd74', avtx: '#042c1c', bal: '820.00', balN: 820, price: '$1.00', priceN: 1, chg: '0.0%', chgN: 0, chgCls: 'badge neutral numjoin', status: 'قيد الانتظار', statusCls: 'badge gold' },
+      { name: 'أربيتروم', av: 'A', avc: '#f5a623', avtx: '#3f2305', bal: '145.5 ARB', balN: 145.5, price: '$0.92', priceN: 0.92, chg: '−3.1%', chgN: -3.1, chgCls: 'badge red numjoin', status: 'فشل', statusCls: 'badge red' },
       { name: 'أوبتيميزم', av: 'O', avc: '#fb3d18', bal: '60.00 OP', balN: 60, price: '$2.14', priceN: 2.14, chg: '+1.8%', chgN: 1.8, chgCls: 'badge green numjoin', status: 'مُرسَل', statusCls: 'badge brand' }
     ];
     const sorted = sortRows(rows, this.state.sortKey, this.state.sortDir);
@@ -307,6 +307,14 @@ class App extends React.Component {
     window.addEventListener('keydown', this._esc);
     this._copyClick = (e) => { const c = e.target.closest && e.target.closest('[data-copy]'); if (c) { this.copyToken(c.getAttribute('data-copy')); return; } const a = e.target.closest && e.target.closest('[data-action]'); if (a) this._add({ status: a.getAttribute('data-tone') || 'info', title: a.getAttribute('data-action') }); };
     document.addEventListener('click', this._copyClick);
+    // إتاحة خانات النسخ بلوحة المفاتيح: قابلة للتركيز + تفعيل بـ Enter/Space (حلقة التركيز عبر قاعدة [tabindex] العامّة)
+    document.querySelectorAll('[data-copy]').forEach((el) => {
+      if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+      if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'نسخ ' + el.getAttribute('data-copy'));
+    });
+    this._copyKey = (e) => { if (e.key !== 'Enter' && e.key !== ' ') return; const c = e.target.closest && e.target.closest('[data-copy]'); if (c) { e.preventDefault(); this.copyToken(c.getAttribute('data-copy')); } };
+    document.addEventListener('keydown', this._copyKey);
     if (window.IntersectionObserver) {
       this._spy = new IntersectionObserver((ents) => {
         ents.forEach(en => { if (en.isIntersecting && en.target.id) this.setState({ activeSection: en.target.id }); });
@@ -332,7 +340,7 @@ class App extends React.Component {
       if (document.querySelector('i[data-lucide]')) window.lucide.createIcons();
     } else { clearTimeout(this._lt); this._lt = setTimeout(() => this._renderIcons(), 150); }
   }
-  componentWillUnmount() { window.removeEventListener('keydown', this._esc); clearTimeout(this._lt); clearInterval(this._numRAF); if (this._numIO) this._numIO.disconnect(); Object.keys(this._upTimers).forEach(id => this._stopUpload(id)); clearInterval(this._badgeTimer); document.removeEventListener('click', this._copyClick); if (this._spy) this._spy.disconnect(); }
+  componentWillUnmount() { window.removeEventListener('keydown', this._esc); clearTimeout(this._lt); clearInterval(this._numRAF); if (this._numIO) this._numIO.disconnect(); Object.keys(this._upTimers).forEach(id => this._stopUpload(id)); clearInterval(this._badgeTimer); document.removeEventListener('click', this._copyClick); document.removeEventListener('keydown', this._copyKey); if (this._spy) this._spy.disconnect(); }
   _scls(s){ return s === 'loading' ? 'load' : s === 'success' ? 'ok' : s === 'error' ? 'err' : 'info'; }
   _add(input){ const id = ++this._tid; this.setState(s => ({ toasts: [...s.toasts, { id, ...input }].slice(-5) })); const dur = input.duration === undefined ? 3600 : input.duration; if (dur > 0) this._tos[id] = setTimeout(() => this.dismiss(id), dur); return id; }
   dismiss(id){ clearTimeout(this._tos[id]); delete this._tos[id]; this.setState(s => ({ toasts: s.toasts.filter(t => t.id !== id) })); }
