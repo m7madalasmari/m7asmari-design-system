@@ -73,6 +73,10 @@ export default function FormKitPage() {
             <span className="logo">M</span>Form Kit
           </a>
           <div className="topnav">
+            <a className="themetoggle" href="/" aria-label="العودة إلى نظام M7">
+              <svg className="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10" /></svg>
+              <span className="tb-lbl">نظام M7</span>
+            </a>
             <span className="badge brand"><span className="dot"></span>طبقة فوق M7</span>
             <button className="themetoggle" onClick={() => setDark((d) => !d)} aria-label={dark ? 'الوضع الفاتح' : 'الوضع الداكن'}>
               <svg className="ic" viewBox="0 0 24 24" aria-hidden="true">
@@ -90,18 +94,10 @@ export default function FormKitPage() {
         <section className="hero" data-screen-label="Hero">
           <span className="eyebrow">M7 · Form Kit</span>
           <h1 className="h1">مجموعة النماذج العربية</h1>
-          <p className="lead">
-            طبقة تشغيل فوق نظام M7 تولّد نماذج RTL متعددة من مكوّنات وتوكنز النظام — بلا هوية أو توكنز خاصة.
-            {' '}{RECIPES.length} نموذجًا جاهزًا عبر {CATEGORIES.length} فئات، تعمل في الوضعين الفاتح والداكن.
-          </p>
         </section>
 
         <section className="section" data-screen-label="Field states">
-          <SectionHeader
-            kicker="مكوّنات الحقول"
-            title="الحقول وحالاتها"
-            desc="مكوّنات أُضيفت إلى M7 core بإعادة استخدام أصنافه: Input · Select · Checkbox · Radio · Switch · Password — بكل الحالات."
-          />
+          <SectionHeader kicker="مكوّنات الحقول" title="الحقول وحالاتها" />
           <FieldStates />
         </section>
 
