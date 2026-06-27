@@ -1,5 +1,15 @@
 # سجل التغييرات — M7asmari Design System
 
+## 2026-06-27 — توحيد المكوّنات المكرّرة (Search · Breadcrumb · NavItem)
+
+توحيد ثلاث حالات تكرار على **طبقة Component** بمتغيّرات (variants) — بلا تغيير بصري (نفس الأصناف/الماركب لكل متغيّر):
+
+- **`SearchField`** — يوحّد `.search` و`.dashsearch`. `variant="pill"|"dash"` + `shortcut` اختياري؛ الإدخال قابل للتهيئة بالكامل عبر تمرير الخصائص. (استُبدل في: SearchSlider، Combobox، DashboardShell)
+- **`Breadcrumb`** — يوحّد `.breadcrumb` و`.dashcrumb`. `items` + `leadingIcon` اختياري + `variant="dash"` (فاصل chevron). (استُبدل في: NavSection، DashboardShell)
+- **`NavItem`** — يوحّد `.sideitem` و`.dashcat`. `variant="rail"|"panel"` + `count` اختياري؛ **حلّ محلّ `SidebarItem`** (حُذف). (استُبدل في: NavSection، DrawerSection، DashboardShell)
+
+**StatCard و StatTile تُركا منفصلين** عمدًا (بنيتان مختلفتان: sparkline مقابل أيقونة+اتجاه). الاختبارات: 58 (محدّثة لـNavItem). يبقى التكرار اللوني عبر التوكنز (موحّد أصلًا).
+
 ## 2026-06-27 — استخراج مكوّنات لوحة التحكّم القابلة لإعادة الاستخدام
 
 فُكِّكت قطع `DashboardShell` الداخلية إلى **8 مكوّنات عرضية مستقلّة بـAPI نظيف** (تحسب تنسيقها من `color`/booleans) — بلا تغيير بصري (نفس الأصناف والماركب):

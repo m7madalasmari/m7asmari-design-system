@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import StatTile from '../components/StatTile.jsx';
-import SidebarItem from '../components/SidebarItem.jsx';
+import NavItem from '../components/NavItem.jsx';
 import FolderItem from '../components/FolderItem.jsx';
 import NotificationMenu from '../components/NotificationMenu.jsx';
 import CollapsibleSection from '../components/CollapsibleSection.jsx';
@@ -25,16 +25,27 @@ describe('StatTile', () => {
   });
 });
 
-describe('SidebarItem', () => {
+describe('NavItem (panel)', () => {
   it('active يضيف on و aria-current، والنقر يستدعي onClick', () => {
     const onClick = vi.fn();
-    const { container } = render(<SidebarItem icon="x" label="الكل" count={5} active onClick={onClick} />);
+    const { container } = render(<NavItem variant="panel" icon="x" label="الكل" count={5} active onClick={onClick} />);
     const btn = screen.getByRole('button');
     expect(btn.className).toContain('on');
     expect(btn).toHaveAttribute('aria-current', 'true');
     fireEvent.click(btn);
     expect(onClick).toHaveBeenCalled();
     expect(container.querySelector('.dashcat-count').textContent).toBe('5');
+  });
+});
+
+describe('NavItem (rail)', () => {
+  it('يعرض .sideitem بنقطة وتسمية؛ active يضيف on', () => {
+    const { container } = render(<NavItem variant="rail" active label="المحفظة" />);
+    const el = container.querySelector('.sideitem');
+    expect(el).toBeTruthy();
+    expect(el.className).toContain('on');
+    expect(container.querySelector('.sideicon')).toBeTruthy();
+    expect(el.textContent).toContain('المحفظة');
   });
 });
 

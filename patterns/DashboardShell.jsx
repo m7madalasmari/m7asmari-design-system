@@ -5,10 +5,12 @@ import StatTile from '../components/StatTile.jsx';
 import FileRow from '../components/FileRow.jsx';
 import FolderItem from '../components/FolderItem.jsx';
 import ActivityItem from '../components/ActivityItem.jsx';
-import SidebarItem from '../components/SidebarItem.jsx';
+import NavItem from '../components/NavItem.jsx';
 import UserMenu from '../components/UserMenu.jsx';
 import NotificationMenu from '../components/NotificationMenu.jsx';
 import CollapsibleSection from '../components/CollapsibleSection.jsx';
+import SearchField from '../components/SearchField.jsx';
+import Breadcrumb from '../components/Breadcrumb.jsx';
 
 export default function DashboardShell({ v }) {
   const { dashCats, dashFiles, dashFolders, dashNotifOpen, dashNotifs, dashPinnedFolders, dashRecent, dashSec, dashStats, dashTags, dashUnread, toggleDashNotif, toggleFolders, togglePinned, toggleRecent, toggleTags, toggleTheme } = v;
@@ -16,9 +18,9 @@ export default function DashboardShell({ v }) {
 <div className="dashframe">
 <aside className="dashside">
 <div className="dashside-head"><div className="dashlogo"><i data-lucide="layers"></i></div><div><div className="dashside-title">لوحة M7asmari</div><div className="dashside-sub">الإصدار 2.0</div></div></div>
-<div className="dashsearch-wrap"><div className="dashsearch"><i data-lucide="search"></i><input placeholder="ابحث في كل شيء…" aria-label="بحث في اللوحة" /><span className="dashkbd">⌘K</span></div></div>
+<div className="dashsearch-wrap"><SearchField variant="dash" placeholder="ابحث في كل شيء…" aria-label="بحث في اللوحة" shortcut="⌘K" /></div>
 <div className="dashscroll">
-{(dashCats || []).map((c) => (<SidebarItem key={c.id} icon={c.icon} label={c.label} count={c.count} active={c.active} onClick={c.fn} />))}
+{(dashCats || []).map((c) => (<NavItem variant="panel" key={c.id} icon={c.icon} label={c.label} count={c.count} active={c.active} onClick={c.fn} />))}
 <div className="dashsep"></div>
 <CollapsibleSection open={dashSec.pinned} onToggle={togglePinned} title="مثبّت" titleIcon={<svg className="pinico" viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg>}>
 {(dashPinnedFolders || []).map((f, $index) => (<FolderItem key={$index} {...f} showStar />))}
@@ -42,7 +44,7 @@ export default function DashboardShell({ v }) {
 </aside>
 <div className="dashmain">
 <div className="dashtop">
-<div className="dashcrumb"><i data-lucide="home"></i><svg viewBox="0 0 24 24" style={{ width: '13px', height: '13px' }}><path d="M9 6l6 6-6 6"></path></svg><span className="here">الرئيسية</span></div>
+<Breadcrumb variant="dash" leadingIcon="home" items={['الرئيسية']} />
 <div className="dashtop-acts">
 <button className="dashicobtn" aria-label="عوامل التصفية"><i data-lucide="sliders-horizontal"></i></button>
 <NotificationMenu open={dashNotifOpen} unread={dashUnread} items={dashNotifs} onToggle={toggleDashNotif} />

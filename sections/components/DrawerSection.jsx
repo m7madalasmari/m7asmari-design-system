@@ -2,6 +2,7 @@ import React from 'react';
 import { css } from '../../app/lib/css.js';
 import Button from '../../components/Button.jsx';
 import Drawer from '../../components/Drawer.jsx';
+import NavItem from '../../components/NavItem.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 
 export default function DrawerSection() {
@@ -18,7 +19,7 @@ export default function DrawerSection() {
 <div className="grid cols2">
 <div><p className="subhead">درج جانبي</p><div className="framedemo"><div className="sheetwrap"><Button variant="secondary" onClick={() => setDrawer('left')}>افتح يسارًا</Button><Button variant="brand" onClick={() => setDrawer('right')}>افتح يمينًا</Button></div>
 <Drawer open={drawerOpen} onClose={() => setDrawer(null)} placement={side} labelledBy="drawer-demo-title">
-<div className="fx ac jb"><span className="pcard-title" style={css('font-size:17px')} id="drawer-demo-title">القائمة</span><button className="bx" aria-label="إغلاق" onClick={() => setDrawer(null)} style={css('opacity:.5;cursor:pointer;border:none;background:transparent;font:inherit;font-size:18px;line-height:1;color:inherit')}>×</button></div><p className="t-sm" style={css('margin:0')}>{hint}</p><div className="sideitem on"><span className="sideicon"></span>المحفظة</div><div className="sideitem"><span className="sideicon"></span>المقتنيات</div><div className="sideitem"><span className="sideicon"></span>الإعدادات</div>
+<div className="fx ac jb"><span className="pcard-title" style={css('font-size:17px')} id="drawer-demo-title">القائمة</span><button className="bx" aria-label="إغلاق" onClick={() => setDrawer(null)} style={css('opacity:.5;cursor:pointer;border:none;background:transparent;font:inherit;font-size:18px;line-height:1;color:inherit')}>×</button></div><p className="t-sm" style={css('margin:0')}>{hint}</p><NavItem variant="rail" active label="المحفظة" /><NavItem variant="rail" label="المقتنيات" /><NavItem variant="rail" label="الإعدادات" />
 </Drawer></div></div>
 <div><p className="subhead">ورقة سفلية</p><div className="framedemo"><div className="sheetwrap"><Button variant="secondary" onClick={() => setSheet(true)}>افتح الورقة السفلية</Button></div>
 <Drawer open={sheet} onClose={() => setSheet(false)} placement="bottom" labelledBy="sheet-demo-title">
