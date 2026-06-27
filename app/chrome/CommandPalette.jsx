@@ -1,5 +1,4 @@
 import React from 'react';
-import { css } from '../lib/css.js';
 
 export default function CommandPalette({ closeCmd, cmdQuery, cmdResults, cmdScrimCls, onCmdInput, stop }) {
   return (

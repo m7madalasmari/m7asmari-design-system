@@ -1,24 +1,12 @@
 import React from 'react';
 import { css } from './lib/css.js';
+import { sortRows, nextSortDir, ariaSortFor } from './lib/sort.js';
+import { prefersReducedMotion } from './lib/a11y.js';
+import { buildMonth } from './lib/calendar.js';
 import TopBar from './chrome/TopBar.jsx';
 import SideRail from './chrome/SideRail.jsx';
 import Hero from './chrome/Hero.jsx';
 import CommandPalette from './chrome/CommandPalette.jsx';
-import CodeBlock from '../docs/CodeBlock.jsx';
-import ColorScale from '../docs/ColorScale.jsx';
-import ColorSwatch from '../docs/ColorSwatch.jsx';
-import SectionHeader from '../docs/SectionHeader.jsx';
-import ShowcasePanel from '../docs/ShowcasePanel.jsx';
-import TokenTable from '../docs/TokenTable.jsx';
-import TypeSpecimen from '../docs/TypeSpecimen.jsx';
-import Alert from '../components/Alert.jsx';
-import Avatar from '../components/Avatar.jsx';
-import Badge from '../components/Badge.jsx';
-import Banner from '../components/Banner.jsx';
-import Button from '../components/Button.jsx';
-import Card from '../components/Card.jsx';
-import EmptyState from '../components/EmptyState.jsx';
-import StatCard from '../components/StatCard.jsx';
 import Colors from '../sections/foundations/Colors.jsx';
 import Typography from '../sections/foundations/Typography.jsx';
 import Spacing from '../sections/foundations/Spacing.jsx';
@@ -62,50 +50,13 @@ import GuidelinesSection from '../sections/reference/GuidelinesSection.jsx';
 
 
 class App extends React.Component {
-  state = { tab: 0, theme: this.props.theme ?? 'light', cbTerms: true, cbUpdates: false, swNotif: true, radioPlan: 'pro', sheetOpen: false, drawerOpen: false, drawerSide: 'right', accOpen: 'calendar', upVariant: 'centered', toasts: [], toastPos: 'bottom-right', tabPill: 'overview', tabSeg: 'day', tabUnder: 'all', btnOk: 'idle', btnErr: 'idle', badgeIdx: 0, otp: ['', '', '', '', '', ''], otpStatus: 'idle', ensVal: '', ensStatus: 'idle', amtVal: '', amtStatus: 'idle', files: [], swItems: [], swOpen: null, swSide: null, swLast: 'جاهز', modalOpen: false, sliderVal: 65, calMonth: 5, calYear: 2026, calSel: 14, pageActive: 1, tags: ['تصميم', 'واجهات', 'عربي'], sortKey: null, sortDir: 1, activeSection: 'colors', cmdOpen: false, cmdQuery: '', dashSec: { pinned: true, folders: true, recent: true, tags: true }, dashCat: 'all', dashNotif: false, dashPinned: ['العمل'], exportFmt: 'tailwind' };
+  // الحالة المركزية المتبقّية تخصّ الأقسام غير المُستخرَجة بعد (أزرار، ضوابط، رفع، جدول،
+  // تقويم، سحب، لوحة، إشعارات، لوحة أوامر). المكوّنات المُستخرَجة تدير حالتها داخليًا.
+  state = { theme: this.props.theme ?? 'light', cbTerms: true, cbUpdates: false, swNotif: true, radioPlan: 'pro', upVariant: 'centered', toasts: [], toastPos: 'bottom-right', btnOk: 'idle', btnErr: 'idle', badgeIdx: 0, files: [], swItems: [], swOpen: null, swSide: null, swLast: 'جاهز', calMonth: 5, calYear: 2026, calSel: 14, sortKey: null, sortDir: 1, activeSection: 'colors', cmdOpen: false, cmdQuery: '', dashSec: { pinned: true, folders: true, recent: true, tags: true }, dashCat: 'all', dashNotif: false, dashPinned: ['العمل'], exportFmt: 'tailwind' };
   _filesInit = false;
-  _sliderRef = React.createRef();
   _tid = 0;
   _tos = {};
-  _undBtns = {};
-  _undInd = React.createRef();
   _numRefs = { mrr: React.createRef(), users: React.createRef(), conv: React.createRef() };
-  _otpRefs = [0, 1, 2, 3, 4, 5].map(() => React.createRef());
-  _otpSetChar(i, ch) {
-    const otp = [...this.state.otp]; otp[i] = ch;
-    this.setState({ otp, otpStatus: 'idle' });
-    if (otp.every(d => d !== '')) setTimeout(() => this.setState({ otpStatus: otp.join('') === '123456' ? 'success' : 'error' }), 20);
-  }
-  onOtpInput(i) { return (e) => {
-    const v = (e.target.value || '').replace(/\D/g, '');
-    if (!v) { this._otpSetChar(i, ''); return; }
-    this._otpSetChar(i, v[v.length - 1]);
-    if (i < 5) { const n = this._otpRefs[i + 1].current; if (n) n.focus(); }
-  }; }
-  onOtpKey(i) { return (e) => {
-    if (e.key === 'Backspace' && !this.state.otp[i] && i > 0) { const p = this._otpRefs[i - 1].current; if (p) p.focus(); this._otpSetChar(i - 1, ''); }
-  }; }
-  onOtpPaste(e) {
-    e.preventDefault();
-    const t = ((e.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '').slice(0, 6);
-    if (!t) return;
-    const otp = ['', '', '', '', '', ''];
-    for (let k = 0; k < t.length; k++) otp[k] = t[k];
-    this.setState({ otp, otpStatus: 'idle' });
-    const idx = Math.min(t.length, 5); const el = this._otpRefs[idx].current; if (el) el.focus();
-    if (t.length === 6) setTimeout(() => this.setState({ otpStatus: t === '123456' ? 'success' : 'error' }), 20);
-  }
-  resetOtp() { this.setState({ otp: ['', '', '', '', '', ''], otpStatus: 'idle' }); const el = this._otpRefs[0].current; if (el) el.focus(); }
-  onEns(e) {
-    const v = e.target.value; let st = 'idle';
-    if (v) { const taken = ['admin', 'satoshi', 'vitalik', 'm7asmari']; if (v.length < 3) st = 'short'; else if (taken.includes(v.toLowerCase())) st = 'taken'; else st = 'ok'; }
-    this.setState({ ensVal: v, ensStatus: st });
-  }
-  onAmt(e) {
-    const v = e.target.value; let st = 'idle';
-    if (v !== '') { const n = parseFloat(v); if (isNaN(n) || n <= 0) st = 'bad'; else if (n > 2.4) st = 'over'; else st = 'ok'; }
-    this.setState({ amtVal: v, amtStatus: st });
-  }
   _numFmt = {
     mrr: (n) => '$' + Math.round(n).toLocaleString('en-US'),
     users: (n) => Math.round(n).toLocaleString('en-US'),
@@ -114,6 +65,10 @@ class App extends React.Component {
   _runNums() {
     clearInterval(this._numRAF);
     const targets = { mrr: 129480, users: 8420, conv: 3.8 };
+    if (prefersReducedMotion()) { // احترام تقليل الحركة: اعرض القيم النهائية فورًا بلا عدّ
+      for (const k in targets) { const el = this._numRefs[k].current; if (el) el.textContent = this._numFmt[k](targets[k]); }
+      return;
+    }
     const start = performance.now(), dur = 1500;
     const tick = () => {
       const p = Math.min(1, (performance.now() - start) / dur);
@@ -135,11 +90,6 @@ class App extends React.Component {
     }, { threshold: 0.4 });
     this._numIO.observe(el);
   }
-  _posUnder() {
-    const el = this._undBtns[this.state.tabUnder], ind = this._undInd.current;
-    if (el && ind) { ind.style.width = el.offsetWidth + 'px'; ind.style.left = el.offsetLeft + 'px'; }
-  }
-  setUndRef = (id) => (el) => { if (el) this._undBtns[id] = el; };
   runStateful(which) {
     const key = which === 'ok' ? 'btnOk' : 'btnErr';
     if (this.state[key] !== 'idle') return;
@@ -213,25 +163,10 @@ class App extends React.Component {
     setTimeout(() => this._startUpload('release'), 0);
   }
   copyToken(v) { try { navigator.clipboard && navigator.clipboard.writeText(v); } catch (_) {} this._add({ status: 'success', title: 'تم النسخ', description: v }); }
-  openModal() { this.setState({ modalOpen: true }); }
-  closeModal() { this.setState({ modalOpen: false }); }
-  sliderDown(e) { this._sliding = true; this.sliderMove(e); if (e.currentTarget.setPointerCapture && e.pointerId != null) { try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {} } }
-  sliderMove(e) {
-    if (!this._sliding) return;
-    const t = this._sliderRef && this._sliderRef.current; if (!t) return;
-    const r = t.getBoundingClientRect();
-    let pct = Math.round((r.right - e.clientX) / r.width * 100);
-    pct = Math.max(0, Math.min(100, pct));
-    this.setState({ sliderVal: pct });
-  }
-  sliderUp() { this._sliding = false; }
   calPrev() { this.setState(s => { let m = s.calMonth - 1, y = s.calYear; if (m < 0) { m = 11; y--; } return { calMonth: m, calYear: y }; }); }
   calNext() { this.setState(s => { let m = s.calMonth + 1, y = s.calYear; if (m > 11) { m = 0; y++; } return { calMonth: m, calYear: y }; }); }
   calSelect(d) { this.setState({ calSel: d }); }
-  setPage(p) { if (p >= 1 && p <= 5) this.setState({ pageActive: p }); }
-  addTag(e) { if (e.key === 'Enter') { e.preventDefault(); const v = e.target.value.trim(); if (v) { this.setState(s => ({ tags: [...s.tags, v] })); e.target.value = ''; } } }
-  removeTag(i) { this.setState(s => ({ tags: s.tags.filter((_, k) => k !== i) })); }
-  setSort(key) { this.setState(s => ({ sortKey: key, sortDir: s.sortKey === key ? -s.sortDir : 1 })); }
+  setSort(key) { this.setState(s => ({ sortKey: key, sortDir: nextSortDir(s.sortKey, s.sortDir, key) })); }
   toggleCmd() { this.setState(s => ({ cmdOpen: !s.cmdOpen, cmdQuery: '' })); }
   _scaleDefs() {
     return {
@@ -267,21 +202,24 @@ class App extends React.Component {
   }
   copyExport() { const t = this._exportText(this.state.exportFmt); try { navigator.clipboard && navigator.clipboard.writeText(t); } catch (_) {} this._add({ status: 'success', title: 'نُسخت الرموز', description: 'صيغة ' + this.state.exportFmt + ' في الحافظة.' }); }
   closeCmd() { this.setState({ cmdOpen: false }); }
-  cmdGo(id) { this.setState({ cmdOpen: false }); const el = document.getElementById(id); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); }
+  cmdGo(id) { this.setState({ cmdOpen: false }); const el = document.getElementById(id); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: prefersReducedMotion() ? 'auto' : 'smooth' }); }
   _tableVals() {
     const rows = [
       { name: 'إيثيريوم', av: 'E', avc: '#627eea', bal: '2.40 ETH', balN: 2.40, price: '$3,180', priceN: 3180, chg: '+4.2%', chgN: 4.2, chgCls: 'badge green numjoin', status: 'مكتمل', statusCls: 'badge green' },
-      { name: 'USDC', av: 'U', avc: '#16bd74', bal: '820.00', balN: 820, price: '$1.00', priceN: 1, chg: '0.0%', chgN: 0, chgCls: 'badge neutral numjoin', status: 'قيد الانتظار', statusCls: 'badge gold' },
-      { name: 'أربيتروم', av: 'A', avc: '#f5a623', bal: '145.5 ARB', balN: 145.5, price: '$0.92', priceN: 0.92, chg: '−3.1%', chgN: -3.1, chgCls: 'badge red numjoin', status: 'فشل', statusCls: 'badge red' },
+      { name: 'USDC', av: 'U', avc: '#16bd74', avtx: '#042c1c', bal: '820.00', balN: 820, price: '$1.00', priceN: 1, chg: '0.0%', chgN: 0, chgCls: 'badge neutral numjoin', status: 'قيد الانتظار', statusCls: 'badge gold' },
+      { name: 'أربيتروم', av: 'A', avc: '#f5a623', avtx: '#3f2305', bal: '145.5 ARB', balN: 145.5, price: '$0.92', priceN: 0.92, chg: '−3.1%', chgN: -3.1, chgCls: 'badge red numjoin', status: 'فشل', statusCls: 'badge red' },
       { name: 'أوبتيميزم', av: 'O', avc: '#fb3d18', bal: '60.00 OP', balN: 60, price: '$2.14', priceN: 2.14, chg: '+1.8%', chgN: 1.8, chgCls: 'badge green numjoin', status: 'مُرسَل', statusCls: 'badge brand' }
     ];
-    const k = this.state.sortKey;
-    if (k) { const d = this.state.sortDir; rows.sort((a, b) => { const av = a[k], bv = b[k]; return (typeof av === 'number' ? av - bv : String(av).localeCompare(bv, 'ar')) * d; }); }
+    const sorted = sortRows(rows, this.state.sortKey, this.state.sortDir);
     const arrow = (key) => this.state.sortKey === key ? (this.state.sortDir > 0 ? ' ↑' : ' ↓') : '';
+    const col = (key, label, align) => ({
+      key, label: label + arrow(key), align,
+      ariaSort: ariaSortFor(this.state.sortKey, this.state.sortDir, key),
+      onSort: () => this.setSort(key),
+    });
     return {
-      tblRows: rows,
-      thName: 'الأصل' + arrow('name'), thBal: 'الرصيد' + arrow('balN'), thPrice: 'السعر' + arrow('priceN'), thChg: '24س' + arrow('chgN'),
-      sortName: () => this.setSort('name'), sortBal: () => this.setSort('balN'), sortPrice: () => this.setSort('priceN'), sortChg: () => this.setSort('chgN')
+      tblRows: sorted,
+      tblCols: [col('name', 'الأصل', 'start'), col('balN', 'الرصيد', 'center'), col('priceN', 'السعر', 'center'), col('chgN', '24س', 'center')],
     };
   }
   toggleDash(key) { this.setState(s => ({ dashSec: { ...s.dashSec, [key]: !s.dashSec[key] } })); }
@@ -290,7 +228,7 @@ class App extends React.Component {
   closeDashNotif() { this.setState({ dashNotif: false }); }
   toggleDashPin(label) { this.setState(s => ({ dashPinned: s.dashPinned.includes(label) ? s.dashPinned.filter(f => f !== label) : [...s.dashPinned, label] })); }
   _dashVals() {
-    const secCls = (k) => this.state.dashSec[k] ? 'dashsec open' : 'dashsec';
+    // بيانات خام فقط — التنسيق (color-mix/الأصناف) يُحسب داخل المكوّنات المُستخرَجة.
     const cats = [['all', 'كل العناصر', 'layout-grid', 48], ['favorites', 'المفضّلة', 'star', 12], ['recent', 'الأخيرة', 'clock', 8], ['shared', 'المشتركة', 'share-2', 5]];
     const folders = [
       ['العمل', 'var(--sky-500)', 24, '2.4 غ.ب', 65],
@@ -300,34 +238,16 @@ class App extends React.Component {
     ];
     const mkFolder = (f) => {
       const [label, color, items, size, prog] = f;
-      const pinned = this.state.dashPinned.includes(label);
-      return { label, color, items, size, prog, pinned,
-        boxStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color },
-        fillStyle: { width: prog + '%', background: color },
-        pinCls: pinned ? 'dashpin on' : 'dashpin',
-        togglePin: () => this.toggleDashPin(label) };
+      return { label, color, items, size, prog, pinned: this.state.dashPinned.includes(label), onTogglePin: () => this.toggleDashPin(label) };
     };
     const notifs = [
       ['ملف جديد مُشارك', 'شاركت سارة «ميزانية 2024»', 'قبل 5 دقائق', true],
       ['تنبيه التخزين', 'تستخدم 85% من المساحة', 'قبل ساعة', true],
       ['تحديث متاح', 'صدر Dashboard Pro v2.1', 'قبل ساعتين', false]
-    ].map(([title, msg, time, unread]) => ({ title, msg, time, unread, cls: unread ? 'dashnotif-item unread' : 'dashnotif-item' }));
-    const files = [
-      ['مقترح_المشروع.pdf', '2.4 م.ب', 'قبل ساعتين', 'file-text', 'var(--red-500)'],
-      ['نظام_التصميم.fig', '5.1 م.ب', 'قبل 5 ساعات', 'palette', 'var(--cat-5)'],
-      ['ملاحظات_الاجتماع.docx', '124 ك.ب', 'قبل يوم', 'file-text', 'var(--sky-500)'],
-      ['الميزانية_2024.xlsx', '856 ك.ب', 'قبل يومين', 'bar-chart-2', 'var(--emerald-500)']
-    ].map(([name, size, mod, icon, color]) => ({ name, size, mod, icon, iconStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color } }));
-    const stats = [
-      ['48', 'إجمالي الملفات', '+12% هذا الأسبوع', 'folder', 'var(--sky-500)', 'up'],
-      ['24', 'العناصر المشتركة', '+8% هذا الأسبوع', 'share-2', 'var(--cat-5)', 'up'],
-      ['7.5 غ.ب', 'التخزين المستخدم', '75% من 10 غ.ب', 'hard-drive', 'var(--amber-500)', 'flat']
-    ].map(([val, label, delta, icon, color, trend]) => ({ val, label, delta, icon, trend,
-      iconStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color },
-      deltaCls: trend === 'up' ? 'dashstat-d up' : 'dashstat-d flat' }));
+    ].map(([title, msg, time, unread]) => ({ title, msg, time, unread }));
     return {
-      dashCats: cats.map(([id, label, icon, count]) => ({ id, label, icon, count, cls: this.state.dashCat === id ? 'dashcat on' : 'dashcat', fn: () => this.setDashCat(id) })),
-      dashPinnedCls: secCls('pinned'), dashFoldersCls: secCls('folders'), dashRecentCls: secCls('recent'), dashTagsCls: secCls('tags'),
+      dashCats: cats.map(([id, label, icon, count]) => ({ id, label, icon, count, active: this.state.dashCat === id, fn: () => this.setDashCat(id) })),
+      dashSec: this.state.dashSec,
       togglePinned: () => this.toggleDash('pinned'), toggleFolders: () => this.toggleDash('folders'), toggleRecent: () => this.toggleDash('recent'), toggleTags: () => this.toggleDash('tags'),
       dashPinnedFolders: folders.filter(f => this.state.dashPinned.includes(f[0])).map(mkFolder),
       dashFolders: folders.map(mkFolder),
@@ -335,10 +255,19 @@ class App extends React.Component {
       dashTags: ['تصميم', 'تطوير', 'تسويق', 'مبيعات', 'دعم'],
       dashNotifs: notifs,
       dashUnread: notifs.filter(n => n.unread).length,
-      dashNotifCls: this.state.dashNotif ? 'dashnotif open' : 'dashnotif',
+      dashNotifOpen: this.state.dashNotif,
       toggleDashNotif: () => this.toggleDashNotif(), closeDashNotif: () => this.closeDashNotif(),
-      dashFiles: files,
-      dashStats: stats
+      dashFiles: [
+        ['مقترح_المشروع.pdf', '2.4 م.ب', 'قبل ساعتين', 'file-text', 'var(--red-500)'],
+        ['نظام_التصميم.fig', '5.1 م.ب', 'قبل 5 ساعات', 'palette', 'var(--cat-5)'],
+        ['ملاحظات_الاجتماع.docx', '124 ك.ب', 'قبل يوم', 'file-text', 'var(--sky-500)'],
+        ['الميزانية_2024.xlsx', '856 ك.ب', 'قبل يومين', 'bar-chart-2', 'var(--emerald-500)']
+      ].map(([name, size, mod, icon, color]) => ({ name, size, mod, icon, color })),
+      dashStats: [
+        ['48', 'إجمالي الملفات', '+12% هذا الأسبوع', 'folder', 'var(--sky-500)', 'up'],
+        ['24', 'العناصر المشتركة', '+8% هذا الأسبوع', 'share-2', 'var(--cat-5)', 'up'],
+        ['7.5 غ.ب', 'التخزين المستخدم', '75% من 10 غ.ب', 'hard-drive', 'var(--amber-500)', 'flat']
+      ].map(([val, label, delta, icon, color, trend]) => ({ val, label, delta, icon, color, trend }))
     };
   }
   _cmdVals() {
@@ -364,10 +293,19 @@ class App extends React.Component {
     setTimeout(() => s.remove(), 600);
   }
   componentDidMount() {
-    this._esc = (e) => { if (e.key === 'Escape') this.setState({ drawerOpen: false, sheetOpen: false, modalOpen: false, cmdOpen: false }); if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); this.toggleCmd(); } };
+    // النوافذ/الأدراج المُستخرَجة تغلق نفسها بـ Escape داخليًا؛ هنا لوحة الأوامر فقط.
+    this._esc = (e) => { if (e.key === 'Escape') this.setState({ cmdOpen: false }); if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); this.toggleCmd(); } };
     window.addEventListener('keydown', this._esc);
     this._copyClick = (e) => { const c = e.target.closest && e.target.closest('[data-copy]'); if (c) { this.copyToken(c.getAttribute('data-copy')); return; } const a = e.target.closest && e.target.closest('[data-action]'); if (a) this._add({ status: a.getAttribute('data-tone') || 'info', title: a.getAttribute('data-action') }); };
     document.addEventListener('click', this._copyClick);
+    // إتاحة خانات النسخ بلوحة المفاتيح: قابلة للتركيز + تفعيل بـ Enter/Space (حلقة التركيز عبر قاعدة [tabindex] العامّة)
+    document.querySelectorAll('[data-copy]').forEach((el) => {
+      if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+      if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'نسخ ' + el.getAttribute('data-copy'));
+    });
+    this._copyKey = (e) => { if (e.key !== 'Enter' && e.key !== ' ') return; const c = e.target.closest && e.target.closest('[data-copy]'); if (c) { e.preventDefault(); this.copyToken(c.getAttribute('data-copy')); } };
+    document.addEventListener('keydown', this._copyKey);
     if (window.IntersectionObserver) {
       this._spy = new IntersectionObserver((ents) => {
         ents.forEach(en => { if (en.isIntersecting && en.target.id) this.setState({ activeSection: en.target.id }); });
@@ -375,19 +313,18 @@ class App extends React.Component {
       document.querySelectorAll('.section[id]').forEach(s => this._spy.observe(s));
     }
     this._renderIcons();
-    this._posUnder();
     this._watchNums();
     this.setState({ files: this._initialFiles(), swItems: this._swInit() });
     setTimeout(() => this._startUpload('release'), 300);
     this._badgeTimer = setInterval(() => this.setState(s => ({ badgeIdx: (s.badgeIdx + 1) % 4 })), 1600);
-    window.addEventListener('resize', this._rz = () => this._posUnder());
   }
   componentDidUpdate() {
-    this._renderIcons(); this._posUnder();
+    this._renderIcons();
     if (this.state.theme !== this._lastTheme) {
       this._lastTheme = this.state.theme;
       const root = document.querySelector('.ds');
-      if (root) { root.style.display = 'none'; void root.offsetHeight; root.style.display = ''; }
+      // إعادة طلاء عند تبديل السمة مع الحفاظ على موضع التمرير (display:none يصفّر التمرير)
+      if (root) { const y = window.scrollY; root.style.display = 'none'; void root.offsetHeight; root.style.display = ''; window.scrollTo(0, y); }
     }
   }
   _renderIcons() {
@@ -395,7 +332,7 @@ class App extends React.Component {
       if (document.querySelector('i[data-lucide]')) window.lucide.createIcons();
     } else { clearTimeout(this._lt); this._lt = setTimeout(() => this._renderIcons(), 150); }
   }
-  componentWillUnmount() { window.removeEventListener('keydown', this._esc); clearTimeout(this._lt); clearInterval(this._numRAF); if (this._numIO) this._numIO.disconnect(); Object.keys(this._upTimers).forEach(id => this._stopUpload(id)); clearInterval(this._badgeTimer); document.removeEventListener('click', this._copyClick); if (this._spy) this._spy.disconnect(); }
+  componentWillUnmount() { window.removeEventListener('keydown', this._esc); clearTimeout(this._lt); clearInterval(this._numRAF); if (this._numIO) this._numIO.disconnect(); Object.keys(this._upTimers).forEach(id => this._stopUpload(id)); clearInterval(this._badgeTimer); document.removeEventListener('click', this._copyClick); document.removeEventListener('keydown', this._copyKey); if (this._spy) this._spy.disconnect(); }
   _scls(s){ return s === 'loading' ? 'load' : s === 'success' ? 'ok' : s === 'error' ? 'err' : 'info'; }
   _add(input){ const id = ++this._tid; this.setState(s => ({ toasts: [...s.toasts, { id, ...input }].slice(-5) })); const dur = input.duration === undefined ? 3600 : input.duration; if (dur > 0) this._tos[id] = setTimeout(() => this.dismiss(id), dur); return id; }
   dismiss(id){ clearTimeout(this._tos[id]); delete this._tos[id]; this.setState(s => ({ toasts: s.toasts.filter(t => t.id !== id) })); }
@@ -404,43 +341,19 @@ class App extends React.Component {
   toastError(){ this._add({ status: 'error', title: 'فشل الالتقاط', description: 'أعد المحاولة بعد استقرار المتصفّح.' }); }
   clearToasts(){ Object.values(this._tos).forEach(clearTimeout); this._tos = {}; this.setState({ toasts: [] }); }
   moveStack(pos, label){ this.setState({ toastPos: pos }); this._add({ status: 'info', title: 'تغيّر الموضع', description: 'الإشعارات الجديدة تفتح من ' + label + '.' }); }
-  _tabVals() {
-    const idx = (arr, v) => arr.indexOf(v);
-    const pillItems = [['overview', 'نظرة عامة'], ['activity', 'النشاط'], ['settings', 'الإعدادات']];
-    const segItems = [['day', 'يوم'], ['week', 'أسبوع'], ['month', 'شهر']];
-    const undItems = [['all', 'الكل'], ['open', 'مفتوحة'], ['closed', 'مغلقة']];
-    const pillText = { overview: 'ملخّص عام لأهم المؤشّرات والأرصدة في لمحة واحدة.', activity: 'أحدث الأحداث والمعاملات على محفظتك مرتّبة زمنيًا.', settings: 'التفضيلات وخيارات الأمان والشبكة الافتراضية.' };
-    const pi = idx(pillItems.map(x => x[0]), this.state.tabPill);
-    const si = idx(segItems.map(x => x[0]), this.state.tabSeg);
-    return {
-      pillTabs: pillItems.map(([v, label]) => ({ v, label, cls: this.state.tabPill === v ? 'ttab on' : 'ttab', fn: () => this.setState({ tabPill: v }) })),
-      segTabs: segItems.map(([v, label]) => ({ v, label, cls: this.state.tabSeg === v ? 'ttab on' : 'ttab', fn: () => this.setState({ tabSeg: v }) })),
-      undTabs: undItems.map(([v, label]) => ({ v, label, cls: this.state.tabUnder === v ? 'ttab on' : 'ttab', fn: () => this.setState({ tabUnder: v }), ref: this.setUndRef(v) })),
-      pillIndStyle: { transform: 'translateX(' + (pi * -100) + '%)' },
-      segIndStyle: { transform: 'translateX(' + (si * -100) + '%)' },
-      undIndRef: this._undInd,
-      pillText: pillText[this.state.tabPill]
-    };
-  }
   renderVals() {
     const acc = this.props.accent ?? 'blue';
     const corners = this.props.corners ?? 'rounded';
     const accClass = acc === 'blue' ? '' : 'acc-' + acc;
     const radClass = corners === 'rounded' ? '' : 'sharp';
     const theme = this.state.theme;
-    const accIds = ['brief', 'launch', 'campaign', 'calendar', 'ship', 'archive'];
-    const accCls = {}, accH = {};
-    accIds.forEach(id => {
-      accCls[id] = this.state.accOpen === id ? 'acc-item open' : 'acc-item';
-      accH[id] = () => this.setState(s => ({ accOpen: s.accOpen === id ? null : id }));
-    });
     const posDefs = [['top-left','أعلى يسار','tl'],['top-center','أعلى وسط','tc'],['top-right','أعلى يمين','tr'],['bottom-left','أسفل يسار','bl'],['bottom-center','أسفل وسط','bc'],['bottom-right','أسفل يمين','br']];
     const posMap = {};
     posDefs.forEach(([id, , k]) => { posMap[id] = k; });
     const posList = posDefs.map(([id, label]) => ({ id, label, cls: this.state.toastPos === id ? 'posbtn on' : 'posbtn', fn: () => this.moveStack(id, label) }));
     const toasts = this.state.toasts.slice(-4).map(t => ({ id: t.id, title: t.title, desc: t.description, cls: 'toast2 ' + this._scls(t.status), dismiss: () => this.dismiss(t.id) }));
     return {
-      accCls, accH, posList, toasts,
+      posList, toasts,
       stackCls: 'tstack ' + posMap[this.state.toastPos],
       toastPromise: () => this.toastPromise(),
       toastSuccess: () => this.toastSuccess(),
@@ -451,26 +364,20 @@ class App extends React.Component {
       themeLabel: theme === 'dark' ? 'فاتح' : 'داكن',
       cbTermsCls: this.state.cbTerms ? 'cbx on' : 'cbx',
       cbUpdatesCls: this.state.cbUpdates ? 'cbx on' : 'cbx',
+      cbTermsOn: this.state.cbTerms,
+      cbUpdatesOn: this.state.cbUpdates,
       toggleTerms: () => this.setState(s => ({ cbTerms: !s.cbTerms })),
       toggleUpdates: () => this.setState(s => ({ cbUpdates: !s.cbUpdates })),
       swNotifCls: this.state.swNotif ? 'switch on' : 'switch',
+      swNotifOn: this.state.swNotif,
       toggleNotif: () => this.setState(s => ({ swNotif: !s.swNotif })),
+      radioPlan: this.state.radioPlan,
       rStarterCls: this.state.radioPlan === 'starter' ? 'radio on' : 'radio',
       rProCls: this.state.radioPlan === 'pro' ? 'radio on' : 'radio',
       rTeamCls: this.state.radioPlan === 'team' ? 'radio on' : 'radio',
       pickStarter: () => this.setState({ radioPlan: 'starter' }),
       pickPro: () => this.setState({ radioPlan: 'pro' }),
       pickTeam: () => this.setState({ radioPlan: 'team' }),
-      scrimCls: this.state.sheetOpen ? 'scrim2 open' : 'scrim2',
-      sheetCls: this.state.sheetOpen ? 'sheet2 open' : 'sheet2',
-      openSheet: () => this.setState({ sheetOpen: true }),
-      closeSheet: () => this.setState({ sheetOpen: false }),
-      drawerScrimCls: this.state.drawerOpen ? 'scrim2 open' : 'scrim2',
-      drawerCls: 'drawer2 ' + this.state.drawerSide + (this.state.drawerOpen ? ' open' : ''),
-      drawerHint: this.state.drawerSide === 'left' ? 'ينزلق من اليسار. اضغط Esc أو انقر خارجه للإغلاق.' : 'ينزلق من اليمين. اضغط Esc أو انقر خارجه للإغلاق.',
-      openLeft: () => this.setState({ drawerOpen: true, drawerSide: 'left' }),
-      openRight: () => this.setState({ drawerOpen: true, drawerSide: 'right' }),
-      closeDrawer: () => this.setState({ drawerOpen: false }),
       upCenteredCls: this.state.upVariant === 'centered' ? 'on' : '',
       upRowCls: this.state.upVariant === 'row' ? 'on' : '',
       dzCls: this.state.upVariant === 'row' ? 'dropzone row' : 'dropzone',
@@ -489,34 +396,19 @@ class App extends React.Component {
       }),
       upCounter: this.state.files.filter(f => f.status === 'success').length + ' من ' + this.state.files.length + ' جاهز',
       resetUpload: () => this.resetUpload(),
-      modalScrimCls: this.state.modalOpen ? 'mscrim open' : 'mscrim',
-      modalCls: this.state.modalOpen ? 'mdialog open' : 'mdialog',
-      openModal: () => this.openModal(), closeModal: () => this.closeModal(),
       toggleCmd: () => this.toggleCmd(),
       stop: (e) => e.stopPropagation(),
-      sliderRef: this._sliderRef,
-      sliderVal: this.state.sliderVal,
-      sliderFill: { width: this.state.sliderVal + '%' },
-      sliderKnob: { right: this.state.sliderVal + '%' },
-      sliderPct: this.state.sliderVal + '%',
-      sliderDown: (e) => this.sliderDown(e), sliderMove: (e) => this.sliderMove(e), sliderUp: () => this.sliderUp(),
       ...((() => {
         const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
         const y = this.state.calYear, m = this.state.calMonth;
-        const first = new Date(y, m, 1).getDay(), dim = new Date(y, m + 1, 0).getDate(), pdim = new Date(y, m, 0).getDate();
-        const cells = [];
-        for (let i = first - 1; i >= 0; i--) cells.push({ label: pdim - i, cls: 'cal-day muted', fn: () => {} });
-        for (let d = 1; d <= dim; d++) {
-          const isToday = (y === 2026 && m === 5 && d === 8), isSel = (d === this.state.calSel);
-          cells.push({ label: d, cls: 'cal-day' + (isSel ? ' sel' : isToday ? ' today' : ''), fn: () => this.calSelect(d) });
-        }
-        let t = 1; while (cells.length % 7 !== 0) cells.push({ label: t++, cls: 'cal-day muted', fn: () => {} });
-        return { calTitle: months[m] + ' ' + y, calDays: cells, calPrev: () => this.calPrev(), calNext: () => this.calNext() };
+        const calDays = buildMonth(y, m, this.state.calSel, { year: 2026, month: 5, day: 8 }).map((c) => ({
+          label: c.label,
+          cls: 'cal-day' + (c.muted ? ' muted' : c.selected ? ' sel' : c.today ? ' today' : ''),
+          muted: c.muted, day: c.day, selected: !!c.selected, today: !!c.today,
+          fn: c.muted ? () => {} : () => this.calSelect(c.day),
+        }));
+        return { calTitle: months[m] + ' ' + y, calMonthLabel: months[m], calDays, calPrev: () => this.calPrev(), calNext: () => this.calNext() };
       })()),
-      pageItems: [1, 2, 3, 4, 5].map(p => ({ n: p, cls: p === this.state.pageActive ? 'btn brand sm' : 'btn ghost sm', fn: () => this.setPage(p) })),
-      pagePrev: () => this.setPage(this.state.pageActive - 1), pageNext: () => this.setPage(this.state.pageActive + 1),
-      tagList: this.state.tags.map((t, i) => ({ label: t, remove: () => this.removeTag(i) })),
-      addTag: (e) => this.addTag(e),
       navItems: [['colors', 'الألوان'], ['type', 'الطباعة'], ['motion', 'الحركة'], ['icons', 'الأيقونات'], ['states', 'الحالات'], ['buttons', 'الأزرار'], ['inputs', 'الحقول'], ['otp', 'رمز التحقّق'], ['calendar', 'التقويم'], ['cards', 'البطاقات'], ['tables', 'الجداول'], ['badges', 'الشارات'], ['numanim', 'الأرقام'], ['alerts', 'التنبيهات'], ['modal', 'النوافذ'], ['tabs', 'التبويبات'], ['swipe', 'السحب'], ['patterns', 'الأنماط'], ['darkmode', 'الوضع الداكن']].map(([id, label]) => ({ id, label, href: '#' + id, cls: this.state.activeSection === id ? 'nvi on' : 'nvi' })),
       ...this._tableVals(),
       ...this._cmdVals(),
@@ -548,22 +440,6 @@ class App extends React.Component {
       numConvRef: this._numRefs.conv,
       replayNums: () => this._runNums(),
       ripple: (e) => this.ripple(e),
-      otpBoxes: this.state.otp.map((d, i) => ({ d, ref: this._otpRefs[i], onInput: this.onOtpInput(i), onKey: this.onOtpKey(i) })),
-      otpWrapCls: 'otpwrap' + (this.state.otpStatus === 'success' ? ' ok' : '') + (this.state.otpStatus === 'error' ? ' err' : ''),
-      otpPaste: (e) => this.onOtpPaste(e),
-      otpMsg: this.state.otpStatus === 'success' ? 'تم التحقّق ✓' : this.state.otpStatus === 'error' ? 'رمز خاطئ، حاول مجددًا.' : 'أدخل 123456 للتحقّق.',
-      otpMsgCls: 'hint' + (this.state.otpStatus === 'success' ? ' ok' : '') + (this.state.otpStatus === 'error' ? ' err' : ''),
-      resetOtp: () => this.resetOtp(),
-      ensVal: this.state.ensVal,
-      onEns: (e) => this.onEns(e),
-      ensInputCls: 'input' + (this.state.ensStatus === 'ok' ? ' is-success' : (this.state.ensStatus === 'short' || this.state.ensStatus === 'taken') ? ' is-error' : ''),
-      ensMsg: this.state.ensStatus === 'ok' ? '✓ الاسم متاح' : this.state.ensStatus === 'short' ? '3 أحرف على الأقل' : this.state.ensStatus === 'taken' ? 'هذا الاسم محجوز بالفعل' : 'متاح إذا كان 3 أحرف فأكثر وغير محجوز.',
-      ensMsgCls: 'hint' + (this.state.ensStatus === 'ok' ? ' ok' : (this.state.ensStatus === 'short' || this.state.ensStatus === 'taken') ? ' err' : ''),
-      amtVal: this.state.amtVal,
-      onAmt: (e) => this.onAmt(e),
-      amtInputCls: 'input' + (this.state.amtStatus === 'ok' ? ' is-success' : (this.state.amtStatus === 'bad' || this.state.amtStatus === 'over') ? ' is-error' : ''),
-      amtMsg: this.state.amtStatus === 'ok' ? '✓ المبلغ متاح للإرسال' : this.state.amtStatus === 'over' ? 'الرصيد غير كافٍ (2.4 ETH)' : this.state.amtStatus === 'bad' ? 'أدخل مبلغًا صحيحًا' : 'الرصيد: 2.4 ETH',
-      amtMsgCls: 'hint' + (this.state.amtStatus === 'ok' ? ' ok' : (this.state.amtStatus === 'bad' || this.state.amtStatus === 'over') ? ' err' : ''),
       okBtnCls: 'btn primary' + (this.state.btnOk === 'success' ? ' is-ok' : '') + (this.state.btnOk === 'loading' ? ' is-load' : ''),
       okLabel: this.state.btnOk === 'loading' ? 'جارٍ الحفظ' : this.state.btnOk === 'success' ? 'تم الحفظ' : 'حفظ التغييرات',
       okSpin: this.state.btnOk === 'loading',
@@ -574,8 +450,7 @@ class App extends React.Component {
       errLabel: this.state.btnErr === 'loading' ? 'جارٍ الإرسال' : this.state.btnErr === 'error' ? 'فشل' : 'إرسال',
       errSpin: this.state.btnErr === 'loading',
       errX: this.state.btnErr === 'error',
-      runErr: () => this.runStateful('err'),
-      ...this._tabVals()
+      runErr: () => this.runStateful('err')
     };
   }
 
@@ -613,17 +488,17 @@ class App extends React.Component {
 
 <ButtonsSection v={V} />
 
-<InputsSection v={V} />
+<InputsSection />
 
-<OtpSection v={V} />
+<OtpSection />
 
 <ControlsSection v={V} />
 
-<SelectSection v={V} />
+<SelectSection />
 
-<ComboboxSection v={V} />
+<ComboboxSection />
 
-<SearchSliderSection v={V} />
+<SearchSliderSection />
 
 <CalendarSection v={V} />
 
@@ -647,21 +522,21 @@ class App extends React.Component {
 
 <FeedbackSection v={V} />
 
-<ModalSection v={V} />
+<ModalSection />
 
-<DrawerSection v={V} />
+<DrawerSection />
 
 <LoadingSection v={V} />
 
 <EmptySection v={V} />
 
-<TabsSection v={V} />
+<TabsSection />
 
-<NavSection v={V} />
+<NavSection />
 
 <StepperSection v={V} />
 
-<AccordionSection v={V} />
+<AccordionSection />
 
 <SwipeSection v={V} />
 
