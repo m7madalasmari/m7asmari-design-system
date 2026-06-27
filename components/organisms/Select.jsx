@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from '../../app/lib/css.js';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * Select — قائمة اختيار منسدلة على أصناف M7 (.selectbox + .menu)، مرتكزة عبر .fk-anchor/.fk-pop.
@@ -66,7 +67,7 @@ export default function Select({
         <span style={selected ? undefined : css('color:var(--text-muted)')}>
           {selected ? selected.label : placeholder}
         </span>
-        <span className="chev" aria-hidden="true">▾</span>
+        <Icon name="chevron-down" size={16} className="chev" />
       </div>
       {open ? (
         <div className={'fk-pop' + (bare ? ' auto' : '')}>
@@ -82,7 +83,7 @@ export default function Select({
                 onClick={() => choose(i)}
               >
                 {o.label}
-                {o.value === value ? <span aria-hidden="true">✓</span> : null}
+                {o.value === value ? <Icon name="check" size={16} /> : null}
               </div>
             ))}
           </div>

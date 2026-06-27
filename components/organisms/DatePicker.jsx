@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '../../app/lib/css.js';
 import { buildMonth } from '../../app/lib/calendar.js';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * DatePicker — منتقي تاريخ على أصناف M7 (.cal)، مرتكز عبر .fk-anchor/.fk-pop. مكوّن متحكَّم.
@@ -52,15 +53,15 @@ export default function DatePicker({ value, onChange, placeholder = 'اختر ت
         {...rest}
       >
         <span style={fmt ? undefined : css('color:var(--text-muted)')}>{fmt || placeholder}</span>
-        <span className="chev" aria-hidden="true">▾</span>
+        <Icon name="chevron-down" size={16} className="chev" />
       </div>
       {open ? (
         <div className="fk-pop auto">
           <div className="cal">
             <div className="cal-head">
-              <button type="button" className="cal-btn" aria-label="الشهر السابق" onClick={prev}>‹</button>
+              <button type="button" className="cal-btn" aria-label="الشهر السابق" onClick={prev}><Icon name="chevron-right" size={18} /></button>
               <div className="cal-title">{MONTHS[view.month]} {view.year}</div>
-              <button type="button" className="cal-btn" aria-label="الشهر التالي" onClick={next}>›</button>
+              <button type="button" className="cal-btn" aria-label="الشهر التالي" onClick={next}><Icon name="chevron-left" size={18} /></button>
             </div>
             <div className="cal-grid">
               {WD.map((w) => <div className="cal-wd" key={w}>{w}</div>)}

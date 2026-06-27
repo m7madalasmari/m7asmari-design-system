@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * Combobox — حقل بحث/إكمال تلقائي على أصناف M7 (.search + .menu + .combohi)، مرتكز عبر .fk-anchor/.fk-pop.
@@ -52,7 +53,7 @@ export default function Combobox({
   return (
     <div className="fk-anchor" ref={rootRef}>
       <div className="search">
-        <span className="mgicon" aria-hidden="true"></span>
+        <Icon name="search" size={16} />
         <input
           id={id}
           role="combobox"

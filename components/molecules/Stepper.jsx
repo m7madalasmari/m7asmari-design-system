@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * Stepper — مؤشّر خطوات أفقي على أصناف M7 (.stepper/.step). يعرض المكتملة/النشطة/القادمة.
@@ -16,7 +17,7 @@ export default function Stepper({ steps = [], current = 0, className = '' }) {
               role="listitem"
               aria-current={i === current ? 'step' : undefined}
             >
-              <span className="step-dot">{i < current ? '✓' : i + 1}</span>
+              <span className="step-dot">{i < current ? <Icon name="check" size={16} /> : i + 1}</span>
               <span className="step-label">{label}</span>
             </div>
             {i < steps.length - 1 ? <span className={'step-line' + (i < current ? ' done' : '')}></span> : null}

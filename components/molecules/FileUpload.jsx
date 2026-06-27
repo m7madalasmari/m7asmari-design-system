@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * FileUpload — منطقة رفع ملفات على أصناف M7 (.dropzone/.fileitem). تفتح مربّع الاختيار
@@ -43,7 +44,7 @@ export default function FileUpload({
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => { e.preventDefault(); onFiles(e.dataTransfer.files); }}
       >
-        <span className="dz-ico" aria-hidden="true">⤓</span>
+        <span className="dz-ico" aria-hidden="true"><Icon name="upload" size={24} /></span>
         <div className="dz-title">{label}</div>
         <div className="dz-sub">{hint}</div>
         <input
@@ -70,7 +71,7 @@ export default function FileUpload({
                   <div className="filename">{f.name}</div>
                   <div className="filemeta">{fmtSize(f.size)}</div>
                 </div>
-                <span className="filestat ok" aria-hidden="true">✓</span>
+                <span className="filestat ok" aria-hidden="true"><Icon name="check" size={16} /></span>
               </div>
             );
           })}

@@ -11,6 +11,7 @@ import Switch from '../components/atoms/Switch.jsx';
 import RadioGroup from '../components/molecules/RadioGroup.jsx';
 import Select from '../components/organisms/Select.jsx';
 import PhoneInput from '../components/molecules/PhoneInput.jsx';
+import Icon from '../components/atoms/Icon.jsx';
 
 /**
  * FormKitPage — معرض Form Kit (Vite MPA · entry: app/formkit.jsx).
@@ -82,16 +83,12 @@ export default function FormKitPage() {
           </a>
           <div className="topnav">
             <a className="themetoggle" href="/" aria-label="العودة إلى نظام M7">
-              <svg className="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10" /></svg>
+              <Icon name="home" size={18} />
               <span className="tb-lbl">نظام M7</span>
             </a>
             <span className="badge brand"><span className="dot"></span>طبقة فوق M7</span>
             <button className="themetoggle" onClick={() => setDark((d) => !d)} aria-label={dark ? 'الوضع الفاتح' : 'الوضع الداكن'}>
-              <svg className="ic" viewBox="0 0 24 24" aria-hidden="true">
-                {dark
-                  ? <><circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" /></>
-                  : <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" />}
-              </svg>
+              <Icon name={dark ? 'sun' : 'moon'} size={18} />
               <span className="tb-lbl">{dark ? 'فاتح' : 'داكن'}</span>
             </button>
           </div>

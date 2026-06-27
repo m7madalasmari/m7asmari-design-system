@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from '../../components/atoms/Card.jsx';
 import Alert from '../../components/atoms/Alert.jsx';
+import Icon from '../../components/atoms/Icon.jsx';
 
 /**
  * FormCard — غلاف عرض موحّد لوصفات الـKit (ليس core): بطاقة (.panel) + عنوان + وصف،
@@ -16,7 +17,7 @@ export default function FormCard({ title, description, done = false, doneText = 
         </div>
         {done ? (
           <Alert variant="ok">
-            <span className="alert-ico" aria-hidden="true">✓</span>
+            <span className="alert-ico" aria-hidden="true"><Icon name="check" size={16} /></span>
             <div>
               <div className="alert-title">تم بنجاح</div>
               <div className="alert-text">{doneText}</div>

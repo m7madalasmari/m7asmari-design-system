@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from './Icon.jsx';
 
 /**
  * PasswordInput — حقل كلمة مرور على صنف M7 (.input) مع زرّ إظهار/إخفاء (.pwfield/.pwtoggle)
@@ -50,11 +51,7 @@ export default function PasswordInput({
           aria-label={show ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'}
           onClick={() => setShow((x) => !x)}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
-            <circle cx="12" cy="12" r="3" />
-            {show ? <path d="M3 3l18 18" /> : null}
-          </svg>
+          <Icon name={show ? 'eye-off' : 'eye'} size={18} />
         </button>
       </div>
       {meter && value ? (
