@@ -785,3 +785,24 @@
 /* أزرار تنقّل التقويم وأيام التقويم: حافظ على المظهر مع جعلها أزرارًا */
 .cal-btn{font:inherit;padding:0}
 button.cal-day{border:none;background:transparent;font:inherit;padding:0;width:100%}
+
+/* ===== Form Kit — إضافات core (تكشّفت ببناء الكِت؛ توكنز فقط، خصائص منطقية RTL) ===== */
+/* قائمة منسدلة مرتكزة: النظام يملك .menu/.cal بلا تموضع — تحتاجها Select/Combobox/DatePicker */
+.fk-anchor{position:relative}
+.fk-pop{position:absolute;inset-inline:0;top:calc(100% + var(--space-2));z-index:var(--z-dropdown)}
+.fk-pop.auto{inset-inline:auto;inset-inline-start:0;min-width:100%}
+.fk-pop .menu{max-height:300px;overflow:auto}
+/* تنشيط عنصر القائمة بالكيبورد (تكملة لـ:hover) */
+.menuitem.active{background:var(--surface-muted);color:var(--text-primary)}
+.menuitem.sel.active{background:var(--brand-soft);color:var(--brand-ink)}
+/* حقل كلمة المرور: زرّ إظهار/إخفاء داخل الحقل + مقياس قوّة */
+.pwfield{position:relative}
+.pwfield .input{padding-inline-end:var(--space-12)}
+.pwtoggle{position:absolute;inset-inline-end:var(--space-2);top:50%;transform:translateY(-50%);display:grid;place-items:center;width:var(--space-9);height:var(--space-9);border:none;background:transparent;color:var(--text-muted);cursor:pointer;border-radius:var(--radius-sm)}
+.pwtoggle:hover{color:var(--text-primary)}
+.pwtoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pwmeter{display:flex;gap:var(--space-1);margin-top:var(--space-2)}
+.pwseg{height:4px;flex:1;border-radius:var(--radius-full);background:var(--surface-elevated);transition:background var(--dur) var(--ease)}
+.pwseg.weak{background:var(--danger)}
+.pwseg.medium{background:var(--warning)}
+.pwseg.strong{background:var(--success)}
