@@ -228,7 +228,7 @@ class App extends React.Component {
   closeDashNotif() { this.setState({ dashNotif: false }); }
   toggleDashPin(label) { this.setState(s => ({ dashPinned: s.dashPinned.includes(label) ? s.dashPinned.filter(f => f !== label) : [...s.dashPinned, label] })); }
   _dashVals() {
-    const secCls = (k) => this.state.dashSec[k] ? 'dashsec open' : 'dashsec';
+    // بيانات خام فقط — التنسيق (color-mix/الأصناف) يُحسب داخل المكوّنات المُستخرَجة.
     const cats = [['all', 'كل العناصر', 'layout-grid', 48], ['favorites', 'المفضّلة', 'star', 12], ['recent', 'الأخيرة', 'clock', 8], ['shared', 'المشتركة', 'share-2', 5]];
     const folders = [
       ['العمل', 'var(--sky-500)', 24, '2.4 غ.ب', 65],
@@ -238,34 +238,16 @@ class App extends React.Component {
     ];
     const mkFolder = (f) => {
       const [label, color, items, size, prog] = f;
-      const pinned = this.state.dashPinned.includes(label);
-      return { label, color, items, size, prog, pinned,
-        boxStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color },
-        fillStyle: { width: prog + '%', background: color },
-        pinCls: pinned ? 'dashpin on' : 'dashpin',
-        togglePin: () => this.toggleDashPin(label) };
+      return { label, color, items, size, prog, pinned: this.state.dashPinned.includes(label), onTogglePin: () => this.toggleDashPin(label) };
     };
     const notifs = [
       ['ملف جديد مُشارك', 'شاركت سارة «ميزانية 2024»', 'قبل 5 دقائق', true],
       ['تنبيه التخزين', 'تستخدم 85% من المساحة', 'قبل ساعة', true],
       ['تحديث متاح', 'صدر Dashboard Pro v2.1', 'قبل ساعتين', false]
-    ].map(([title, msg, time, unread]) => ({ title, msg, time, unread, cls: unread ? 'dashnotif-item unread' : 'dashnotif-item' }));
-    const files = [
-      ['مقترح_المشروع.pdf', '2.4 م.ب', 'قبل ساعتين', 'file-text', 'var(--red-500)'],
-      ['نظام_التصميم.fig', '5.1 م.ب', 'قبل 5 ساعات', 'palette', 'var(--cat-5)'],
-      ['ملاحظات_الاجتماع.docx', '124 ك.ب', 'قبل يوم', 'file-text', 'var(--sky-500)'],
-      ['الميزانية_2024.xlsx', '856 ك.ب', 'قبل يومين', 'bar-chart-2', 'var(--emerald-500)']
-    ].map(([name, size, mod, icon, color]) => ({ name, size, mod, icon, iconStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color } }));
-    const stats = [
-      ['48', 'إجمالي الملفات', '+12% هذا الأسبوع', 'folder', 'var(--sky-500)', 'up'],
-      ['24', 'العناصر المشتركة', '+8% هذا الأسبوع', 'share-2', 'var(--cat-5)', 'up'],
-      ['7.5 غ.ب', 'التخزين المستخدم', '75% من 10 غ.ب', 'hard-drive', 'var(--amber-500)', 'flat']
-    ].map(([val, label, delta, icon, color, trend]) => ({ val, label, delta, icon, trend,
-      iconStyle: { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color },
-      deltaCls: trend === 'up' ? 'dashstat-d up' : 'dashstat-d flat' }));
+    ].map(([title, msg, time, unread]) => ({ title, msg, time, unread }));
     return {
-      dashCats: cats.map(([id, label, icon, count]) => ({ id, label, icon, count, cls: this.state.dashCat === id ? 'dashcat on' : 'dashcat', fn: () => this.setDashCat(id) })),
-      dashPinnedCls: secCls('pinned'), dashFoldersCls: secCls('folders'), dashRecentCls: secCls('recent'), dashTagsCls: secCls('tags'),
+      dashCats: cats.map(([id, label, icon, count]) => ({ id, label, icon, count, active: this.state.dashCat === id, fn: () => this.setDashCat(id) })),
+      dashSec: this.state.dashSec,
       togglePinned: () => this.toggleDash('pinned'), toggleFolders: () => this.toggleDash('folders'), toggleRecent: () => this.toggleDash('recent'), toggleTags: () => this.toggleDash('tags'),
       dashPinnedFolders: folders.filter(f => this.state.dashPinned.includes(f[0])).map(mkFolder),
       dashFolders: folders.map(mkFolder),
@@ -273,10 +255,19 @@ class App extends React.Component {
       dashTags: ['تصميم', 'تطوير', 'تسويق', 'مبيعات', 'دعم'],
       dashNotifs: notifs,
       dashUnread: notifs.filter(n => n.unread).length,
-      dashNotifCls: this.state.dashNotif ? 'dashnotif open' : 'dashnotif',
+      dashNotifOpen: this.state.dashNotif,
       toggleDashNotif: () => this.toggleDashNotif(), closeDashNotif: () => this.closeDashNotif(),
-      dashFiles: files,
-      dashStats: stats
+      dashFiles: [
+        ['مقترح_المشروع.pdf', '2.4 م.ب', 'قبل ساعتين', 'file-text', 'var(--red-500)'],
+        ['نظام_التصميم.fig', '5.1 م.ب', 'قبل 5 ساعات', 'palette', 'var(--cat-5)'],
+        ['ملاحظات_الاجتماع.docx', '124 ك.ب', 'قبل يوم', 'file-text', 'var(--sky-500)'],
+        ['الميزانية_2024.xlsx', '856 ك.ب', 'قبل يومين', 'bar-chart-2', 'var(--emerald-500)']
+      ].map(([name, size, mod, icon, color]) => ({ name, size, mod, icon, color })),
+      dashStats: [
+        ['48', 'إجمالي الملفات', '+12% هذا الأسبوع', 'folder', 'var(--sky-500)', 'up'],
+        ['24', 'العناصر المشتركة', '+8% هذا الأسبوع', 'share-2', 'var(--cat-5)', 'up'],
+        ['7.5 غ.ب', 'التخزين المستخدم', '75% من 10 غ.ب', 'hard-drive', 'var(--amber-500)', 'flat']
+      ].map(([val, label, delta, icon, color, trend]) => ({ val, label, delta, icon, color, trend }))
     };
   }
   _cmdVals() {
