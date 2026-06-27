@@ -1,8 +1,8 @@
 import React from 'react';
 import { css } from '../../app/lib/css.js';
-import Button from '../../components/Button.jsx';
-import Drawer from '../../components/Drawer.jsx';
-import NavItem from '../../components/NavItem.jsx';
+import Button from '../../components/atoms/Button.jsx';
+import Drawer from '../../components/organisms/Drawer.jsx';
+import NavItem from '../../components/molecules/NavItem.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 
 export default function DrawerSection() {

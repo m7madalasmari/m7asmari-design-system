@@ -1,8 +1,8 @@
 import React from 'react';
 import { css } from '../../app/lib/css.js';
-import Badge from '../../components/Badge.jsx';
+import Badge from '../../components/atoms/Badge.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
-import StatCard from '../../components/StatCard.jsx';
+import StatCard from '../../components/atoms/StatCard.jsx';
 
 export default function KpiSection({ v }) {
   return (

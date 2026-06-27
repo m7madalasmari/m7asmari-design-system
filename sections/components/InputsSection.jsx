@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '../../app/lib/css.js';
-import TagsInput from '../../components/TagsInput.jsx';
+import TagsInput from '../../components/organisms/TagsInput.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 import ShowcasePanel from '../../docs/ShowcasePanel.jsx';
 

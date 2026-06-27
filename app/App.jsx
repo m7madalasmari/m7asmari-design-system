@@ -44,7 +44,6 @@ import StepperSection from '../sections/components/StepperSection.jsx';
 import AccordionSection from '../sections/components/AccordionSection.jsx';
 import SwipeSection from '../sections/components/SwipeSection.jsx';
 import PatternsSection from '../sections/components/PatternsSection.jsx';
-import DarkModeSection from '../sections/reference/DarkModeSection.jsx';
 import ResponsiveSection from '../sections/reference/ResponsiveSection.jsx';
 import GuidelinesSection from '../sections/reference/GuidelinesSection.jsx';
 
@@ -191,7 +190,7 @@ class App extends React.Component {
     if (fmt === 'css') {
       let v = ':root {\n';
       for (const k in sc) { steps.forEach((s, i) => { v += '  --' + k + '-' + s + ': ' + sc[k][i] + ';\n'; }); }
-      for (const k in radii) v += '  --r-' + k + ': ' + radii[k] + ';\n';
+      for (const k in radii) v += '  --radius-' + k + ': ' + radii[k] + ';\n';
       for (const k in space) v += '  --space-' + k + ': ' + space[k] + ';\n';
       return v + '}';
     }
@@ -231,10 +230,10 @@ class App extends React.Component {
     // بيانات خام فقط — التنسيق (color-mix/الأصناف) يُحسب داخل المكوّنات المُستخرَجة.
     const cats = [['all', 'كل العناصر', 'layout-grid', 48], ['favorites', 'المفضّلة', 'star', 12], ['recent', 'الأخيرة', 'clock', 8], ['shared', 'المشتركة', 'share-2', 5]];
     const folders = [
-      ['العمل', 'var(--sky-500)', 24, '2.4 غ.ب', 65],
-      ['شخصي', 'var(--emerald-500)', 15, '1.2 غ.ب', 35],
+      ['العمل', 'var(--chart-1)', 24, '2.4 غ.ب', 65],
+      ['شخصي', 'var(--chart-2)', 15, '1.2 غ.ب', 35],
       ['الأرشيف', 'var(--neutral-500)', 9, '850 م.ب', 20],
-      ['أعمال العملاء', 'var(--cat-5)', 32, '3.1 غ.ب', 85]
+      ['أعمال العملاء', 'var(--chart-5)', 32, '3.1 غ.ب', 85]
     ];
     const mkFolder = (f) => {
       const [label, color, items, size, prog] = f;
@@ -258,20 +257,20 @@ class App extends React.Component {
       dashNotifOpen: this.state.dashNotif,
       toggleDashNotif: () => this.toggleDashNotif(), closeDashNotif: () => this.closeDashNotif(),
       dashFiles: [
-        ['مقترح_المشروع.pdf', '2.4 م.ب', 'قبل ساعتين', 'file-text', 'var(--red-500)'],
-        ['نظام_التصميم.fig', '5.1 م.ب', 'قبل 5 ساعات', 'palette', 'var(--cat-5)'],
-        ['ملاحظات_الاجتماع.docx', '124 ك.ب', 'قبل يوم', 'file-text', 'var(--sky-500)'],
-        ['الميزانية_2024.xlsx', '856 ك.ب', 'قبل يومين', 'bar-chart-2', 'var(--emerald-500)']
+        ['مقترح_المشروع.pdf', '2.4 م.ب', 'قبل ساعتين', 'file-text', 'var(--chart-4)'],
+        ['نظام_التصميم.fig', '5.1 م.ب', 'قبل 5 ساعات', 'palette', 'var(--chart-5)'],
+        ['ملاحظات_الاجتماع.docx', '124 ك.ب', 'قبل يوم', 'file-text', 'var(--chart-1)'],
+        ['الميزانية_2024.xlsx', '856 ك.ب', 'قبل يومين', 'bar-chart-2', 'var(--chart-2)']
       ].map(([name, size, mod, icon, color]) => ({ name, size, mod, icon, color })),
       dashStats: [
-        ['48', 'إجمالي الملفات', '+12% هذا الأسبوع', 'folder', 'var(--sky-500)', 'up'],
-        ['24', 'العناصر المشتركة', '+8% هذا الأسبوع', 'share-2', 'var(--cat-5)', 'up'],
-        ['7.5 غ.ب', 'التخزين المستخدم', '75% من 10 غ.ب', 'hard-drive', 'var(--amber-500)', 'flat']
+        ['48', 'إجمالي الملفات', '+12% هذا الأسبوع', 'folder', 'var(--chart-1)', 'up'],
+        ['24', 'العناصر المشتركة', '+8% هذا الأسبوع', 'share-2', 'var(--chart-5)', 'up'],
+        ['7.5 غ.ب', 'التخزين المستخدم', '75% من 10 غ.ب', 'hard-drive', 'var(--chart-3)', 'flat']
       ].map(([val, label, delta, icon, color, trend]) => ({ val, label, delta, icon, color, trend }))
     };
   }
   _cmdVals() {
-    const all = [['colors', 'الألوان', 'الأسس'], ['type', 'الطباعة', 'الأسس'], ['buttons', 'الأزرار', 'مكوّنات'], ['inputs', 'الحقول', 'مكوّنات'], ['cards', 'البطاقات', 'مكوّنات'], ['tabs', 'التبويبات', 'مكوّنات'], ['badges', 'الشارات', 'مكوّنات'], ['tables', 'الجداول', 'مكوّنات'], ['otp', 'رمز التحقّق', 'مكوّنات'], ['numanim', 'الأرقام المتحرّكة', 'مكوّنات'], ['calendar', 'التقويم', 'مكوّنات'], ['swipe', 'قائمة قابلة للسحب', 'مكوّنات'], ['modal', 'النوافذ المنبثقة', 'مكوّنات'], ['icons', 'الأيقونات', 'الأسس'], ['motion', 'الحركة', 'الأسس'], ['darkmode', 'الوضع الداكن', 'الأسس'], ['guidelines', 'دليل الاستخدام', 'الأسس']];
+    const all = [['colors', 'الألوان', 'الأسس'], ['type', 'الطباعة', 'الأسس'], ['buttons', 'الأزرار', 'مكوّنات'], ['inputs', 'الحقول', 'مكوّنات'], ['cards', 'البطاقات', 'مكوّنات'], ['tabs', 'التبويبات', 'مكوّنات'], ['badges', 'الشارات', 'مكوّنات'], ['tables', 'الجداول', 'مكوّنات'], ['otp', 'رمز التحقّق', 'مكوّنات'], ['numanim', 'الأرقام المتحرّكة', 'مكوّنات'], ['calendar', 'التقويم', 'مكوّنات'], ['swipe', 'قائمة قابلة للسحب', 'مكوّنات'], ['modal', 'النوافذ المنبثقة', 'مكوّنات'], ['icons', 'الأيقونات', 'الأسس'], ['motion', 'الحركة', 'الأسس'], ['guidelines', 'دليل الاستخدام', 'الأسس']];
     const q = this.state.cmdQuery.trim();
     const list = q ? all.filter(x => x[1].includes(q)) : all;
     return {
@@ -409,7 +408,7 @@ class App extends React.Component {
         }));
         return { calTitle: months[m] + ' ' + y, calMonthLabel: months[m], calDays, calPrev: () => this.calPrev(), calNext: () => this.calNext() };
       })()),
-      navItems: [['colors', 'الألوان'], ['type', 'الطباعة'], ['motion', 'الحركة'], ['icons', 'الأيقونات'], ['states', 'الحالات'], ['buttons', 'الأزرار'], ['inputs', 'الحقول'], ['otp', 'رمز التحقّق'], ['calendar', 'التقويم'], ['cards', 'البطاقات'], ['tables', 'الجداول'], ['badges', 'الشارات'], ['numanim', 'الأرقام'], ['alerts', 'التنبيهات'], ['modal', 'النوافذ'], ['tabs', 'التبويبات'], ['swipe', 'السحب'], ['patterns', 'الأنماط'], ['darkmode', 'الوضع الداكن']].map(([id, label]) => ({ id, label, href: '#' + id, cls: this.state.activeSection === id ? 'nvi on' : 'nvi' })),
+      navItems: [['colors', 'الألوان'], ['type', 'الطباعة'], ['motion', 'الحركة'], ['icons', 'الأيقونات'], ['states', 'الحالات'], ['buttons', 'الأزرار'], ['inputs', 'الحقول'], ['otp', 'رمز التحقّق'], ['calendar', 'التقويم'], ['cards', 'البطاقات'], ['tables', 'الجداول'], ['badges', 'الشارات'], ['numanim', 'الأرقام'], ['alerts', 'التنبيهات'], ['modal', 'النوافذ'], ['tabs', 'التبويبات'], ['swipe', 'السحب'], ['patterns', 'الأنماط']].map(([id, label]) => ({ id, label, href: '#' + id, cls: this.state.activeSection === id ? 'nvi on' : 'nvi' })),
       ...this._tableVals(),
       ...this._cmdVals(),
       ...this._dashVals(),
@@ -542,7 +541,6 @@ class App extends React.Component {
 
 <PatternsSection v={V} />
 
-<DarkModeSection v={V} />
 
 <ResponsiveSection v={V} />
 

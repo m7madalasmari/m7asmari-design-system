@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Slider from '../components/Slider.jsx';
+import Slider from '../components/organisms/Slider.jsx';
 
 describe('Slider', () => {
   it('role=slider مع قيم aria صحيحة', () => {

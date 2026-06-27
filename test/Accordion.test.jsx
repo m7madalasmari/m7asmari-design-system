@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import Accordion from '../components/Accordion.jsx';
+import Accordion from '../components/organisms/Accordion.jsx';
 
 const ITEMS = [
   { id: 'a', icon: 'file', title: 'الأول', body: 'محتوى الأول' },

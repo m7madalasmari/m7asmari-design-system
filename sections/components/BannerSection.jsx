@@ -1,6 +1,6 @@
 import React from 'react';
-import Banner from '../../components/Banner.jsx';
-import Button from '../../components/Button.jsx';
+import Banner from '../../components/atoms/Banner.jsx';
+import Button from '../../components/atoms/Button.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 
 export default function BannerSection({ v }) {

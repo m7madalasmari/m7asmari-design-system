@@ -9,7 +9,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "audit": "python3 scripts/audit.py",
+    "audit:contrast": "python3 scripts/contrast.py",
+    "build:dev": "python3 scripts/build-dev.py"
   },
   "dependencies": {
     "react": "18.3.1",

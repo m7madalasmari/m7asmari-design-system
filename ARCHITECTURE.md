@@ -28,10 +28,11 @@
 
 ## طبقات التفكيك وشجرة الملفات
 ```text
-tokens/        A — مصدر الحقيقة     ✅ منجز
-  tokens.css   :root (السلالم + الدلالية + cat + radius/shadow/ring/font/dur/ease/z)
-  themes.css   .dark + .ds.acc-green/.acc-red/.sharp
-  tailwind.preset.js   (لاحقًا — من مصدّر التوكنز الموجود في المنطق)
+tokens/        A — مصدر الحقيقة (4 طبقات — المرحلة الثالثة)   ✅ منجز
+  primitive.css  مقاييس خام: brand/neutral/success/warning/danger/info + chart + radius/shadow/space/text/leading/weight/dur/ease/z/bp
+  semantic.css   مفردات دلالية (background/surface/text-*/border/brand/success…) + .dark + .ds.acc-*/.sharp
+  component.css  توكنز المكوّنات (btn/card/input/table/badge/alert/nav + …) ← من semantic
+  pattern.css    مسافات دلالية (--space-page/section/card/field/stack) + تخطيط + تصنيف Page Patterns
 styles/        ✅ منجز (CSS عام مقسّم، الهوية محفوظة)
   base.css     reset + layout + chrome scaffold + foundations display + @font-face
   components.css  أنماط المكوّنات + لوحة التحكم + @keyframes + @media
@@ -47,7 +48,6 @@ sections/      D — قسم لكل ملف يركّب C حول B
   reference/   (DarkMode Responsive Guidelines)
 patterns/      E — أمثلة مركّبة (معزولة)
   DashboardShell  FeatureSection
-examples/      مكان منظّم لـ Landing/Details لاحقًا (فارغ الآن عمدًا)
 app/
   chrome/      TopBar SideRail Hero CommandPalette(+Trigger)
   App.jsx      جذر التركيب + حالة الثيم/الاتجاه/القسم النشط
@@ -55,7 +55,8 @@ app/
 vendor/        react, react-dom, lucide (+ babel-standalone للمعاينة)
 fonts/  assets/  (أصول)
 ```
-ترتيب تحميل CSS الثابت: `tokens → themes → base → components`.
+ترتيب تحميل CSS الثابت: `primitive → semantic → component → pattern → base → components → [page]`.
+> **المرحلة الثالثة:** `components/` أُعيد تنظيمها إلى `atoms/ · molecules/ · organisms/` (انظر القسم أدناه). الدليل الكامل للتوكنز في [`TOKENS.md`](TOKENS.md).
 
 ## قواعد التفكيك المعتمدة
 - لا يُنشأ مكوّن إلا إذا قلّل تكرارًا حقيقيًا أو خدم إعادة استخدام (لا تنظيم لأجل التنظيم).
@@ -76,12 +77,23 @@ fonts/  assets/  (أصول)
 - ✅ **خطوة 8:** QA بصري نهائي معتمَد، ثم إزالة مرجع dc وأدواته.
 
 ## أداة QA (تاريخية — أُزيلت)
-كانت `build-qa.py` تولّد `qa.html` لمقارنة React بنسخة dc المرجعية آليًا (تطابق DOM + أخطاء/تحذيرات console + اختبارات تفاعل). **أُزيلت بالكامل بعد QA النهائي** مع نسخة dc المرجعية. تبقّى `build-dev.py` فقط لتوليد `index.dev.html` (معاينة بلا Node).
+كانت `build-qa.py` تولّد `qa.html` لمقارنة React بنسخة dc المرجعية آليًا (تطابق DOM + أخطاء/تحذيرات console + اختبارات تفاعل). **أُزيلت بالكامل بعد QA النهائي** مع نسخة dc المرجعية. تبقّى `scripts/build-dev.py` فقط لتوليد `index.dev.html` (معاينة بلا Node).
 
 ## ملف التشغيل الحالي
 - **الأساسي (Vite):** `index.html` → `app/main.jsx` → `app/App.jsx` + `app/chrome/*` + `app/lib/css.js`. يستورد CSS من `tokens/` و`styles/`. للبناء/النشر: `npm i && npm run build` (يبني سحابيًا على Vercel بلا Node محلي).
-- **معاينة محلية بلا Node:** `index.dev.html` (يجمّع نفس مصادر `app/` في سكربت Babel واحد، React عام من `vendor/`). للتحديث بعد تعديل `app/`: `python3 build-dev.py`.
+- **معاينة محلية بلا Node:** `index.dev.html` (يجمّع نفس مصادر `app/` في سكربت Babel واحد، React عام من `vendor/`). للتحديث بعد تعديل `app/`: `python3 scripts/build-dev.py`.
 - **مرجع dc الأصلي:** `legacy.dc.html` + `support.js` — **حُذِفا** بعد اعتماد QA البصري النهائي. (`preview.html` كان يعتمد عليهما فصار غير فعّال — أداة QA فقط.)
+
+## ⚠️ ازدواج `vendor/` و`assets/` (الجذر مقابل `public/`) — مقصود، لا تحذفه
+
+يوجد نسختان من أصول الطرف الثالث والصور، **عمدًا**، لأن المشروع يُشغَّل بمسارين مختلفين لكلٍّ نظام حلّ مسارات مختلف:
+
+| المسار | يخدم | لماذا يحتاج نسخته |
+|--------|------|------------------|
+| **`/vendor/*` + `/assets/*` (الجذر)** | معاينة **no-Node** (`index.dev.html` / `requests.dev.html` عبر `python3 -m http.server`) | الـHTML المُولّد يشير إليها بمسارات نسبية من الجذر (`vendor/react…`, `assets/avatar.jpg`)؛ لا Vite ليحلّها |
+| **`public/vendor/*` + `public/assets/*`** | بناء **Vite** الإنتاجي | Vite ينسخ ما في `public/` كما هو إلى جذر `dist/`، فتُخدَم عبر `/vendor/…` و`/assets/…` في الإنتاج |
+
+**القاعدة:** عند تحديث `lucide.min.js` أو `avatar.jpg` أو أي أصل، **حدّث النسختين**. هذا ليس تكرارًا خاطئًا — حذف أيّ نسخة يكسر أحد المسارين. (تدقيق Structural Cleanup أبقاهما عمدًا.)
 
 ## المرحلة الثانية — تقوية النظام (منجَزة 2026-06-27)
 
@@ -107,3 +119,28 @@ Vitest + Testing Library + jsdom — `npm run test:run`. 47 اختبارًا (10
 - **مُستخرَج (حالة داخلية):** المكوّنات الثمانية أعلاه — لا تمرّ عبر `V`.
 - **غير مُستخرَج بعد (لا يزال `v={V}`):** الأقسام المرتبطة بعمق ببيانات `App` (الجدول، التقويم، الرفع، السحب، لوحة التحكم، الإشعارات، عناصر الاختيار، لوحة الأوامر). حُسّنت وصوليتها في مكانها.
 - **ساكن (عيّنات بصرية):** Combobox، Select، Stepper — لا حالة؛ وصولية فقط.
+
+## المرحلة الثالثة — تنظيف معماري (System Architecture Cleanup · 2026-06-27)
+
+**الهدف:** نظام متين قابل للتوسّع بأسماء دلالية وطبقات واضحة — **بلا مزايا/مكوّنات جديدة وبلا إعادة تصميم**. كل تغيير لون قيمة-محفوظ (zero visual change) عدا تعديلات محدودة مبرّرة (z-index الشريط العلوي → `--z-sticky`؛ إلصاق 3 مدد حركة مطابقة بالتوكنز).
+
+### 1) معمارية التوكنز — 4 طبقات
+`primitive.css → semantic.css → component.css → pattern.css`. المكوّنات تستهلك **الدلالي/المكوّن فقط** — لا primitives ولا hex مباشرة. التفاصيل والمقاييس الكاملة في [`TOKENS.md`](TOKENS.md).
+
+### 2) توحيد الأسماء (شكلية → وظيفية)
+`--sky→--brand` · `--emerald→--success` · `--amber→--warning` · `--red→--danger` · `--cat→--chart` · `--ink→--text-primary` · `--canvas→--background` · `--surface-2/3→--surface-muted/raised` · `--border-2→--border-strong` · `--r-*→--radius-*` · `--sh-*→--shadow-*`. (617 استبدالًا قيمة-محفوظًا في 19 ملفًا.) أُضيف `--info`, `--brand-hover`, وسلالم `--space-*`/`--text-*`/`--leading-*`/`--weight-*`.
+
+### 3) معمارية المكوّنات — ذرّي
+`components/` → `atoms/ (8)` · `molecules/ (11)` · `organisms/ (7)`. كل المسارات (≈220 استيرادًا) + الاختبارات + `scripts/build-dev.py` (مسح تعاودي) محدّثة ومُتحقَّق منها.
+
+| atoms | molecules | organisms |
+|-------|-----------|-----------|
+| Button Badge Avatar Alert Banner Card StatCard EmptyState | ActivityItem FileRow FolderItem NavItem UserMenu SearchField Breadcrumb NotificationMenu CollapsibleSection StatTile Pagination | OtpInput Slider Accordion Tabs Drawer Modal TagsInput |
+
+### 4) نظام Audit
+`npm run audit` (`scripts/audit.py` — بايثون، بلا Node). يفشل على: توكنز قديمة · primitives داخل المكوّنات · hex خام في الأنماط · استيرادات مكسورة · أسماء غير دلالية. يحذّر (backlog): مسافات/حركة خارج السلّم، خصائص RTL فيزيائية.
+
+### الفصل user-facing / developer / internal
+- **للمستخدم (Theme Builder):** Brand/Secondary Color · Theme · Radius · Density · Card/Button Style · Font · Motion.
+- **للمطوّر:** الطبقة الدلالية + المكوّنات (`TOKENS.md`)، وتصدير CSS/JSON طبقي من الباني.
+- **داخلي:** primitive scales — لا تُعرض كخيارات؛ تُعرض كمرجع في قسم «الألوان».

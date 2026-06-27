@@ -1,5 +1,5 @@
 import React from 'react';
-import Alert from '../../components/Alert.jsx';
+import Alert from '../../components/atoms/Alert.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 
 export default function AlertsSection({ v }) {

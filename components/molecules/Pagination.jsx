@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button.jsx';
+import Button from '../atoms/Button.jsx';
 
 /**
  * Pagination — ترقيم صفحات قابل لإعادة الاستخدام.

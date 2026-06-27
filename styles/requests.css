@@ -1,0 +1,41 @@
+/* M7asmari — صفحة «خدمة الطلبات» (مثال تطبيقي مستقل · entry: app/requests.jsx)
+   تعيد استخدام توكنز ومكوّنات النظام بالكامل؛ هذه إضافات تخطيط مخصوصة بالصفحة
+   فقط ومُحاطة بـ‎.reqsvc‎ حتى لا تتسرّب إلى بقيّة النظام. كل القيم من التوكنز. */
+
+.reqsvc .hero{max-width:720px}
+.reqsvc .hero .btnrow{margin-top:30px}
+
+/* ===== المزايا الثلاث ===== */
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px 24px;box-shadow:var(--shadow-sm);transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
+.feat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.feat-ico{width:52px;height:52px;border-radius:var(--radius-md);background:var(--brand-soft);color:var(--brand-ink);display:grid;place-items:center;margin-bottom:18px}
+.feat-ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.feat-card .fcard-title{font-size:19px}
+.feat-card .fcard-text{margin-top:8px}
+
+/* ===== النموذج + الحالة (عمودان) ===== */
+.req-cols{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:start}
+@media (max-width:900px){.req-cols{grid-template-columns:1fr}}
+
+.req-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 26px;box-shadow:var(--shadow-sm)}
+.req-card-title{font-size:19px;font-weight:800;font-family:var(--font-display)}
+.req-card-sub{font-size:14px;line-height:1.6;color:var(--text-muted);margin-top:4px;text-wrap:pretty}
+.req-form{display:flex;flex-direction:column;gap:18px;margin-top:22px}
+.req-form .grid{gap:18px}
+select.input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%236e6c66'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M6%209l6%206%206-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 14px center;background-size:18px;padding-left:42px}
+
+/* ===== قائمة الطلبات ===== */
+.req-list{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.req-item{display:flex;flex-direction:column;gap:10px;padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);transition:border-color .15s ease,box-shadow .15s ease}
+.req-item:hover{border-color:var(--border-strong);box-shadow:var(--shadow-sm)}
+.req-item-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.req-item-title{font-size:15px;font-weight:700;color:var(--text-primary);line-height:1.5}
+.req-item-desc{font-size:14px;line-height:1.7;color:var(--text-secondary);text-wrap:pretty}
+.req-item-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* ===== شريط الدعوة للإجراء (CTA) ===== */
+.req-cta{margin-top:96px;padding:56px 40px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+.req-cta-title{font-size:clamp(24px,3.4vw,34px);font-weight:800;font-family:var(--font-display);line-height:1.25;text-wrap:balance}
+.req-cta-text{font-size:16px;line-height:1.7;color:var(--text-secondary);max-width:520px;margin:14px auto 0;text-wrap:pretty}
+.req-cta .btnrow{justify-content:center;margin-top:28px}
+@media (max-width:600px){.req-cta{padding:40px 22px;margin-top:72px}}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Accordion from '../../components/Accordion.jsx';
+import Accordion from '../../components/organisms/Accordion.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 
 const ITEMS = [

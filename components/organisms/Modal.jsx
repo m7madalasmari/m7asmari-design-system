@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFocusTrap, useInertWhenClosed } from '../app/lib/a11y.js';
+import { useFocusTrap, useInertWhenClosed } from '../../app/lib/a11y.js';
 
 /**
  * Modal — نافذة حوار قابلة لإعادة الاستخدام.
