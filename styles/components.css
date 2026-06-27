@@ -424,9 +424,6 @@
 .dark .alert.err .alert-text{color:#f5a892}
 .dark .alert.info .alert-text{color:#93cdf0}
 .cap{font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--ink-3);margin-bottom:12px;display:block}
-.toc{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.tocchip{font-size:14px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--border);padding:7px 15px;border-radius:var(--r-full);text-decoration:none;transition:all .14s;box-shadow:var(--sh-sm)}
-.tocchip:hover{color:var(--ink);border-color:var(--border-2);transform:translateY(-1px)}
 /* ===== ADDED COMPONENTS ===== */
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes shimmer{to{background-position:-200% 0}}
@@ -528,7 +525,7 @@
 .divider-tx{display:flex;align-items:center;gap:14px;color:var(--ink-3);font-size:13px;font-weight:600}
 .divider-tx::before,.divider-tx::after{content:"";flex:1;height:1px;background:var(--border)}
 /* ===== a11y: unified keyboard focus ring (consistency across every interactive element) ===== */
-.ds a:focus-visible,.ds button:focus-visible,.ds input:focus-visible,.ds textarea:focus-visible,.ds [tabindex]:focus-visible,.ds .switch:focus-visible,.ds .cbx:focus-visible,.ds .tab:focus-visible,.ds .ttab:focus-visible,.ds .sideitem:focus-visible,.ds .tocchip:focus-visible,.ds .dashcat:focus-visible{outline:none;box-shadow:var(--ring);border-radius:var(--r-sm)}
+.ds a:focus-visible,.ds button:focus-visible,.ds input:focus-visible,.ds textarea:focus-visible,.ds [tabindex]:focus-visible,.ds .switch:focus-visible,.ds .cbx:focus-visible,.ds .tab:focus-visible,.ds .ttab:focus-visible,.ds .sideitem:focus-visible,.ds .dashcat:focus-visible{outline:none;box-shadow:var(--ring);border-radius:var(--r-sm)}
 .ds .btn:focus-visible{border-radius:var(--r-full)}
 @media (prefers-reduced-motion:reduce){.ds *,.ds *::before,.ds *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 /* token export */
@@ -780,8 +777,6 @@
   .otpbox{flex:1 1 0;min-width:0;width:auto;max-width:50px;font-size:20px}
   .icongrid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
   .bpchip{width:100%}
-  .toc{gap:7px}
-  .tocchip{font-size:13px;padding:6px 12px}
   .hero{padding:36px 0 4px}
   .themetoggle .tb-lbl,.cmdtrigger .tb-lbl{display:none}
   .themetoggle,.cmdtrigger{padding:8px;gap:0}
