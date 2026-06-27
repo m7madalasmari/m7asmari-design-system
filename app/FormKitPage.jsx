@@ -10,6 +10,7 @@ import Checkbox from '../components/atoms/Checkbox.jsx';
 import Switch from '../components/atoms/Switch.jsx';
 import RadioGroup from '../components/molecules/RadioGroup.jsx';
 import Select from '../components/organisms/Select.jsx';
+import PhoneInput from '../components/molecules/PhoneInput.jsx';
 
 /**
  * FormKitPage — معرض Form Kit (Vite MPA · entry: app/formkit.jsx).
@@ -22,6 +23,8 @@ function FieldStates() {
   const [sw, setSw] = React.useState(true);
   const [plan, setPlan] = React.useState('pro');
   const [pw, setPw] = React.useState('Form123!');
+  const [dial, setDial] = React.useState('+966');
+  const [phone, setPhone] = React.useState('');
   return (
     <div className="panel panel-pad">
       <div className="grid cols3" style={css('gap:26px')}>
@@ -56,6 +59,11 @@ function FieldStates() {
               { value: 'team', label: 'الفريق', hint: '٩٩ ر.س' },
             ]}
           />
+        </Field>
+      </div>
+      <div style={css('margin-top:24px')}>
+        <Field label="رقم الجوال (مفتاح دولة + رقم LTR)">
+          <PhoneInput dial={dial} onDial={setDial} value={phone} onChange={(e) => setPhone(e.target.value)} />
         </Field>
       </div>
     </div>

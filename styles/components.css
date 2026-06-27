@@ -806,3 +806,16 @@ button.cal-day{border:none;background:transparent;font:inherit;padding:0;width:1
 .pwseg.weak{background:var(--danger)}
 .pwseg.medium{background:var(--warning)}
 .pwseg.strong{background:var(--success)}
+/* حقل الجوال: حاوية موحّدة بحدود الإدخال — مفتاح الدولة داخلها يفصله خطّ عن الرقم (جزيرة LTR) */
+.fk-phone{display:flex;align-items:center;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--input-radius);transition:border-color .15s,box-shadow .15s}
+.fk-phone:focus-within{border-color:var(--input-border-focus);box-shadow:var(--input-ring)}
+.fk-phone.is-error{border-color:var(--danger);box-shadow:0 0 0 2.5px var(--input-ring-error)}
+.fk-phone.is-success{border-color:var(--success);box-shadow:0 0 0 2.5px var(--input-ring-success)}
+.fk-phone.is-disabled{background:var(--surface-muted);opacity:.7}
+.fk-phone-dial{flex:none;border-inline-end:1.5px solid var(--input-border)}
+.fk-dial-trigger{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:15px;font-weight:500;color:var(--input-fg);padding:12px 14px;white-space:nowrap}
+.fk-dial-trigger:hover{color:var(--brand-ink)}
+.ds .fk-dial-trigger:focus-visible{box-shadow:none}
+.fk-phone-num{flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:15px;color:var(--input-fg);padding:12px 15px}
+.fk-phone-num::placeholder{color:var(--input-placeholder)}
+.ds .fk-phone-num:focus-visible{box-shadow:none}

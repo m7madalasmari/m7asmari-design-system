@@ -10,15 +10,8 @@ import FormActions from '../../../components/molecules/FormActions.jsx';
 import FormCard from '../FormCard.jsx';
 import { useForm } from '../useForm.js';
 import { required, minLength } from '../../../app/lib/validation.js';
+import { COUNTRY_OPTIONS } from '../../../app/lib/countries.js';
 
-const ADDR_COUNTRIES = [
-  { value: 'sa', label: 'السعودية' },
-  { value: 'ae', label: 'الإمارات' },
-  { value: 'eg', label: 'مصر' },
-  { value: 'jo', label: 'الأردن' },
-  { value: 'kw', label: 'الكويت' },
-  { value: 'qa', label: 'قطر' },
-];
 const CITIES = [
   { value: 'ryd', label: 'الرياض' },
   { value: 'jed', label: 'جدة' },
@@ -45,7 +38,7 @@ export default function AddressForm() {
         </Field>
         <div className="grid cols2">
           <Field label="الدولة" status={f.errors.country ? 'error' : ''} message={f.errors.country}>
-            <Combobox options={ADDR_COUNTRIES} value={f.values.country} onChange={(v) => f.set('country', v)} placeholder="ابحث عن الدولة…" ariaLabel="الدولة" />
+            <Combobox options={COUNTRY_OPTIONS} value={f.values.country} onChange={(v) => f.set('country', v)} placeholder="ابحث عن الدولة…" ariaLabel="الدولة" />
           </Field>
           <Field label="المدينة" status={f.errors.city ? 'error' : ''} message={f.errors.city}>
             <Select options={CITIES} value={f.values.city} onChange={(v) => f.set('city', v)} placeholder="اختر المدينة" ariaLabel="المدينة" />

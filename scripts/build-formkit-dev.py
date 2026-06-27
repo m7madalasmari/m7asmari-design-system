@@ -3,7 +3,7 @@
 Mirrors the Vite entry (formkit.html + app/formkit.jsx) by concatenating the SAME source
 (lib + docs + components + kits + FormKitPage) into one Babel-standalone script with global React.
 The Vite project is authoritative; this is a convenience preview that mirrors it 1:1."""
-import os, glob
+import os, glob, hashlib
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -37,7 +37,7 @@ def rel(p):
 
 
 libs = ['app/lib/css.js', 'app/lib/a11y.js', 'app/lib/sort.js', 'app/lib/calendar.js',
-        'app/lib/validation.js', 'app/lib/themeTokens.js']
+        'app/lib/validation.js', 'app/lib/countries.js', 'app/lib/themeTokens.js']
 docs = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'docs', '*.jsx')))
 comps = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'components', '**', '*.jsx'), recursive=True))
 kit_lib = ['kits/form/useForm.js', 'kits/form/FormCard.jsx']
@@ -63,12 +63,7 @@ html = '''<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="tokens/primitive.css" />
-<link rel="stylesheet" href="tokens/semantic.css" />
-<link rel="stylesheet" href="tokens/component.css" />
-<link rel="stylesheet" href="tokens/pattern.css" />
-<link rel="stylesheet" href="styles/base.css" />
-<link rel="stylesheet" href="styles/components.css" />
+__CSS_LINKS__
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
 <script src="vendor/lucide.min.js"></script>
@@ -82,5 +77,12 @@ html = '''<!doctype html>
 </body>
 </html>
 '''
+# روابط CSS مع بصمة محتوى لتفادي كاش المتصفّح في المعاينة
+css_files = ['tokens/primitive.css', 'tokens/semantic.css', 'tokens/component.css',
+             'tokens/pattern.css', 'styles/base.css', 'styles/components.css']
+ver = hashlib.md5(''.join(open(os.path.join(ROOT, f), encoding='utf-8').read() for f in css_files).encode('utf-8')).hexdigest()[:8]
+css_links = '\n'.join('<link rel="stylesheet" href="%s?v=%s" />' % (f, ver) for f in css_files)
+html = html.replace('__CSS_LINKS__', css_links)
+
 open(os.path.join(ROOT, 'formkit.dev.html'), 'w', encoding='utf-8').write(html)
 print('wrote formkit.dev.html  (bundle', len(bundle), 'chars from', len(order), 'modules)')

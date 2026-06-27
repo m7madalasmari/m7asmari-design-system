@@ -15,6 +15,7 @@ export default function Select({
   ariaLabel,
   id,
   status, // يُبتلع (يأتي من Field)
+  bare = false, // بلا حدود/خلفية — للاستخدام داخل حقل آخر (مثل PhoneInput)
   className = '',
   ...rest
 }) {
@@ -51,7 +52,7 @@ export default function Select({
   return (
     <div className="fk-anchor" ref={rootRef}>
       <div
-        className={'selectbox' + (open ? ' open' : '') + (className ? ' ' + className : '')}
+        className={(bare ? 'fk-dial-trigger' : 'selectbox') + (open ? ' open' : '') + (className ? ' ' + className : '')}
         role="combobox"
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -68,7 +69,7 @@ export default function Select({
         <span className="chev" aria-hidden="true">▾</span>
       </div>
       {open ? (
-        <div className="fk-pop">
+        <div className={'fk-pop' + (bare ? ' auto' : '')}>
           <div className="menu" role="listbox" aria-label={ariaLabel}>
             {options.map((o, i) => (
               <div

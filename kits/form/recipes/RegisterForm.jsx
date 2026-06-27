@@ -1,6 +1,7 @@
 import React from 'react';
 import Field from '../../../components/molecules/Field.jsx';
 import Input from '../../../components/atoms/Input.jsx';
+import PhoneInput from '../../../components/molecules/PhoneInput.jsx';
 import PasswordInput from '../../../components/atoms/PasswordInput.jsx';
 import Select from '../../../components/organisms/Select.jsx';
 import Checkbox from '../../../components/atoms/Checkbox.jsx';
@@ -10,22 +11,16 @@ import FormActions from '../../../components/molecules/FormActions.jsx';
 import FormCard from '../FormCard.jsx';
 import { useForm } from '../useForm.js';
 import { required, email, minLength, matches } from '../../../app/lib/validation.js';
+import { COUNTRY_OPTIONS } from '../../../app/lib/countries.js';
 
-const REG_COUNTRIES = [
-  { value: 'sa', label: 'السعودية' },
-  { value: 'ae', label: 'الإمارات' },
-  { value: 'eg', label: 'مصر' },
-  { value: 'jo', label: 'الأردن' },
-  { value: 'ma', label: 'المغرب' },
-];
-
-/** إنشاء حساب — اسم + بريد + كلمة مرور (بمقياس قوّة) + تأكيد + دولة + موافقة الشروط. */
+/** إنشاء حساب — اسم + بريد + جوال (بمفتاح دولة) + كلمة مرور (بمقياس) + تأكيد + دولة + موافقة. */
 export default function RegisterForm() {
   const f = useForm(
-    { name: '', email: '', password: '', confirm: '', country: '', terms: false },
+    { name: '', email: '', dial: '+966', phone: '', password: '', confirm: '', country: '', terms: false },
     (v) => ({
       name: [required('الاسم مطلوب')],
       email: [required(), email()],
+      phone: [required('رقم الجوال مطلوب'), minLength(7, 'رقم غير مكتمل')],
       password: [required(), minLength(8, 'كلمة المرور 8 أحرف على الأقل')],
       confirm: [required('أعد إدخال كلمة المرور'), matches(() => v.password, 'كلمتا المرور غير متطابقتين')],
       country: [required('اختر الدولة')],
@@ -41,6 +36,9 @@ export default function RegisterForm() {
         <Field label="البريد الإلكتروني" status={f.errors.email ? 'error' : ''} message={f.errors.email}>
           <Input type="email" dir="ltr" placeholder="name@example.com" {...f.bind('email')} />
         </Field>
+        <Field label="رقم الجوال" status={f.errors.phone ? 'error' : ''} message={f.errors.phone}>
+          <PhoneInput dial={f.values.dial} onDial={(v) => f.set('dial', v)} {...f.bind('phone')} />
+        </Field>
         <div className="grid cols2">
           <Field label="كلمة المرور" status={f.errors.password ? 'error' : ''} message={f.errors.password}>
             <PasswordInput meter {...f.bind('password')} />
@@ -50,7 +48,7 @@ export default function RegisterForm() {
           </Field>
         </div>
         <Field label="الدولة" status={f.errors.country ? 'error' : ''} message={f.errors.country}>
-          <Select options={REG_COUNTRIES} value={f.values.country} onChange={(v) => f.set('country', v)} placeholder="اختر الدولة" ariaLabel="الدولة" />
+          <Select options={COUNTRY_OPTIONS} value={f.values.country} onChange={(v) => f.set('country', v)} placeholder="اختر الدولة" ariaLabel="الدولة" />
         </Field>
         <Checkbox checked={f.values.terms} onChange={(v) => f.set('terms', v)}>
           أوافق على الشروط والأحكام وسياسة الخصوصية
