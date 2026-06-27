@@ -8,4 +8,5 @@ dist/
 # مخرجات مُولّدة — لا تُتعقّب (تُبنى من المصدر)
 # معاينة بلا Node: أعد توليدها بـ python3 build-dev.py
 index.dev.html
+requests.dev.html
 coverage/

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import TagsInput from '../components/TagsInput.jsx';
+import TagsInput from '../components/organisms/TagsInput.jsx';
 
 describe('TagsInput', () => {
   it('يعرض الوسوم الابتدائية كقائمة', () => {

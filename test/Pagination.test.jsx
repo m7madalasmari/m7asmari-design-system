@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Pagination from '../components/Pagination.jsx';
+import Pagination from '../components/molecules/Pagination.jsx';
 
 describe('Pagination', () => {
   it('يعرض الصفحات مع aria-current للحالية', () => {

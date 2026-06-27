@@ -17,7 +17,7 @@ export default function Elevation({ v }) {
 <div className="zrow"><span className="zname">الإشعارات العائمة</span><span className="zval">1400</span></div>
 <div className="zrow" style={css('border:none')}><span className="zname">التلميحات</span><span className="zval">1500</span></div>
 </ShowcasePanel>
-<ShowcasePanel><p className="subhead">مستويات الارتفاع</p><div className="grid cols3" style={css('gap:14px')}><div className="shadowdemo" data-copy="var(--sh-sm)" style={css('box-shadow:var(--sh-sm)')}>sm</div><div className="shadowdemo" data-copy="var(--sh-md)" style={css('box-shadow:var(--sh-md)')}>md</div><div className="shadowdemo" data-copy="var(--sh-lg)" style={css('box-shadow:var(--sh-lg)')}>lg</div></div><p className="t-sm" style={css('margin-top:18px')}>الظلال ترتفع مع الطبقة: البطاقات تستخدم sm، والقوائم md، والنوافذ والأدراج lg.</p></ShowcasePanel>
+<ShowcasePanel><p className="subhead">مستويات الارتفاع</p><div className="grid cols3" style={css('gap:14px')}><div className="shadowdemo" data-copy="var(--shadow-sm)" style={css('box-shadow:var(--shadow-sm)')}>sm</div><div className="shadowdemo" data-copy="var(--shadow-md)" style={css('box-shadow:var(--shadow-md)')}>md</div><div className="shadowdemo" data-copy="var(--shadow-lg)" style={css('box-shadow:var(--shadow-lg)')}>lg</div></div><p className="t-sm" style={css('margin-top:18px')}>الظلال ترتفع مع الطبقة: البطاقات تستخدم sm، والقوائم md، والنوافذ والأدراج lg.</p></ShowcasePanel>
 </div>
 </section>
   );

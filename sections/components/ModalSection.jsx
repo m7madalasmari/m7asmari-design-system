@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../../components/Button.jsx';
-import Modal from '../../components/Modal.jsx';
+import Button from '../../components/atoms/Button.jsx';
+import Modal from '../../components/organisms/Modal.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 import ShowcasePanel from '../../docs/ShowcasePanel.jsx';
 

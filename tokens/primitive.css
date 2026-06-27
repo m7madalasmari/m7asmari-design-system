@@ -1,0 +1,59 @@
+/* ============================================================================
+   M7asmari — Primitive Tokens (Layer 1 / 4)
+   ----------------------------------------------------------------------------
+   مقاييس خام فقط: ألوان، حوافّ، ظلال، مسافات، طباعة، حركة، z-index.
+   لا تُستهلك مباشرة داخل المكوّنات — تُبنى منها الطبقة الدلالية (semantic.css).
+   الأسماء وظيفية (brand/success/warning/danger) لا شكلية (sky/emerald/amber/red).
+   القيم منقولة حرفيًا من الإصدار السابق (tokens.css) — لا تغيير بصري.
+   ============================================================================ */
+
+:root{
+  /* ===== مقاييس الألوان (50 → 950) ===== */
+  /* العلامة / Brand (كان sky) */
+  --brand-50:#ecf9ff;--brand-100:#d3f0ff;--brand-200:#b1e6ff;--brand-300:#7dd6ff;--brand-400:#38c0fb;--brand-500:#00a6ef;--brand-600:#0084c4;--brand-700:#0a6a9e;--brand-800:#115a82;--brand-900:#15496c;--brand-950:#0d2f47;
+  /* محايد دافئ / Neutral (0 = أبيض) */
+  --neutral-0:#ffffff;--neutral-50:#fbfaf9;--neutral-100:#f3f1ed;--neutral-200:#eae7e1;--neutral-300:#dcd7ce;--neutral-400:#b8b2a8;--neutral-500:#8f8d86;--neutral-600:#6e6c66;--neutral-700:#54534e;--neutral-800:#3a3833;--neutral-900:#1b1b19;--neutral-950:#121210;
+  /* نجاح / Success (كان emerald) */
+  --success-50:#e6f9f0;--success-100:#c7f2dd;--success-200:#93e6bf;--success-300:#57d59c;--success-400:#28c885;--success-500:#16bd74;--success-600:#0e9a5d;--success-700:#0c7c4c;--success-800:#0c623d;--success-900:#0a4f33;--success-950:#042c1c;
+  /* تحذير / Warning (كان amber) */
+  --warning-50:#fef7e7;--warning-100:#fdedc4;--warning-200:#fbdb8c;--warning-300:#f9c652;--warning-400:#f7b332;--warning-500:#f5a623;--warning-600:#c97f06;--warning-700:#a3640a;--warning-800:#854f0f;--warning-900:#6f4210;--warning-950:#3f2305;
+  /* خطر / Danger (كان red) */
+  --danger-50:#ffeee9;--danger-100:#ffd6cb;--danger-200:#ffb3a1;--danger-300:#ff8a6e;--danger-400:#fd5e3a;--danger-500:#fb3d18;--danger-600:#d22d0d;--danger-700:#ad2410;--danger-800:#8e2113;--danger-900:#761f14;--danger-950:#400b05;
+  /* معلومة / Info (جديد — أزرق ثابت مستقلّ عن لون العلامة القابل للتخصيص) */
+  --info-50:#ecf6ff;--info-100:#d4ebff;--info-200:#b8e6fb;--info-300:#86cdf2;--info-400:#4ab3e8;--info-500:#1f95d6;--info-600:#0a6f9e;--info-700:#0a5a80;--info-800:#0d4a68;--info-900:#103d56;--info-950:#0a2436;
+
+  /* ===== لوحة تصنيفية للرسوم/البيانات (كان cat) — تُستهلك مباشرة كقيم بيانات ===== */
+  --chart-1:#00a6ef;--chart-2:#16bd74;--chart-3:#f5a623;--chart-4:#fb3d18;--chart-5:#8b5cf6;--chart-6:#ec4899;--chart-7:#0ea5a4;--chart-8:#6366f1;
+
+  /* ===== الحوافّ (Radius) (كان --r-*) ===== */
+  --radius-xs:7px;--radius-sm:10px;--radius-md:14px;--radius-lg:20px;--radius-xl:28px;--radius-full:999px;
+
+  /* ===== الظلال المحايدة (Shadow) (كان --sh-*) — حلقة التركيز --focus-ring دلالية ===== */
+  --shadow-sm:0 1px 2px rgba(27,27,25,.06),0 1px 1px rgba(27,27,25,.04);
+  --shadow-md:0 6px 20px rgba(27,27,25,.07),0 2px 5px rgba(27,27,25,.05);
+  --shadow-lg:0 18px 44px rgba(27,27,25,.11),0 4px 12px rgba(27,27,25,.06);
+
+  /* ===== سلّم المسافات (Spacing) — جديد. خطوة الأساس 4px (+ خطوة 12 الشائعة) ===== */
+  --space-0:0;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-7:28px;--space-8:32px;--space-9:36px;--space-10:40px;--space-12:48px;--space-14:56px;--space-16:64px;--space-20:80px;--space-24:96px;
+
+  /* ===== الطباعة (Typography) ===== */
+  --font-ui:'Thmanyah Sans',system-ui,-apple-system,sans-serif;
+  --font-display:'Thmanyah Serif','Thmanyah Sans',Georgia,serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  /* مقياس الأحجام (جديد — مطابق لقيم أصناف .t-*) */
+  --text-xs:12px;--text-sm:14px;--text-base:16px;--text-lg:18px;--text-xl:22px;--text-2xl:30px;--text-3xl:40px;--text-4xl:54px;
+  /* ارتفاعات الأسطر (جديد) */
+  --leading-tight:1.15;--leading-snug:1.25;--leading-normal:1.5;--leading-relaxed:1.65;--leading-loose:1.7;
+  /* أوزان الخطّ (جديد) */
+  --weight-light:300;--weight-regular:400;--weight-medium:500;--weight-semibold:600;--weight-bold:700;--weight-black:800;
+
+  /* ===== الحركة (Motion) ===== */
+  --dur-fast:120ms;--dur:180ms;--dur-slow:320ms;
+  --ease:cubic-bezier(.4,0,.2,1);--ease-out:cubic-bezier(0,0,.2,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);
+
+  /* ===== فهرس الطبقات (Z-index) ===== */
+  --z-base:1;--z-dropdown:1000;--z-sticky:1100;--z-drawer:1200;--z-modal:1300;--z-toast:1400;--z-tooltip:1500;
+
+  /* ===== نقاط التوقّف (Breakpoints) — توثيقية (لا تُستهلك في @media مباشرة) ===== */
+  --bp-sm:480px;--bp-md:768px;--bp-lg:1024px;--bp-xl:1320px;
+}

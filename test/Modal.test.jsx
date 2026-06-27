@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Modal from '../components/Modal.jsx';
+import Modal from '../components/organisms/Modal.jsx';
 
 function Demo({ start = false }) {
   const [open, setOpen] = React.useState(start);

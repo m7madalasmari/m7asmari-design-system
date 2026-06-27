@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Drawer from '../components/Drawer.jsx';
+import Drawer from '../components/organisms/Drawer.jsx';
 
 describe('Drawer', () => {
   it('يطبّق صنف الاتجاه و open', () => {

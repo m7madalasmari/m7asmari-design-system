@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '../../app/lib/css.js';
-import SearchField from '../../components/SearchField.jsx';
+import SearchField from '../../components/molecules/SearchField.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 
 export default function ComboboxSection() {

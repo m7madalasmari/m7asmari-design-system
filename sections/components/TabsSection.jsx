@@ -1,5 +1,5 @@
 import React from 'react';
-import Tabs from '../../components/Tabs.jsx';
+import Tabs from '../../components/organisms/Tabs.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 import ShowcasePanel from '../../docs/ShowcasePanel.jsx';
 

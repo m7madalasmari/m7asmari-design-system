@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from './Avatar.jsx';
+import Avatar from '../atoms/Avatar.jsx';
 
 /**
  * UserMenu — تذييل ملف المستخدم (أفاتار + اسم + بريد + إجراءات).

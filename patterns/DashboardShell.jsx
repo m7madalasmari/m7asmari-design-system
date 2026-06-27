@@ -1,16 +1,16 @@
 import React from 'react';
-import Avatar from '../components/Avatar.jsx';
-import Button from '../components/Button.jsx';
-import StatTile from '../components/StatTile.jsx';
-import FileRow from '../components/FileRow.jsx';
-import FolderItem from '../components/FolderItem.jsx';
-import ActivityItem from '../components/ActivityItem.jsx';
-import NavItem from '../components/NavItem.jsx';
-import UserMenu from '../components/UserMenu.jsx';
-import NotificationMenu from '../components/NotificationMenu.jsx';
-import CollapsibleSection from '../components/CollapsibleSection.jsx';
-import SearchField from '../components/SearchField.jsx';
-import Breadcrumb from '../components/Breadcrumb.jsx';
+import Avatar from '../components/atoms/Avatar.jsx';
+import Button from '../components/atoms/Button.jsx';
+import StatTile from '../components/molecules/StatTile.jsx';
+import FileRow from '../components/molecules/FileRow.jsx';
+import FolderItem from '../components/molecules/FolderItem.jsx';
+import ActivityItem from '../components/molecules/ActivityItem.jsx';
+import NavItem from '../components/molecules/NavItem.jsx';
+import UserMenu from '../components/molecules/UserMenu.jsx';
+import NotificationMenu from '../components/molecules/NotificationMenu.jsx';
+import CollapsibleSection from '../components/molecules/CollapsibleSection.jsx';
+import SearchField from '../components/molecules/SearchField.jsx';
+import Breadcrumb from '../components/molecules/Breadcrumb.jsx';
 
 export default function DashboardShell({ v }) {
   const { dashCats, dashFiles, dashFolders, dashNotifOpen, dashNotifs, dashPinnedFolders, dashRecent, dashSec, dashStats, dashTags, dashUnread, toggleDashNotif, toggleFolders, togglePinned, toggleRecent, toggleTags, toggleTheme } = v;

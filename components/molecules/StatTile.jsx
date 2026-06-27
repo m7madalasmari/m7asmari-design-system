@@ -2,7 +2,7 @@ import React from 'react';
 
 /**
  * StatTile — بطاقة مؤشّر (أيقونة + قيمة + تسمية + تغيّر + اتجاه).
- * <StatTile icon="folder" value="48" label="الملفات" delta="+12%" trend="up" color="var(--sky-500)" />
+ * <StatTile icon="folder" value="48" label="الملفات" delta="+12%" trend="up" color="var(--chart-1)" />
  */
 export default function StatTile({ icon, value, label, delta, trend = 'flat', color = 'var(--brand)' }) {
   const iconStyle = { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color };

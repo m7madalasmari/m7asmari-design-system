@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../../components/Button.jsx';
+import Button from '../../components/atoms/Button.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 
 export default function SwipeSection({ v }) {

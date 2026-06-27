@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import OtpInput from '../components/OtpInput.jsx';
+import OtpInput from '../components/organisms/OtpInput.jsx';
 
 describe('OtpInput', () => {
   it('يعرض length خانات ضمن مجموعة معنونة', () => {

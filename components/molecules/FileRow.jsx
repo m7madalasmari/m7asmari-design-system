@@ -2,9 +2,9 @@ import React from 'react';
 
 /**
  * FileRow — صفّ ملف (أيقونة ملوّنة + اسم + بيانات + زرّ خيارات).
- * <FileRow icon="file-text" name="…" size="2.4 م.ب" mod="قبل ساعتين" color="var(--red-500)" onMore={fn} />
+ * <FileRow icon="file-text" name="…" size="2.4 م.ب" mod="قبل ساعتين" color="var(--chart-4)" onMore={fn} />
  */
-export default function FileRow({ icon, name, size, mod, color = 'var(--ink-3)', onMore }) {
+export default function FileRow({ icon, name, size, mod, color = 'var(--text-muted)', onMore }) {
   const iconStyle = { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color };
   return (
     <div className="dashfile">

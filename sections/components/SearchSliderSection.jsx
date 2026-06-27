@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from '../../app/lib/css.js';
-import Slider from '../../components/Slider.jsx';
-import SearchField from '../../components/SearchField.jsx';
+import Slider from '../../components/organisms/Slider.jsx';
+import SearchField from '../../components/molecules/SearchField.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
 import ShowcasePanel from '../../docs/ShowcasePanel.jsx';
 

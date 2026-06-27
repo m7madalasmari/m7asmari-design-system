@@ -4,28 +4,38 @@ Concatenates the SAME app/ source into one Babel-standalone script (global React
 so module resolution is never needed. The Vite project (index.html + app/main.jsx) is the
 primary/authoritative source; this is only a convenience preview that mirrors it 1:1."""
 import os
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def strip(src):
     out = []
-    for ln in src.splitlines():
+    lines = src.splitlines()
+    i = 0
+    while i < len(lines):
+        ln = lines[i]
         s = ln.strip()
         if s.startswith('import '):           # drop ESM imports (React is global, others in-scope)
+            # consume the full statement, including multi-line `import {\n …\n} from '…';`
+            while ';' not in lines[i] and i < len(lines) - 1:
+                i += 1
+            i += 1
             continue
         if s == 'export default App;':
+            i += 1
             continue
         ln = ln.replace('export default function ', 'function ')
         ln = ln.replace('export function ', 'function ')
         ln = ln.replace('export const ', 'const ')
         out.append(ln)
+        i += 1
     return '\n'.join(out)
 
 _d = sorted('docs/'+x for x in os.listdir(os.path.join(ROOT,'docs')) if x.endswith('.jsx'))
-_c = sorted('components/'+x for x in os.listdir(os.path.join(ROOT,'components')) if x.endswith('.jsx'))
+import glob as _glob0
+_c = sorted(os.path.relpath(p, ROOT) for p in _glob0.glob(os.path.join(ROOT,'components','**','*.jsx'), recursive=True))
 import glob as _glob
 _s = sorted(os.path.relpath(p, ROOT) for p in _glob.glob(os.path.join(ROOT,'sections','**','*.jsx'), recursive=True))
 _p = sorted('patterns/'+x for x in os.listdir(os.path.join(ROOT,'patterns')) if x.endswith('.jsx')) if os.path.isdir(os.path.join(ROOT,'patterns')) else []
-_lib = ['app/lib/css.js', 'app/lib/a11y.js', 'app/lib/sort.js', 'app/lib/calendar.js']
+_lib = ['app/lib/css.js', 'app/lib/a11y.js', 'app/lib/sort.js', 'app/lib/calendar.js', 'app/lib/themeTokens.js']
 order = _lib + _d + _c + _p + _s + ['app/chrome/TopBar.jsx','app/chrome/SideRail.jsx','app/chrome/Hero.jsx','app/chrome/CommandPalette.jsx','app/App.jsx']
 parts = [strip(open(os.path.join(ROOT, p)).read()) for p in order]
 mount = '\n\nconst { createRoot } = ReactDOM;\ncreateRoot(document.getElementById("root")).render(<App />);\n'
@@ -41,10 +51,13 @@ html = '''<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="tokens/tokens.css" />
-<link rel="stylesheet" href="tokens/themes.css" />
+<link rel="stylesheet" href="tokens/primitive.css" />
+<link rel="stylesheet" href="tokens/semantic.css" />
+<link rel="stylesheet" href="tokens/component.css" />
+<link rel="stylesheet" href="tokens/pattern.css" />
 <link rel="stylesheet" href="styles/base.css" />
 <link rel="stylesheet" href="styles/components.css" />
+<link rel="stylesheet" href="styles/theme-builder.css" />
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
 <script src="vendor/lucide.min.js"></script>
