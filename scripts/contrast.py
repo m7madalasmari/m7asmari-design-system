@@ -95,6 +95,11 @@ PAIRS = [
     ('table header fg/bg',   '--table-header-fg','--table-header-bg',  'text'),
     ('table cell fg/surface','--table-cell-fg',  '--surface',          'text'),
     ('nav active fg/bg',     '--nav-active-fg',  '--nav-active-bg',    'text'),
+    # رسائل الحقول (.hint.err/.ok) على الأسطح والخلفية
+    ('field msg err / surface',    '--danger-ink',  '--surface',    'text'),
+    ('field msg ok / surface',     '--success-ink', '--surface',    'text'),
+    ('field msg err / background', '--danger-ink',  '--background', 'text'),
+    ('field msg ok / background',  '--success-ink', '--background', 'text'),
     # التنبيهات (نص على خلفية التنبيه)
     ('alert.ok text/bg',     '--alert-ok-text',     '--alert-ok-bg',     'text'),
     ('alert.ok title/bg',    '--alert-ok-title',    '--alert-ok-bg',     'text'),
