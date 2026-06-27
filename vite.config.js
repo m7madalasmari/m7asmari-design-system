@@ -18,6 +18,7 @@ export default defineConfig({
         main: at('./index.html'),
         'theme-builder': at('./theme-builder.html'),
         requests: at('./requests.html'),
+        formkit: at('./formkit.html'),
       },
     },
   },

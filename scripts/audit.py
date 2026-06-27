@@ -20,9 +20,11 @@ def files(*globs):
 STYLES = files('styles/*.css')
 CODE   = files('app/**/*.jsx', 'app/**/*.js', 'components/**/*.jsx',
                'sections/**/*.jsx', 'patterns/*.jsx', 'docs/*.jsx', 'tokens/*.css',
+               'kits/**/*.jsx', 'kits/**/*.js',
                'test/*.jsx', 'test/*.js')
 ALL_IMP = files('app/**/*.jsx', 'app/**/*.js', 'components/**/*.jsx',
-                'sections/**/*.jsx', 'patterns/*.jsx', 'docs/*.jsx', 'test/*.jsx', 'test/*.js')
+                'sections/**/*.jsx', 'patterns/*.jsx', 'docs/*.jsx',
+                'kits/**/*.jsx', 'kits/**/*.js', 'test/*.jsx', 'test/*.js')
 
 fails, warns = [], []
 

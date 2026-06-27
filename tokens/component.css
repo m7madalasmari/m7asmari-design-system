@@ -42,6 +42,9 @@
   --input-placeholder: var(--text-muted);
   --input-radius: var(--radius-md);
   --input-ring: var(--focus-ring);
+  /* حلقات التحقّق (خطأ/نجاح) — مشتقّة من حالة النظام بنسبة شفافية ثابتة (لا rgba خام في القواعد) */
+  --input-ring-error: color-mix(in srgb, var(--danger) 10%, transparent);
+  --input-ring-success: color-mix(in srgb, var(--success) 10%, transparent);
 
   /* ===== الجدول (Table) ===== */
   --table-header-bg: var(--surface-muted);
