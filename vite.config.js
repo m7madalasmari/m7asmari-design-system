@@ -16,9 +16,13 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: at('./index.html'),
+        core: at('./core.html'),
         'theme-builder': at('./theme-builder.html'),
         requests: at('./requests.html'),
         formkit: at('./formkit.html'),
+        dashboardkit: at('./dashboardkit.html'),
+        lab: at('./lab.html'),
+        catalog: at('./catalog.html'),
       },
     },
   },

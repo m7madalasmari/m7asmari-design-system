@@ -83,6 +83,24 @@ for p in files('tokens/*.css'):
 if hits:
     fails.append(('non-semantic token name in token layer', hits))
 
+# ---- 6) أيقونات: منع رجوع data-lucide (المصدر الموحّد هو مكوّن Icon، لا مكتبة runtime) ----
+hits = []
+for p in CODE:
+    for i, ln in enumerate(open(p, encoding='utf-8'), 1):
+        if 'data-lucide' in ln:
+            hits.append(f'{p}:{i}')
+if hits:
+    fails.append(('data-lucide (استخدم مكوّن Icon بدل أيقونات lucide runtime)', hits))
+
+# ---- 7) :focus-visible للعناصر التفاعلية ذات الأدوار المخصّصة (checkbox/switch/select…) ----
+# كل صنف تفاعلي بدور مخصّص (يُركَّز بالكيبورد) يجب أن تكون له حلقة تركيز صريحة في components.css.
+FOCUS_CLASSES = ['cbx', 'switch', 'selectbox', 'tab', 'ttab', 'sideitem', 'dashcat']
+comp_src = open('styles/components.css', encoding='utf-8').read()
+covered = set(re.findall(r'\.([a-z][\w-]*):focus-visible', comp_src))
+missing = [f'.{c}' for c in FOCUS_CLASSES if c not in covered]
+if missing:
+    fails.append((':focus-visible مفقودة لعناصر ذات أدوار مخصّصة (أضِفها لقاعدة حلقة التركيز)', missing))
+
 # ---- WARN: مسافات خارج السلّم في الأنماط ----
 SCALE = {0,4,8,12,16,20,24,28,32,36,40,48,56,64,80,96,120,999}  # 999 = نصف قطر الحبّة المقصود
 PX = re.compile(r'(?<![\w.])(\d+)px')

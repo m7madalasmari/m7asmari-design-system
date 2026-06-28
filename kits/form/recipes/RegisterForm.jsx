@@ -31,7 +31,7 @@ export default function RegisterForm() {
     <FormCard title="إنشاء حساب جديد" description="أنشئ حسابك في خطوات قليلة." done={f.done} doneText="تم إنشاء حسابك بنجاح.">
       <Form onSubmit={f.submit()} aria-label="إنشاء حساب">
         <Field label="الاسم الكامل" status={f.errors.name ? 'error' : ''} message={f.errors.name}>
-          <Input placeholder="مثال: نورة العتيبي" {...f.bind('name')} />
+          <Input placeholder="مثال: محمد الأسمري" {...f.bind('name')} />
         </Field>
         <Field label="البريد الإلكتروني" status={f.errors.email ? 'error' : ''} message={f.errors.email}>
           <Input type="email" dir="ltr" placeholder="name@example.com" {...f.bind('email')} />

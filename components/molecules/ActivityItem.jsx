@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * ActivityItem — سطر نشاط (أيقونة + إجراء + ملف + وقت).
@@ -7,7 +8,7 @@ import React from 'react';
 export default function ActivityItem({ icon, action, file, time }) {
   return (
     <div className="dashact">
-      <i data-lucide={icon}></i>
+      <Icon name={icon} />
       <div className="dashact-main"><div className="dashact-text"><span>{action}</span> <b>{file}</b></div><div className="dashact-time">{time}</div></div>
     </div>
   );

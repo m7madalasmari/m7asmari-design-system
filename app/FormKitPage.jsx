@@ -11,7 +11,10 @@ import Switch from '../components/atoms/Switch.jsx';
 import RadioGroup from '../components/molecules/RadioGroup.jsx';
 import Select from '../components/organisms/Select.jsx';
 import PhoneInput from '../components/molecules/PhoneInput.jsx';
-import Icon from '../components/atoms/Icon.jsx';
+import AppHeader from './chrome/AppHeader.jsx';
+import CommandPalette from '../components/organisms/CommandPalette.jsx';
+import { useTheme } from './lib/useTheme.js';
+import { navCommands, recipeCommands } from './lib/navCommands.js';
 
 /**
  * FormKitPage — معرض Form Kit (Vite MPA · entry: app/formkit.jsx).
@@ -71,29 +74,47 @@ function FieldStates() {
   );
 }
 
+const validId = (h) => RECIPES.some((r) => r.id === h);
+
 export default function FormKitPage() {
-  const [dark, setDark] = React.useState(false);
+  const [dark, toggleTheme] = useTheme();
+  const [active, setActive] = React.useState(() => {
+    const h = (typeof window !== 'undefined' && window.location.hash.slice(1)) || '';
+    return validId(h) ? h : RECIPES[0].id;
+  });
+  const [cmdOpen, setCmdOpen] = React.useState(false);
   const rootClass = 'ds' + (dark ? ' dark' : '');
+  const activeRecipe = RECIPES.find((r) => r.id === active) || RECIPES[0];
+  const ActiveForm = activeRecipe.component;
+
+  React.useEffect(() => {
+    const onHash = () => { const h = window.location.hash.slice(1); if (validId(h)) setActive(h); };
+    const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); setCmdOpen(true); } };
+    window.addEventListener('hashchange', onHash);
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('hashchange', onHash); window.removeEventListener('keydown', onKey); };
+  }, []);
+
+  const select = (id) => { window.location.hash = id; }; // يحدّث الـURL ويُطلق onHash → setActive
+
+  const breadcrumb = [
+    { label: 'الرئيسية', href: '/' },
+    'المجموعات',
+    { label: 'مجموعة النماذج', href: '/formkit.html' },
+    activeRecipe.title,
+  ];
+  const commands = [...navCommands({ toggleTheme, dark }), ...recipeCommands(RECIPES)];
+
   return (
     <div className={rootClass} dir="rtl" lang="ar">
-      <header className="topbar">
-        <div className="topbar-in">
-          <a className="brandmark" href="/" style={css('color:inherit;text-decoration:none')}>
-            <span className="logo">M</span>Form Kit
-          </a>
-          <div className="topnav">
-            <a className="themetoggle" href="/" aria-label="العودة إلى نظام M7">
-              <Icon name="home" size={18} />
-              <span className="tb-lbl">نظام M7</span>
-            </a>
-            <span className="badge brand"><span className="dot"></span>طبقة فوق M7</span>
-            <button className="themetoggle" onClick={() => setDark((d) => !d)} aria-label={dark ? 'الوضع الفاتح' : 'الوضع الداكن'}>
-              <Icon name={dark ? 'sun' : 'moon'} size={18} />
-              <span className="tb-lbl">{dark ? 'فاتح' : 'داكن'}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      <AppHeader
+        active="form"
+        dark={dark}
+        themeLabel={dark ? 'فاتح' : 'داكن'}
+        toggleTheme={toggleTheme}
+        onOpenCmd={() => setCmdOpen(true)}
+        breadcrumb={breadcrumb}
+      />
 
       <main className="page">
         <section className="hero" data-screen-label="Hero">
@@ -106,18 +127,35 @@ export default function FormKitPage() {
           <FieldStates />
         </section>
 
-        {CATEGORIES.map((cat) => (
-          <section className="section" key={cat.id} data-screen-label={cat.title}>
-            <SectionHeader kicker="نماذج جاهزة" title={cat.title} />
-            <div className="grid cols2">
-              {RECIPES.filter((r) => r.category === cat.id).map((r) => {
-                const Recipe = r.component;
-                return <Recipe key={r.id} />;
-              })}
-            </div>
-          </section>
-        ))}
+        <section className="section" data-screen-label="Switcher">
+          <SectionHeader kicker="نماذج جاهزة" title="اختر نموذجًا" desc="أربع عشرة وصفة نموذج عربية مبنية من مكوّنات حقول M7 — مصادقة، تفاعل، بيانات، ومتقدّمة — RTL وفي الوضعين." />
+          <div className="fx col gap12">
+            {CATEGORIES.map((cat) => (
+              <div className="fx ac gap10 wrap" key={cat.id}>
+                <span className="dk-cat">{cat.title}</span>
+                {RECIPES.filter((r) => r.category === cat.id).map((r) => (
+                  <button
+                    key={r.id}
+                    id={'fk-btn-' + r.id}
+                    type="button"
+                    className={'btn sm ' + (active === r.id ? 'brand' : 'ghost')}
+                    aria-pressed={active === r.id}
+                    onClick={() => select(r.id)}
+                  >
+                    {r.title}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="section" data-screen-label={activeRecipe.title}>
+          <ActiveForm />
+        </section>
       </main>
+
+      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} commands={commands} placeholder="انتقل إلى نموذج أو مجموعة…" />
     </div>
   );
 }

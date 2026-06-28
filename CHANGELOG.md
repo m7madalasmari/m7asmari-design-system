@@ -1,5 +1,80 @@
 # سجل التغييرات — M7asmari Design System
 
+## 2026-06-28 — هيكل صفحات موحّد: هيدر مشترك + كتالوج + صفحة رئيسية (هاب)
+
+طبقة تنقّل واحدة فوق كل صفحات MPA (تطبيق مهارة `m7-pages`) — بلا هوية/توكنز جديدة، بإعادة استخدام أصناف الهيدر/الفتات القائمة:
+
+- **`app/chrome/AppHeader.jsx`** — هيدر موحّد بديل عن ثلاثة هيدرات inline: الشعار → الرئيسية، قائمة المجموعات (`app/chrome/KitsMenu.jsx`)، الكتالوج، المختبر، قائمة التوثيق (`app/chrome/DocsMenu.jsx`)، تبديل سمة محفوظ في `localStorage` (`app/lib/useTheme.js`)، و⌘K في كل الصفحات (`app/lib/navCommands.js`).
+- **`components/molecules/Breadcrumb.jsx`** — دعم عناصر `{label, href}` قابلة للنقر (متوافق رجعيًا).
+- **تنقّل الوصفات** موحّد بين Form/Dashboard: مبدّل داخل الصفحة + رابط `#hash` عميق قابل للمشاركة.
+- **`app/CatalogPage.jsx` (`/catalog`)** — كتالوج widgets النواة قابل للبحث، مميَّز صراحةً عن وصفات الـKits (`app/catalog-data.js`).
+- **`app/HomePage.jsx` (`/`)** — صفحة رئيسية (هاب) ببطاقات الطبقات؛ نُقل عرض النظام إلى `/core` (`core.html`). حُذف `app/chrome/TopBar.jsx` اليتيم.
+- **النتيجة:** 154 اختبارًا ✅ · بناء كل المداخل ✅ · تحقّق بصري Light (الهاب/الكتالوج/اللوحات/المختبر)؛ الصفحات الجديدة توكنز فقط (دارك آمن بإعادة الاستخدام).
+
+## 2026-06-28 — توسيع عائلة الإحصاء: طبقة تحليلية أعمق (Core)
+
+أربع أفكار تحليلية متمايزة أُضيفت في **Core** (لا في الكِت)، توكنز فقط، RTL، فاتح/داكن:
+
+- **`components/charts/MultiLineChart.jsx`** — خطّ متعدّد السلاسل لمقارنة اتجاهات على محور مشترك (`series:{label,color?,data}[]`).
+- **`components/charts/BulletChart.jsx`** — أداء «قيمة مقابل هدف» على نطاقات كيفية، محاذاة منطقية `inset-inline` (RTL).
+- **`components/charts/WaterfallChart.jsx`** — تفكيك التغيّر بمساهمات +/- وأعمدة إجمالي (`type:'total'`).
+- **`components/molecules/MetricGrid.jsx`** — جدول مقارنة عدّة مؤشّرات (قيمة/تغيّر/اتجاه) بنظرة واحدة، يدمج `Sparkline`.
+- **تثبيت في وصفة حقيقية:** وصفة جديدة `kits/dashboard/recipes/ExecutiveDashboard.jsx` («لمحة تنفيذية») تستخدم الأربعة فعليًا فوق `DashboardLayout`/`DashboardCard` (مكوّنات M7 القائمة فقط) — مُسجّلة في `kits/dashboard/index.js` (٩ لوحات الآن)، بياناتها في `kits/dashboard/data.js`. أُضيف معامل `?recipe=` لمعاينة اللوحات.
+- **العرض:** قسم «تحليلات أعمق» في `app/LabPage.jsx`. **اختبارات:** موسّعة في `test/statistics.test.jsx`. **النتيجة:** `npm run audit` ✅ · `audit:contrast` ✅ · تحقّق بصري Light/Dark.
+
+## 2026-06-28 — تصحيح اتجاه التنوّع: إحصاء وأفكار، لا مؤثّرات
+
+تراجُع عن طبقة الحركة/المؤشّر التجريبية (إمالة 3D، توهّج يتبع المؤشّر، احتفال عند النقر) — قُيّمت بأنها **غير متّزنة** ولا تليق بنظام جادّ. التنوّع أُعيد توجيهه إلى **عرض الإحصاء والأفكار** لا إلى التأثيرات.
+
+- **حُذف:** `TiltCard` · `SpotlightCard` · `MagneticButton` · `Reveal` · `CountUp` · `app/lib/confetti.js` وكامل CSS المرتبط بها (tiltcard/spotlight/magnetic/confetti/chero/glow/draw-line). أُزيلت خاصية `animate` (رسم تدريجي) من `LineChart` واللوحات.
+- **عائلة إحصاء جديدة (Core، أفكار متمايزة لعرض البيانات):** `components/molecules/{CompareStat (الحالي مقابل السابق), TrendStat (رقم + Sparkline مدمج), DistributionBar (تركيب 100%)}.jsx` · `components/charts/StackedBarChart.jsx` (أعمدة متراكمة). كلها توكنز فقط، RTL، فاتح/داكن.
+- **مختبر المكوّنات:** hero هادئ + قسم «تنوّع الإحصاء» يجمع KPI · مقارنة · اتجاه · تقدّم/هدف · نسبة دائرية · مقياس · تركيب · أعمدة متراكمة · خريطة حرارية — كل فكرة تجيب سؤالًا مختلفًا عن البيانات.
+- **إصلاح ضمنيّ:** التوكن `--dur-normal` (غير معرَّف) في `chartbar`/`funnel-bar`/`carousel-slide` → `--dur`؛ كانت انتقالاتها فوريّة بلا مدّة.
+- **توثيق/اختبارات:** [kits/WIDGETS.md](kits/WIDGETS.md) · `test/statistics.test.jsx`. **النتيجة:** `npm run audit` ✅ · تحقّق بصري Light/Dark.
+
+## 2026-06-28 — تنويع مكتبة المكوّنات: عائلات جديدة + مختبر مكوّنات
+
+معالجة «التكرار وقلّة الابتكار»: المكتبة كانت مركّزة في عائلة واحدة (بطاقات/قوائم إحصاء). أُضيفت **عائلات widgets غائبة** في Core لضمان التنوّع — RTL، توكنز فقط، فاتح/داكن.
+
+- **تصوّر بياني مبتكر:** `components/charts/{Heatmap, Gauge (نصف-دائري), Funnel}.jsx`.
+- **وسائط ومحتوى:** `components/organisms/{CompareSlider (قبل/بعد), Carousel, TreeView}.jsx`.
+- **تواصل واجتماعي:** `components/molecules/{AvatarGroup, ChatThread, ContactCard}.jsx`.
+- **تراكب وتفاعل/لمسات:** `components/organisms/{CommandPalette (⌘K), Popover}.jsx` · `components/molecules/Rating.jsx` · `components/atoms/Skeleton.jsx`.
+- **مختبر المكوّنات:** صفحة `lab.html` (`app/LabPage.jsx`) تعرض العائلات الأربع حيّةً + مدخل Vite + `scripts/build-lab-dev.py` + رابط في TopBar.
+- **توثيق/اختبارات:** كتالوج موسّع في [kits/WIDGETS.md](kits/WIDGETS.md) · `test/lab-widgets.test.jsx`. **النتيجة:** `npm run audit` ✅ · `audit:contrast` ✅ · تحقّق بصري Light/Dark.
+
+## 2026-06-28 — Dashboard Kit v2: كتالوج Widgets محايد للمجال + صقل + تنوّع
+
+تحويل Dashboard Kit من 4 لوحات ثابتة إلى **كتالوج widgets عامّ في Core** + 8 لوحات متنوّعة عبر مجالات (تعليم/صحة/تجارة/إدارة/مبيعات). المبدأ: نفس المكوّنات، بيانات مختلفة — **بلا توكنز/هوية جديدة في الكِت**؛ الفجوات تُصلَح في Core.
+
+- **Widgets جديدة (Core):** `components/molecules/{GoalCard,RingStat,Timeline,RankList,ProfileHeader,PageHeader,Toolbar,FilterBar}.jsx` · `components/organisms/Kanban.jsx` · `components/charts/Legend.jsx`. كلها محايدة للمجال (CSS بتوكنز فقط).
+- **صقل الرسوم:** `LineChart` تحجيم منتظم بلا تشوّه + شبكة خفيفة + نقاط + tooltip؛ `BarChart` قيم فوق الأعمدة؛ `DonutChart` فجوة بين القطع (`gap`) + `Legend` موحّد.
+- **8 لوحات (Recipes) عبر مجالات:** Analytics (SaaS) · Store/Orders (تجارة) · DataTable (مالي) · CRM (مبيعات) · Profile (تعليم/HR) · Files (محتوى) · Kanban (مهام) · Settings (حساب) — مصنّفة في [kits/dashboard/index.js](kits/dashboard/index.js)، بيانات متعددة المجالات في [kits/dashboard/data.js](kits/dashboard/data.js).
+- **العرض:** [app/DashboardKitPage.jsx](app/DashboardKitPage.jsx) مبدّل مجمَّع حسب الفئة (4 فئات × لوحتان). تباين في الإطار (لوحات بإطار محاط وأخرى بلا).
+- **توثيق:** [kits/WIDGETS.md](kits/WIDGETS.md) (كتالوج + دليل تركيب لأي مشروع + قائمة فجوات Core). **النتيجة:** `npm run audit` ✅ · `audit:contrast` ✅ · اختبارات `widgets`/`charts`/`DataTable` (CI) · تحقّق بصري Light/Dark.
+
+## 2026-06-28 — Dashboard Kit (طبقة تشغيل لوحات تحكّم فوق M7)
+
+كِت لوحات عربية RTL/داكن كطبقة فوق M7 — **بلا هوية/توكنز/CSS خاصّة**؛ الفجوات الثلاث التي كشفها الكِت عولِجت في **core** (تفيد ما بعده).
+
+- **رسوم بيانية (core جديد):** `components/charts/{Sparkline,BarChart,LineChart,DonutChart}.jsx` — SVG/CSS بلا مكتبة runtime، ألوان `--chart-1..8`، `role="img"` + `aria-label`. (كانت الفجوة الأكبر؛ لم يكن في core سوى `.spark`/`.progress`.)
+- **`DataTable` (core جديد):** `components/organisms/DataTable.jsx` — يلفّ `.tbl/.tablewrap/.sortable`، يعيد استخدام `app/lib/sort.js` ويدمج `Pagination` (فرز + ترقيم داخليّان، `aria-sort`).
+- **`DashboardLayout` (نمط جديد):** `patterns/DashboardLayout.jsx` — إطار بفتحات (sidebar/header/children) بديلًا عن مونوليث `DashboardShell`؛ modifier `.dashframe.auto` لارتفاع مرن.
+- **الكِت `kits/dashboard/`:** registry + بيانات عرض + 4 وصفات — لمحة تحليلية · جدول بيانات · مدير ملفات · إعدادات (تجسر Form Kit).
+- **العرض/البناء:** `app/DashboardKitPage.jsx` (مبدّل `Tabs` segmented)، `app/dashboardkit.jsx`، `dashboardkit.html`، مدخل في `vite.config.js`، `scripts/build-dashboardkit-dev.py`، ورابط في `app/chrome/TopBar.jsx`.
+- **CSS (توكنز فقط):** كتلة «Charts» في `styles/components.css`. **النتيجة:** `npm run audit` ✅ · `audit:contrast` ✅ · اختبارات `charts`/`DataTable` (CI) · تحقّق بصري Light/Dark.
+
+## 2026-06-28 — توحيد الأيقونات وتقوية التركيز (Icon Consolidation + Focus Hardening)
+
+تقوية core قبل الكِت القادم — **بلا توكنز/هوية جديدة**. مصدر أيقونات واحد بلا مكتبة runtime، وتغطية تركيز كاملة للعناصر ذات الأدوار المخصّصة، مع حرّاس تدقيق ضد الانحدار.
+
+- **مصدر أيقونات موحّد:** وُسِّع مكوّن **`Icon.jsx`** إلى 46 أيقونة (مسارات Lucide ضمنيّة) وأضيف خطّاف هويّة ثابت **`data-icon={name}`**. رُحِّل **كل** استخدامات `<i data-lucide>` (مكوّنات core + chrome + الأنماط + أقسام المعرض) إلى `<Icon>`.
+- **إسقاط lucide runtime:** حُذف `window.lucide.createIcons()` من `App.jsx`، ووسوم `lucide.min.js` من `index.html`/سكربتات `build-dev`/`build-formkit-dev`، وملفّا **`vendor/lucide.min.js`** و**`public/vendor/lucide.min.js`**. لا اعتماد على مكتبة أيقونات وقت التشغيل (موثوق في React الديناميكي بلا فحص DOM).
+- **توست الإشعارات:** قواعد إظهار الأيقونة حسب الحالة تعتمد الآن `[data-icon="…"]` بدل أصناف `.lucide-*` المحقونة سابقًا.
+- **`:focus-visible`:** أُضيف **`.selectbox`** صراحةً لقاعدة حلقة التركيز الموحّدة (كان مغطّى ضمنيًا عبر `[tabindex]` فقط). `.radio`/`.menuitem` غير قابلَين للتركيز (نقطة بصرية / تنقّل بصنف `.active`) فلا حلقة لهما — بقرار مبني على البنية.
+- **حرّاس Audit (`scripts/audit.py`):** قاعدتان HARD FAIL جديدتان — (٦) منع رجوع `data-lucide` في الكود، (٧) التأكّد أن كل عنصر تفاعلي بدور مخصّص (`cbx/switch/selectbox/tab/ttab/sideitem/dashcat`) له `:focus-visible`.
+- **النتيجة:** `npm run audit` ✅ PASS · `npm run audit:contrast` ✅ PASS (بلا تغيير ألوان) · Vitest محدّث (`dashboard-components` يؤكّد على `[data-icon]`) · معاينات بلا Node أُعيد توليدها بلا lucide · تأكيد بصري Light/Dark.
+
 ## 2026-06-27 — تمرير موثوقية الثيم (Theme Reliability Pass)
 
 تدقيق وإصلاح **تباين Light/Dark** واستخدام التوكنز داخل المكوّنات/الأقسام — **إصلاح استخدام، بلا تغيير بنيوي ولا مزايا**. أُضيف مدقّق تباين منطقي يحلّ كل توكن إلى لونه الفعلي في الوضعين ويحسب WCAG.
