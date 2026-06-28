@@ -18,8 +18,17 @@ export default function NavItem({ variant = 'rail', label, icon, count, active =
       </button>
     );
   }
+  const interactive = typeof onClick === 'function';
+  const onKey = (e) => { if (interactive && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick(e); } };
   return (
-    <div className={'sideitem' + (active ? ' on' : '')} onClick={onClick}>
+    <div
+      className={'sideitem' + (active ? ' on' : '')}
+      onClick={onClick}
+      onKeyDown={interactive ? onKey : undefined}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      aria-current={active ? 'true' : undefined}
+    >
       <span className="sideicon"></span>{label}
     </div>
   );

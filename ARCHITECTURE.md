@@ -7,6 +7,8 @@
 >
 > **المرحلة الثانية ✅ منجَزة (2026-06-27):** استُخرجت 8 مكوّنات تفاعلية مستقلّة (Modal, Drawer, Tabs, Accordion, OtpInput, Slider, Pagination, TagsInput) تدير حالتها داخليًا بـ`useState`، مع وصولية شاملة واختبارات Vitest (47). `App.jsx` انخفض إلى **560 سطرًا**. التفاصيل في [`CHANGELOG.md`](CHANGELOG.md) والقسم «المرحلة الثانية» أدناه.
 >
+> **هيكل الصفحات + التثبيت ✅ (2026-06-28):** تحوّل العرض إلى **MPA**: الصفحة الرئيسية (هاب) على `index.html`؛ عرض النظام الكامل على `core.html`؛ + `catalog`/`formkit`/`dashboardkit`/`lab`. **هيدر موحّد** `AppHeader` (الشعار→الرئيسية · قائمتا Kits/Docs · سمة محفوظة في localStorage · ⌘K) عبر كل الصفحات، مع breadcrumbs وWidget Catalog. تلتها جولة تثبيت (a11y المنسدلات/الدارك/RTL + اختبارات → 165). حُذف `TopBar` ولوحة الأوامر القديمة في `chrome/` و`FormSection` اليتيم؛ الأيقونات مُضمّنة SVG (lucide أُزيل).
+>
 > **تمّ قبل إغلاق المرحلة الأولى:** فحص جاهزية البناء، تهيئة أصول `public/` (lucide + avatar)، QA بصري نهائي معتمَد، ثم **إزالة كامل مرجع dc وأدوات مقارنته** (`legacy.dc.html`, `support.js`, `preview.html`, `qa.html`, `build-qa.py`).
 
 ## المبدأ الحاكم
@@ -49,10 +51,11 @@ sections/      D — قسم لكل ملف يركّب C حول B
 patterns/      E — أمثلة مركّبة (معزولة)
   DashboardShell  FeatureSection
 app/
-  chrome/      TopBar SideRail Hero CommandPalette(+Trigger)
-  App.jsx      جذر التركيب + حالة الثيم/الاتجاه/القسم النشط
-  main.jsx     نقطة الدخول (createRoot)
-vendor/        react, react-dom, lucide (+ babel-standalone للمعاينة)
+  chrome/      AppHeader KitsMenu DocsMenu SideRail Hero   (هيدر موحّد عبر كل صفحات MPA)
+  App.jsx      جذر عرض النظام (core) + حالة الثيم/الاتجاه/القسم النشط · home/main + صفحات الكِت/الكتالوج
+  lib/         … useTheme.js (سمة مشتركة localStorage) · navCommands.js (أوامر ⌘K)
+  main.jsx     نقطة دخول core.html (createRoot) · home.jsx لـindex.html
+vendor/        react, react-dom (+ babel-standalone للمعاينة)   — الأيقونات SVG مُضمّنة عبر components/atoms/Icon.jsx
 fonts/  assets/  (أصول)
 ```
 ترتيب تحميل CSS الثابت: `primitive → semantic → component → pattern → base → components → [page]`.
@@ -80,7 +83,7 @@ fonts/  assets/  (أصول)
 كانت `build-qa.py` تولّد `qa.html` لمقارنة React بنسخة dc المرجعية آليًا (تطابق DOM + أخطاء/تحذيرات console + اختبارات تفاعل). **أُزيلت بالكامل بعد QA النهائي** مع نسخة dc المرجعية. تبقّى `scripts/build-dev.py` فقط لتوليد `index.dev.html` (معاينة بلا Node).
 
 ## ملف التشغيل الحالي
-- **الأساسي (Vite):** `index.html` → `app/main.jsx` → `app/App.jsx` + `app/chrome/*` + `app/lib/css.js`. يستورد CSS من `tokens/` و`styles/`. للبناء/النشر: `npm i && npm run build` (يبني سحابيًا على Vercel بلا Node محلي).
+- **الأساسي (Vite · MPA):** `index.html` → `app/home.jsx` (الرئيسية/الهاب)؛ `core.html` → `app/main.jsx` → `app/App.jsx` (عرض النظام)؛ + `catalog`/`formkit`/`dashboardkit`/`lab`. كلها تشترك في `app/chrome/AppHeader` و`app/lib/*`، وتستورد CSS من `tokens/` و`styles/`. للبناء/النشر: `npm i && npm run build` (يبني سحابيًا على Vercel بلا Node محلي).
 - **معاينة محلية بلا Node:** `index.dev.html` (يجمّع نفس مصادر `app/` في سكربت Babel واحد، React عام من `vendor/`). للتحديث بعد تعديل `app/`: `python3 scripts/build-dev.py`.
 - **مرجع dc الأصلي:** `legacy.dc.html` + `support.js` — **حُذِفا** بعد اعتماد QA البصري النهائي. (`preview.html` كان يعتمد عليهما فصار غير فعّال — أداة QA فقط.)
 
@@ -93,7 +96,7 @@ fonts/  assets/  (أصول)
 | **`/vendor/*` + `/assets/*` (الجذر)** | معاينة **no-Node** (`index.dev.html` / `requests.dev.html` عبر `python3 -m http.server`) | الـHTML المُولّد يشير إليها بمسارات نسبية من الجذر (`vendor/react…`, `assets/avatar.jpg`)؛ لا Vite ليحلّها |
 | **`public/vendor/*` + `public/assets/*`** | بناء **Vite** الإنتاجي | Vite ينسخ ما في `public/` كما هو إلى جذر `dist/`، فتُخدَم عبر `/vendor/…` و`/assets/…` في الإنتاج |
 
-**القاعدة:** عند تحديث `lucide.min.js` أو `avatar.jpg` أو أي أصل، **حدّث النسختين**. هذا ليس تكرارًا خاطئًا — حذف أيّ نسخة يكسر أحد المسارين. (تدقيق Structural Cleanup أبقاهما عمدًا.)
+**القاعدة:** عند تحديث `avatar.jpg` أو أصول `vendor/` (react/react-dom/babel) أو أي أصل، **حدّث النسختين**. هذا ليس تكرارًا خاطئًا — حذف أيّ نسخة يكسر أحد المسارين. (ملاحظة: `lucide.min.js` أُزيل من النسختين بعد تضمين الأيقونات SVG.)
 
 ## المرحلة الثانية — تقوية النظام (منجَزة 2026-06-27)
 

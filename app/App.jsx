@@ -7,7 +7,7 @@ import AppHeader from './chrome/AppHeader.jsx';
 import SideRail from './chrome/SideRail.jsx';
 import { getStoredTheme, storeTheme } from './lib/useTheme.js';
 import Hero from './chrome/Hero.jsx';
-import CommandPalette from './chrome/CommandPalette.jsx';
+import CommandPalette from '../components/organisms/CommandPalette.jsx';
 import Colors from '../sections/foundations/Colors.jsx';
 import Typography from '../sections/foundations/Typography.jsx';
 import Spacing from '../sections/foundations/Spacing.jsx';
@@ -272,14 +272,10 @@ class App extends React.Component {
   }
   _cmdVals() {
     const all = [['colors', 'الألوان', 'الأسس'], ['type', 'الطباعة', 'الأسس'], ['buttons', 'الأزرار', 'مكوّنات'], ['inputs', 'الحقول', 'مكوّنات'], ['cards', 'البطاقات', 'مكوّنات'], ['tabs', 'التبويبات', 'مكوّنات'], ['badges', 'الشارات', 'مكوّنات'], ['tables', 'الجداول', 'مكوّنات'], ['otp', 'رمز التحقّق', 'مكوّنات'], ['numanim', 'الأرقام المتحرّكة', 'مكوّنات'], ['calendar', 'التقويم', 'مكوّنات'], ['swipe', 'قائمة قابلة للسحب', 'مكوّنات'], ['modal', 'النوافذ المنبثقة', 'مكوّنات'], ['icons', 'الأيقونات', 'الأسس'], ['motion', 'الحركة', 'الأسس'], ['guidelines', 'دليل الاستخدام', 'الأسس']];
-    const q = this.state.cmdQuery.trim();
-    const list = q ? all.filter(x => x[1].includes(q)) : all;
     return {
-      cmdScrimCls: this.state.cmdOpen ? 'cmdscrim open' : 'cmdscrim',
-      cmdQuery: this.state.cmdQuery,
-      onCmdInput: (e) => this.setState({ cmdQuery: e.target.value }),
       closeCmd: () => this.closeCmd(),
-      cmdResults: list.map(([id, label, cat]) => ({ label, cat, go: () => this.cmdGo(id) }))
+      // لوحة الأوامر الموحّدة (organism) تتولّى البحث/الكيبورد داخليًا
+      cmdCommands: all.map(([id, label, cat]) => ({ id, label, hint: cat, action: () => this.cmdGo(id) })),
     };
   }
   ripple(e) {
@@ -450,7 +446,7 @@ class App extends React.Component {
 
   render() {
     const V = Object.assign({}, this.props, this.renderVals());
-    const { closeCmd, cmdQuery, cmdResults, cmdScrimCls, navItems, onCmdInput, rootClass, stop, themeLabel, toggleCmd, toggleTheme } = V;
+    const { closeCmd, cmdCommands, navItems, rootClass, themeLabel, toggleCmd, toggleTheme } = V;
     return (
 
 <div className={rootClass} dir="rtl" lang="ar">
@@ -541,7 +537,7 @@ class App extends React.Component {
 
 <GuidelinesSection v={V} />
 
-<CommandPalette closeCmd={closeCmd} cmdQuery={cmdQuery} cmdResults={cmdResults} cmdScrimCls={cmdScrimCls} onCmdInput={onCmdInput} stop={stop} />
+<CommandPalette open={this.state.cmdOpen} onClose={closeCmd} commands={cmdCommands} placeholder="ابحث عن مكوّن أو قسم…" />
 
 </div>
 </div>

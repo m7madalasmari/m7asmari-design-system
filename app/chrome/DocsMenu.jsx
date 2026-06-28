@@ -23,9 +23,9 @@ export default function DocsMenu() {
     <Popover
       ariaLabel="التوثيق"
       trigger={
-        <span style={css('display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:inherit')}>
+        <button type="button" style={css('display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:none;border:none;font:inherit;padding:0;color:inherit')}>
           التوثيق<Icon name="chevron-down" size={15} />
-        </span>
+        </button>
       }
     >
       {({ close }) => (

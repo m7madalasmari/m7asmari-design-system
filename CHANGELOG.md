@@ -1,5 +1,16 @@
 # سجل التغييرات — M7asmari Design System
 
+## 2026-06-28 — تثبيت وصلابة: a11y + إصلاح تجمّد الدارك + RTL + اختبارات
+
+جولة تدقيق شاملة (`m7-auditor`) ثم إصلاح P0/P1 — بلا مزايا جديدة ولا إعادة تصميم:
+- **a11y المنسدلات (P0):** `components/organisms/Popover.jsx` صار disclosure متاحًا — مُطلِق `<button>` فعلي بـ`aria-expanded`/`aria-haspopup`، نقل التركيز لأول عنصر عند الفتح وإرجاعه للمُطلِق عند Esc/الإغلاق. يصلح قائمتَي «المجموعات» و«التوثيق» للكيبورد دون زرّ داخل زرّ.
+- **تجمّد الدارك (P0):** حدود البانر و«افعل/لا تفعل» (`--banner-*-border`/`--guide-*-border`) لها الآن مقابل في `.dark` (`tokens/component.css`) بدل التجمّد على الفاتح فوق خلفيات داكنة.
+- **a11y المكوّنات:** `NavItem` (rail) و`CollapsibleSection` قابلة للتشغيل بالكيبورد (role/tabIndex/Enter‑Space + aria، بلا تغيير وسم/CSS بفضل `[tabindex]:focus-visible`)؛ `NotificationMenu` بـ`aria-expanded`/`haspopup`.
+- **توحيد لوحة الأوامر:** `app/App.jsx` انتقل إلى `components/organisms/CommandPalette` المتاح، وحُذفت النسخة القديمة `app/chrome/CommandPalette.jsx` (تكرار + غير وصولة).
+- **RTL:** فاصل `Breadcrumb` (dash) ينعكس (chevron-left) · `.secdesc` بـ`text-align:start`.
+- **تنظيف:** حذف `components/molecules/FormSection.jsx` اليتيم؛ تحديث `README.md`/`ARCHITECTURE.md` (MPA/الهيدر الموحّد/إزالة lucide)؛ تجاهُل `*.dev.html` المولّدة.
+- **اختبارات:** `useTheme` + `navCommands` + `AppHeader` (+11 ⇒ **165**). **النتيجة:** `npm run build` ✅ · 165 اختبارًا ✅ · تحقّق دارك بصري لحدود البانر/الإرشادات.
+
 ## 2026-06-28 — هيكل صفحات موحّد: هيدر مشترك + كتالوج + صفحة رئيسية (هاب)
 
 طبقة تنقّل واحدة فوق كل صفحات MPA (تطبيق مهارة `m7-pages`) — بلا هوية/توكنز جديدة، بإعادة استخدام أصناف الهيدر/الفتات القائمة:

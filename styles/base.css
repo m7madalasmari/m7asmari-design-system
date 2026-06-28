@@ -40,7 +40,7 @@
 .sectionhead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding-bottom:22px;margin-bottom:34px;border-bottom:1px solid var(--border)}
 .kicker{font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--text-muted)}
 .sectitle{font-size:clamp(26px,3.6vw,36px);font-weight:800;line-height:1.25;margin:8px 0 0}
-.secdesc{font-size:15px;line-height:1.7;color:var(--text-secondary);max-width:380px;text-align:left}
+.secdesc{font-size:15px;line-height:1.7;color:var(--text-secondary);max-width:380px;text-align:start}
 .subhead{font-size:15px;font-weight:700;color:var(--text-muted);margin:0 0 16px}
 .blockgap{margin-top:44px}
 /* generic showcase card */

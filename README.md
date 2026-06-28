@@ -11,14 +11,16 @@ An Arabic-first (RTL) design system built with **standard React (Vite)** — ori
 - **الطباعة:** خطوط **Thmanyah** (Sans للنصوص، Serif Display للعناوين) + JetBrains Mono للرموز.
 - **المكوّنات والأقسام:** ~40 قسمًا (أزرار، حقول، OTP، شارات، تبويبات، بطاقات، جداول، تقويم، نوافذ، أدراج، لوحة أوامر ⌘K، إشعارات…) + نمطان مركّبان (FeatureSection، DashboardShell).
 - **مكوّنات تفاعلية قابلة لإعادة الاستخدام** (المرحلة الثانية): `Modal`, `Drawer`, `Tabs`, `Accordion`, `OtpInput`, `Slider`, `Pagination`, `TagsInput` — تدير حالتها داخليًا بـAPI واضح، ووصولية كاملة بلوحة المفاتيح.
-- **وضع داكن + RTL** أصيلان، و**وصولية** (أدوار ARIA، حبس تركيز، احترام `prefers-reduced-motion`)، و**اختبارات** (Vitest، 47 اختبارًا).
+- **وضع داكن + RTL** أصيلان، و**وصولية** (أدوار ARIA، حبس تركيز، احترام `prefers-reduced-motion`)، و**اختبارات** (Vitest، 165 اختبارًا).
 
 ## البنية / Structure
 ```
-index.html              مدخل Vite (الأساسي)
-app/        App.jsx (حالة الأقسام غير المُستخرَجة + render-قشرة) · main.jsx
-            lib/  css.js · a11y.js (useFocusTrap, prefersReducedMotion…) · sort.js · calendar.js
-            chrome/ (TopBar, SideRail, Hero, CommandPalette)
+index.html              الصفحة الرئيسية (هاب) — مدخل Vite الأساسي (app/home.jsx)
+core.html               عرض النظام الكامل (الأسس/المكوّنات/المرجع) — app/main.jsx → App.jsx
+catalog.html · formkit.html · dashboardkit.html · lab.html   صفحات MPA (كتالوج/كِت/مختبر)
+app/        App.jsx (حالة الأقسام غير المُستخرَجة + render-قشرة) · home.jsx · main.jsx · CatalogPage · FormKitPage · DashboardKitPage · LabPage
+            lib/  css.js · a11y.js · sort.js · calendar.js · useTheme.js (سمة مشتركة) · navCommands.js (⌘K)
+            chrome/ AppHeader (هيدر موحّد عبر كل الصفحات) · KitsMenu · DocsMenu · SideRail · Hero
 docs/       7 مكوّنات توثيق (SectionHeader, TokenTable, ColorSwatch, ColorScale, TypeSpecimen, ShowcasePanel, CodeBlock)
 components/ atoms/(8) Button Badge Avatar Card Alert StatCard Banner EmptyState
             molecules/(11) ActivityItem FileRow FolderItem NavItem UserMenu SearchField Breadcrumb NotificationMenu CollapsibleSection StatTile Pagination
@@ -28,8 +30,9 @@ patterns/   FeatureSection · DashboardShell
 scripts/    أدوات بايثون (بلا Node): build-dev.py · build-requests-dev.py · audit.py · contrast.py · token_map.py
 test/       اختبارات Vitest (setup.js + *.test.{js,jsx})
 tokens/     primitive · semantic · component · pattern (.css)   styles/  base.css · components.css
-public/     vendor/lucide.min.js · assets/avatar.jpg   (أصول بناء Vite الإنتاجي)
-vendor/     react · react-dom · lucide · babel (للمعاينة المحلية بلا Node)
+public/     assets/avatar.jpg   (أصول بناء Vite الإنتاجي)
+vendor/     react · react-dom · babel (للمعاينة المحلية بلا Node)
+            الأيقونات مُضمّنة كـSVG عبر components/atoms/Icon.jsx (لا مكتبة أيقونات وقت التشغيل)
 fonts/  assets/
 ```
 المكوّنات التفاعلية المُستخرَجة **تدير حالتها داخليًا** (`useState`). أمّا الأقسام التي لم تُستخرَج بعد فتبقى عرضية تستقبل كائن القيم المحسوبة `v={V}` (مخرَج `renderVals`) من `App`.
@@ -45,7 +48,7 @@ npm test          # اختبارات (وضع المراقبة)
 npm run test:run  # اختبارات (تشغيل واحد)
 npm run audit     # تدقيق البنية (توكنز قديمة/primitives/hex/استيراد) — بايثون، بلا Node
 ```
-> **تهيئة النشر (مطبَّقة):** أصول النشر التي يطلبها بناء Vite موجودة تحت `public/` — `public/vendor/lucide.min.js` (يحمّله `index.html` عبر `/vendor/lucide.min.js`) و`public/assets/avatar.jpg` (تشير إليه الأقسام عبر `/assets/avatar.jpg`). نسخ `vendor/` و`assets/` في الجذر باقية لخدمة المعاينة المحلية بلا Node.
+> **تهيئة النشر (مطبَّقة):** أصول النشر التي يطلبها بناء Vite موجودة تحت `public/` — `public/assets/avatar.jpg` (تشير إليه الأقسام عبر `/assets/avatar.jpg`). الأيقونات مُضمّنة كـSVG عبر `components/atoms/Icon.jsx` (لا مكتبة أيقونات وقت التشغيل). نسخ `vendor/` و`assets/` في الجذر باقية لخدمة المعاينة المحلية بلا Node.
 
 **معاينة محلية بلا Node:** `index.dev.html` مُولَّد ولم يعد متعقّبًا في git — ولّده أولًا:
 ```bash
@@ -59,7 +62,7 @@ python3 -m http.server 8137
 أثناء المراحل 1–7 جرى التحقّق بأداة مقارنة آلية (React مقابل نسخة dc المرجعية): تطابق DOM، **0 أخطاء / 0 تحذيرات console**. بعد اعتماد QA النهائي **أُزيلت أداة المقارنة ونسخة dc المرجعية بالكامل** (`preview.html`, `qa.html`, `build-qa.py`, `legacy.dc.html`, `support.js`) — لم تعد لازمة. للمعاينة المحلية بلا Node استخدم `index.dev.html` (يُحدَّث بـ`python3 scripts/build-dev.py`).
 
 ## المرحلة الثانية (منجَزة) + ما بقي
-**أُنجِز:** استخراج 8 مكوّنات تفاعلية مستقلّة (Modal, Drawer, Tabs, Accordion, OtpInput, Slider, Pagination, TagsInput) تدير حالتها داخليًا؛ وصولية شاملة (أدوار ARIA، لوحة مفاتيح، حبس تركيز، `prefers-reduced-motion`)؛ دوال منطق نقيّة (`sort`, `calendar`)؛ إطار اختبار Vitest (47 اختبارًا)؛ وتنحيف `App.jsx`. التفاصيل في [`CHANGELOG.md`](CHANGELOG.md).
+**أُنجِز:** استخراج 8 مكوّنات تفاعلية مستقلّة (Modal, Drawer, Tabs, Accordion, OtpInput, Slider, Pagination, TagsInput) تدير حالتها داخليًا؛ وصولية شاملة (أدوار ARIA، لوحة مفاتيح، حبس تركيز، `prefers-reduced-motion`)؛ دوال منطق نقيّة (`sort`, `calendar`)؛ إطار اختبار Vitest (165 اختبارًا)؛ وتنحيف `App.jsx`. التفاصيل في [`CHANGELOG.md`](CHANGELOG.md).
 
 **بقي (بوعي):** Combobox/Select عيّنات ساكنة (حُسّنت وصوليتها بدل استخراجها). الاستخراج الكامل لـ Calendar/FileUpload/SwipeList كمكوّنات عامّة مؤجَّل لارتباطها العميق ببيانات `App` (حُسّنت وصوليتها في مكانها). Stepper بلا حالة فعلية.
 

@@ -8,7 +8,7 @@ import Icon from '../atoms/Icon.jsx';
 export default function NotificationMenu({ open = false, unread = 0, items = [], onToggle }) {
   return (
     <div className={'dashnotif' + (open ? ' open' : '')}>
-      <button className="dashicobtn" aria-label="الإشعارات" onClick={onToggle}>
+      <button className="dashicobtn" aria-label="الإشعارات" aria-haspopup="true" aria-expanded={open} onClick={onToggle}>
         <Icon name="bell" />
         {unread ? (<span className="dashbell-badge">{unread}</span>) : null}
       </button>
