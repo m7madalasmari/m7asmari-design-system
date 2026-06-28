@@ -22,7 +22,7 @@ const LANGS = [
 /** الملف الشخصي / الإعدادات — اسم + نبذة + تاريخ ميلاد (DatePicker) + صورة (FileUpload) + لغة + إشعارات. */
 export default function ProfileForm() {
   const f = useForm(
-    { name: 'نورة العتيبي', bio: '', birth: null, lang: 'ar', notify: true },
+    { name: 'محمد الأسمري', bio: '', birth: null, lang: 'ar', notify: true },
     { name: [required('الاسم مطلوب')] }
   );
   return (

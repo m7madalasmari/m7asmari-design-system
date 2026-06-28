@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * FolderItem — صفّ مجلّد (أيقونة ملوّنة + اسم + بيانات + إجراءات).
@@ -10,13 +11,13 @@ export default function FolderItem({ label, color, items, size, prog, pinned = f
   const boxStyle = { background: 'color-mix(in srgb, ' + color + ' 13%, transparent)', color };
   return (
     <div className="dashfolder">
-      <div className="dashfolder-ic" style={boxStyle}><i data-lucide="folder"></i></div>
+      <div className="dashfolder-ic" style={boxStyle}><Icon name="folder" /></div>
       <div className="dashfolder-main">
         <div className="dashfolder-name">{label}{(showBar && pinned) ? (<svg className="pinico" viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg>) : null}</div>
         <div className="dashfolder-meta">{items} عنصر • {size}</div>
         {showBar ? (<div className="dashfolder-bar"><span style={{ width: prog + '%', background: color }}></span></div>) : null}
       </div>
-      {showStar ? (<i data-lucide="star" style={{ width: '14px', height: '14px', fill: 'var(--warning)', stroke: 'var(--warning)' }}></i>) : null}
+      {showStar ? (<Icon name="star" size={14} style={{ fill: 'var(--warning)', stroke: 'var(--warning)' }} />) : null}
       <div className="dashfolder-acts">
         <button className={pinned ? 'dashpin on' : 'dashpin'} onClick={onTogglePin} aria-label="تثبيت"><svg viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 7 3 2H7l3-2-1-7z"></path></svg></button>
         <button aria-label="خيارات"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>

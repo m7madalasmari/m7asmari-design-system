@@ -11,13 +11,14 @@ import NotificationMenu from '../components/molecules/NotificationMenu.jsx';
 import CollapsibleSection from '../components/molecules/CollapsibleSection.jsx';
 import SearchField from '../components/molecules/SearchField.jsx';
 import Breadcrumb from '../components/molecules/Breadcrumb.jsx';
+import Icon from '../components/atoms/Icon.jsx';
 
 export default function DashboardShell({ v }) {
   const { dashCats, dashFiles, dashFolders, dashNotifOpen, dashNotifs, dashPinnedFolders, dashRecent, dashSec, dashStats, dashTags, dashUnread, toggleDashNotif, toggleFolders, togglePinned, toggleRecent, toggleTags, toggleTheme } = v;
   return (
 <div className="dashframe">
 <aside className="dashside">
-<div className="dashside-head"><div className="dashlogo"><i data-lucide="layers"></i></div><div><div className="dashside-title">لوحة M7asmari</div><div className="dashside-sub">الإصدار 2.0</div></div></div>
+<div className="dashside-head"><div className="dashlogo"><Icon name="layers" /></div><div><div className="dashside-title">لوحة M7asmari</div><div className="dashside-sub">الإصدار 2.0</div></div></div>
 <div className="dashsearch-wrap"><SearchField variant="dash" placeholder="ابحث في كل شيء…" aria-label="بحث في اللوحة" shortcut="⌘K" /></div>
 <div className="dashscroll">
 {(dashCats || []).map((c) => (<NavItem variant="panel" key={c.id} icon={c.icon} label={c.label} count={c.count} active={c.active} onClick={c.fn} />))}
@@ -34,11 +35,11 @@ export default function DashboardShell({ v }) {
 </CollapsibleSection>
 <div className="dashsep"></div>
 <CollapsibleSection open={dashSec.tags} onToggle={toggleTags} title="الوسوم">
-<div className="dashtags">{(dashTags || []).map((t, $index) => (<span className="dashtag" key={$index}><i data-lucide="tag"></i>{t}</span>))}</div>
+<div className="dashtags">{(dashTags || []).map((t, $index) => (<span className="dashtag" key={$index}><Icon name="tag" />{t}</span>))}</div>
 </CollapsibleSection>
 </div>
 <div className="dashside-foot">
-<div className="dashstorage"><div className="dashstorage-top"><b>التخزين</b><span className="numjoin">7.5 / 10 غ.ب</span></div><div className="dashstorage-bar"><span></span></div><Button variant="outline sm w100"><i data-lucide="sparkles"></i>الترقية للنسخة الاحترافية</Button></div>
+<div className="dashstorage"><div className="dashstorage-top"><b>التخزين</b><span className="numjoin">7.5 / 10 غ.ب</span></div><div className="dashstorage-bar"><span></span></div><Button variant="outline sm w100"><Icon name="sparkles" />الترقية للنسخة الاحترافية</Button></div>
 <UserMenu name="محمد الأسمري" mail="alex@company.com" avatar="assets/avatar.jpg" onToggleTheme={toggleTheme} />
 </div>
 </aside>
@@ -46,13 +47,13 @@ export default function DashboardShell({ v }) {
 <div className="dashtop">
 <Breadcrumb variant="dash" leadingIcon="home" items={['الرئيسية']} />
 <div className="dashtop-acts">
-<button className="dashicobtn" aria-label="عوامل التصفية"><i data-lucide="sliders-horizontal"></i></button>
+<button className="dashicobtn" aria-label="عوامل التصفية"><Icon name="sliders-horizontal" /></button>
 <NotificationMenu open={dashNotifOpen} unread={dashUnread} items={dashNotifs} onToggle={toggleDashNotif} />
 <Avatar variant="sm"><img src="assets/avatar.jpg" alt="" /></Avatar>
 </div>
 </div>
 <div className="dashbody">
-<div className="dashwelcome"><div><h3>مرحبًا من جديد، محمد!</h3><p>إليك ما يجري في مساحة عملك اليوم.</p></div><Button variant="primary"><i data-lucide="plus"></i>عنصر جديد</Button></div>
+<div className="dashwelcome"><div><h3>مرحبًا من جديد، محمد!</h3><p>إليك ما يجري في مساحة عملك اليوم.</p></div><Button variant="primary"><Icon name="plus" />عنصر جديد</Button></div>
 <div className="dashstats">{(dashStats || []).map((s, $index) => (<StatTile key={$index} icon={s.icon} value={s.val} label={s.label} delta={s.delta} trend={s.trend} color={s.color} />))}</div>
 <div className="dashfiles"><div className="dashfiles-head"><b>أحدث الملفات</b><Button variant="ghost sm">عرض الكل</Button></div>{(dashFiles || []).map((f, $index) => (<FileRow key={$index} icon={f.icon} name={f.name} size={f.size} mod={f.mod} color={f.color} />))}</div>
 </div>

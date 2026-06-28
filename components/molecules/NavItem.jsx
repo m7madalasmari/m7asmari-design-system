@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * NavItem — عنصر تنقّل موحّد.
@@ -11,7 +12,7 @@ export default function NavItem({ variant = 'rail', label, icon, count, active =
   if (variant === 'panel') {
     return (
       <button className={'dashcat' + (active ? ' on' : '')} aria-current={active ? 'true' : undefined} onClick={onClick}>
-        <i data-lucide={icon}></i>
+        <Icon name={icon} />
         <span className="dashcat-label">{label}</span>
         {count != null ? <span className="dashcat-count">{count}</span> : null}
       </button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * SearchField — حقل بحث موحّد.
@@ -11,7 +12,7 @@ export default function SearchField({ variant = 'pill', shortcut, ...inputProps 
   if (variant === 'dash') {
     return (
       <div className="dashsearch">
-        <i data-lucide="search"></i>
+        <Icon name="search" />
         <input {...inputProps} />
         {shortcut ? <span className="dashkbd">{shortcut}</span> : null}
       </div>

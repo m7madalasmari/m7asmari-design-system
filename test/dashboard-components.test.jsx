@@ -53,9 +53,9 @@ describe('FolderItem', () => {
   it('showBar يعرض شريط التقدّم؛ showStar يعرض النجمة', () => {
     const { container: a } = render(<FolderItem label="العمل" color="var(--chart-1)" items={24} size="2 غ.ب" prog={65} showBar />);
     expect(a.querySelector('.dashfolder-bar')).toBeTruthy();
-    expect(a.querySelector('[data-lucide="star"]')).toBeNull();
+    expect(a.querySelector('[data-icon="star"]')).toBeNull();
     const { container: b } = render(<FolderItem label="العمل" color="var(--chart-1)" items={24} size="2 غ.ب" prog={65} showStar />);
-    expect(b.querySelector('[data-lucide="star"]')).toBeTruthy();
+    expect(b.querySelector('[data-icon="star"]')).toBeTruthy();
     expect(b.querySelector('.dashfolder-bar')).toBeNull();
   });
   it('زرّ التثبيت يستدعي onTogglePin', () => {

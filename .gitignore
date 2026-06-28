@@ -10,4 +10,7 @@ dist/
 index.dev.html
 requests.dev.html
 formkit.dev.html
+dashboardkit.dev.html
+lab.dev.html
+catalog.dev.html
 coverage/

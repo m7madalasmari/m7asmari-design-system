@@ -3,8 +3,9 @@ import { css } from './lib/css.js';
 import { sortRows, nextSortDir, ariaSortFor } from './lib/sort.js';
 import { prefersReducedMotion } from './lib/a11y.js';
 import { buildMonth } from './lib/calendar.js';
-import TopBar from './chrome/TopBar.jsx';
+import AppHeader from './chrome/AppHeader.jsx';
 import SideRail from './chrome/SideRail.jsx';
+import { getStoredTheme, storeTheme } from './lib/useTheme.js';
 import Hero from './chrome/Hero.jsx';
 import CommandPalette from './chrome/CommandPalette.jsx';
 import Colors from '../sections/foundations/Colors.jsx';
@@ -51,7 +52,7 @@ import GuidelinesSection from '../sections/reference/GuidelinesSection.jsx';
 class App extends React.Component {
   // الحالة المركزية المتبقّية تخصّ الأقسام غير المُستخرَجة بعد (أزرار، ضوابط، رفع، جدول،
   // تقويم، سحب، لوحة، إشعارات، لوحة أوامر). المكوّنات المُستخرَجة تدير حالتها داخليًا.
-  state = { theme: this.props.theme ?? 'light', cbTerms: true, cbUpdates: false, swNotif: true, radioPlan: 'pro', upVariant: 'centered', toasts: [], toastPos: 'bottom-right', btnOk: 'idle', btnErr: 'idle', badgeIdx: 0, files: [], swItems: [], swOpen: null, swSide: null, swLast: 'جاهز', calMonth: 5, calYear: 2026, calSel: 14, sortKey: null, sortDir: 1, activeSection: 'colors', cmdOpen: false, cmdQuery: '', dashSec: { pinned: true, folders: true, recent: true, tags: true }, dashCat: 'all', dashNotif: false, dashPinned: ['العمل'], exportFmt: 'tailwind' };
+  state = { theme: this.props.theme ?? getStoredTheme(), cbTerms: true, cbUpdates: false, swNotif: true, radioPlan: 'pro', upVariant: 'centered', toasts: [], toastPos: 'bottom-right', btnOk: 'idle', btnErr: 'idle', badgeIdx: 0, files: [], swItems: [], swOpen: null, swSide: null, swLast: 'جاهز', calMonth: 5, calYear: 2026, calSel: 14, sortKey: null, sortDir: 1, activeSection: 'colors', cmdOpen: false, cmdQuery: '', dashSec: { pinned: true, folders: true, recent: true, tags: true }, dashCat: 'all', dashNotif: false, dashPinned: ['العمل'], exportFmt: 'tailwind' };
   _filesInit = false;
   _tid = 0;
   _tos = {};
@@ -311,27 +312,21 @@ class App extends React.Component {
       }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
       document.querySelectorAll('.section[id]').forEach(s => this._spy.observe(s));
     }
-    this._renderIcons();
     this._watchNums();
     this.setState({ files: this._initialFiles(), swItems: this._swInit() });
     setTimeout(() => this._startUpload('release'), 300);
     this._badgeTimer = setInterval(() => this.setState(s => ({ badgeIdx: (s.badgeIdx + 1) % 4 })), 1600);
   }
   componentDidUpdate() {
-    this._renderIcons();
     if (this.state.theme !== this._lastTheme) {
       this._lastTheme = this.state.theme;
+      storeTheme(this.state.theme); // مزامنة السمة عبر صفحات MPA
       const root = document.querySelector('.ds');
       // إعادة طلاء عند تبديل السمة مع الحفاظ على موضع التمرير (display:none يصفّر التمرير)
       if (root) { const y = window.scrollY; root.style.display = 'none'; void root.offsetHeight; root.style.display = ''; window.scrollTo(0, y); }
     }
   }
-  _renderIcons() {
-    if (window.lucide && window.lucide.createIcons) {
-      if (document.querySelector('i[data-lucide]')) window.lucide.createIcons();
-    } else { clearTimeout(this._lt); this._lt = setTimeout(() => this._renderIcons(), 150); }
-  }
-  componentWillUnmount() { window.removeEventListener('keydown', this._esc); clearTimeout(this._lt); clearInterval(this._numRAF); if (this._numIO) this._numIO.disconnect(); Object.keys(this._upTimers).forEach(id => this._stopUpload(id)); clearInterval(this._badgeTimer); document.removeEventListener('click', this._copyClick); document.removeEventListener('keydown', this._copyKey); if (this._spy) this._spy.disconnect(); }
+  componentWillUnmount() { window.removeEventListener('keydown', this._esc); clearInterval(this._numRAF); if (this._numIO) this._numIO.disconnect(); Object.keys(this._upTimers).forEach(id => this._stopUpload(id)); clearInterval(this._badgeTimer); document.removeEventListener('click', this._copyClick); document.removeEventListener('keydown', this._copyKey); if (this._spy) this._spy.disconnect(); }
   _scls(s){ return s === 'loading' ? 'load' : s === 'success' ? 'ok' : s === 'error' ? 'err' : 'info'; }
   _add(input){ const id = ++this._tid; this.setState(s => ({ toasts: [...s.toasts, { id, ...input }].slice(-5) })); const dur = input.duration === undefined ? 3600 : input.duration; if (dur > 0) this._tos[id] = setTimeout(() => this.dismiss(id), dur); return id; }
   dismiss(id){ clearTimeout(this._tos[id]); delete this._tos[id]; this.setState(s => ({ toasts: s.toasts.filter(t => t.id !== id) })); }
@@ -459,7 +454,7 @@ class App extends React.Component {
     return (
 
 <div className={rootClass} dir="rtl" lang="ar">
-<TopBar themeLabel={themeLabel} toggleCmd={toggleCmd} toggleTheme={toggleTheme} />
+<AppHeader active="core" dark={this.state.theme === 'dark'} themeLabel={themeLabel} toggleTheme={toggleTheme} onOpenCmd={toggleCmd} />
 <SideRail navItems={navItems} />
 <div className="page">
 

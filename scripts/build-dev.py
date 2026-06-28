@@ -60,7 +60,6 @@ html = '''<!doctype html>
 <link rel="stylesheet" href="styles/theme-builder.css" />
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
-<script src="vendor/lucide.min.js"></script>
 <script src="vendor/babel.min.js"></script>
 </head>
 <body>

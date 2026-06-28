@@ -5,6 +5,7 @@ import CodeBlock from '../../docs/CodeBlock.jsx';
 import ColorScale from '../../docs/ColorScale.jsx';
 import ColorSwatch from '../../docs/ColorSwatch.jsx';
 import SectionHeader from '../../docs/SectionHeader.jsx';
+import Icon from '../../components/atoms/Icon.jsx';
 
 export default function Colors({ v }) {
   const { copyExport, exportCssCls, exportJsonCls, exportText, exportTwCls, setExpCss, setExpJson, setExpTw } = v;
@@ -27,7 +28,7 @@ export default function Colors({ v }) {
 <p className="subhead" style={css('margin-top:30px')}>palette تصنيفية — للرسوم والبيانات</p>
 <div className="grid cols4"><div className="swatch" data-copy="#00A6EF"><div className="swatch-chip" style={css('background:#00a6ef;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-1</div></div></div><div className="swatch" data-copy="#16BD74"><div className="swatch-chip" style={css('background:#16bd74;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-2</div></div></div><div className="swatch" data-copy="#F5A623"><div className="swatch-chip" style={css('background:#f5a623;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-3</div></div></div><div className="swatch" data-copy="#FB3D18"><div className="swatch-chip" style={css('background:#fb3d18;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-4</div></div></div><div className="swatch" data-copy="#8B5CF6"><div className="swatch-chip" style={css('background:#8b5cf6;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-5</div></div></div><div className="swatch" data-copy="#EC4899"><div className="swatch-chip" style={css('background:#ec4899;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-6</div></div></div><div className="swatch" data-copy="#0EA5A4"><div className="swatch-chip" style={css('background:#0ea5a4;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-7</div></div></div><div className="swatch" data-copy="#6366F1"><div className="swatch-chip" style={css('background:#6366f1;height:64px')}></div><div className="swatch-meta"><div className="swatch-hex">--chart-8</div></div></div></div>
 <p className="subhead" style={css('margin-top:30px')}>تصدير الرموز</p>
-<div className="exportbar"><div className="expfmts"><button className={exportTwCls} onClick={setExpTw}>Tailwind</button><button className={exportCssCls} onClick={setExpCss}>CSS</button><button className={exportJsonCls} onClick={setExpJson}>JSON</button></div><Button variant="primary sm" onClick={copyExport}><i data-lucide="copy"></i>نسخ</Button></div>
+<div className="exportbar"><div className="expfmts"><button className={exportTwCls} onClick={setExpTw}>Tailwind</button><button className={exportCssCls} onClick={setExpCss}>CSS</button><button className={exportJsonCls} onClick={setExpJson}>JSON</button></div><Button variant="primary sm" onClick={copyExport}><Icon name="copy" />نسخ</Button></div>
 <CodeBlock>{exportText}</CodeBlock>
 </section>
   );

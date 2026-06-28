@@ -52,7 +52,7 @@ export default function Combobox({
 
   return (
     <div className="fk-anchor" ref={rootRef}>
-      <div className="search">
+      <div className="search combo">
         <Icon name="search" size={16} />
         <input
           id={id}

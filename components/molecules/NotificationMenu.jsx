@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * NotificationMenu — زرّ جرس بعدّاد غير مقروء + قائمة إشعارات منسدلة.
@@ -8,7 +9,7 @@ export default function NotificationMenu({ open = false, unread = 0, items = [],
   return (
     <div className={'dashnotif' + (open ? ' open' : '')}>
       <button className="dashicobtn" aria-label="الإشعارات" onClick={onToggle}>
-        <i data-lucide="bell"></i>
+        <Icon name="bell" />
         {unread ? (<span className="dashbell-badge">{unread}</span>) : null}
       </button>
       <div className="dashnotif-pop">

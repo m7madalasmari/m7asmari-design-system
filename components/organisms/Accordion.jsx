@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '../atoms/Icon.jsx';
 
 /**
  * Accordion — قائمة قابلة للطيّ، عنصر واحد مفتوح في كل مرة.
@@ -42,9 +43,9 @@ export default function Accordion({ items = [], defaultOpen = null, allowToggle 
               onClick={() => setOpen((o) => (o === it.id ? (allowToggle ? null : o) : it.id))}
               onKeyDown={(e) => onKeyDown(e, i)}
             >
-              <span className="acc-ico2"><i data-lucide={it.icon}></i></span>
+              <span className="acc-ico2"><Icon name={it.icon} /></span>
               <span className="acc-title2">{it.title}</span>
-              <span className="acc-chev"><i data-lucide="chevron-down"></i></span>
+              <span className="acc-chev"><Icon name="chevron-down" /></span>
             </button>
             <div
               className="acc-wrap"
