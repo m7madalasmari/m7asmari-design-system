@@ -24,7 +24,7 @@ export default function Breadcrumb({ items = [], variant = 'default', leadingIco
         return (
           <React.Fragment key={i}>
             {dash
-              ? <svg viewBox="0 0 24 24" style={{ width: '13px', height: '13px' }}><path d="M9 6l6 6-6 6"></path></svg>
+              ? <Icon name="chevron-left" size={13} />
               : (i > 0 ? <span className="crumbsep">/</span> : null)}
             {href && !here
               ? <a href={href} style={{ color: 'inherit', textDecoration: 'none' }}>{label}</a>

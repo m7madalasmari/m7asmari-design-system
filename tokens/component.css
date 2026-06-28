@@ -95,4 +95,7 @@
   --alert-ok-text:#8fd9b3; --alert-warn-text:#ecca82; --alert-err-text:#f5a892; --alert-info-text:#93cdf0;
   /* حدود التنبيهات: نغمة داكنة ملائمة بدل اللون الفاتح الثابت */
   --alert-ok-border:#1d4d33; --alert-warn-border:#4d3a12; --alert-err-border:#5c2418; --alert-info-border:#1d4a6b;
+  /* حدود البانر + افعل/لا تفعل: نفس منطق الدارك (لا تتجمّد على الفاتح فوق خلفيات داكنة) */
+  --banner-brand-border:#1d4a6b; --banner-ok-border:#1d4d33; --banner-warn-border:#4d3a12;
+  --guide-do-border:#1d4d33; --guide-dont-border:#5c2418;
 }

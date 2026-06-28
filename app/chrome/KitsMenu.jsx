@@ -19,9 +19,9 @@ export default function KitsMenu({ active }) {
     <Popover
       ariaLabel="المجموعات"
       trigger={
-        <span style={css('display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:' + (on ? 'var(--text-primary)' : 'inherit'))} aria-current={on ? 'true' : undefined}>
+        <button type="button" style={css('display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:none;border:none;font:inherit;padding:0;color:' + (on ? 'var(--text-primary)' : 'inherit'))}>
           المجموعات<Icon name="chevron-down" size={15} />
-        </span>
+        </button>
       }
     >
       {({ close }) => (
