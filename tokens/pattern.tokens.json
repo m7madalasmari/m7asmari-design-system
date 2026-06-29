@@ -1,0 +1,189 @@
+{
+  "$description": "M7asmari Pattern & Layout Tokens (Layer 4/4) — DTCG / W3C Design Tokens source of truth. Regenerates tokens/pattern.css byte-identically via scripts/build-tokens.py. Page/pattern-level semantic spacing and layout tokens built on the spacing scale (:root only), including a documentary multi-line page-patterns comment preserved verbatim. $value holds the exact CSS value; $extensions.com.m7asmari.css captures declaration order, exact declaration text and interleaved comments for byte-reproducibility. Values copied verbatim from the previous CSS (zero visual change).",
+  "$extensions": {
+    "com.m7asmari.css": {
+      "format": "blocks",
+      "header": [
+        "/* ============================================================================",
+        "   M7asmari — Pattern & Layout Tokens (Layer 4 / 4)",
+        "   ----------------------------------------------------------------------------",
+        "   مسافات دلالية وتوكنز تخطيط على مستوى الصفحة/النمط، مبنية من سلّم المسافات.",
+        "   تستهلكها قوالب الصفحات (App / RequestsPage / DashboardShell) وقواعد التخطيط.",
+        "   ============================================================================ */"
+      ],
+      "blockOrder": [
+        "block-0"
+      ]
+    }
+  },
+  "block-0": {
+    "$extensions": {
+      "com.m7asmari.css": {
+        "selector": ":root",
+        "lines": [
+          {
+            "raw": "  /* ===== مسافات دلالية (Semantic spacing) ===== */"
+          },
+          {
+            "decls": [
+              "space-page"
+            ],
+            "trailing": "  /* هامش جانبي للصفحة — 40px */"
+          },
+          {
+            "decls": [
+              "space-section"
+            ],
+            "trailing": "  /* فاصل رأسي بين الأقسام الكبرى — 96px */"
+          },
+          {
+            "decls": [
+              "space-card"
+            ],
+            "trailing": "   /* حشوة داخلية للبطاقة/اللوحة — 28px */"
+          },
+          {
+            "decls": [
+              "space-stack"
+            ],
+            "trailing": "   /* تكديس رأسي افتراضي — 16px */"
+          },
+          {
+            "decls": [
+              "space-field"
+            ],
+            "trailing": "   /* فاصل بين حقول النموذج — 12px */"
+          },
+          {
+            "decls": [
+              "space-inline"
+            ],
+            "trailing": "   /* فاصل أفقي صغير — 8px */"
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== تخطيط الصفحة (Page layout) ===== */"
+          },
+          {
+            "decls": [
+              "page-max"
+            ],
+            "trailing": "             /* أقصى عرض للمحتوى */"
+          },
+          {
+            "decls": [
+              "page-gutter"
+            ],
+            "trailing": "  /* الهامش الجانبي */"
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ============================================================================"
+          },
+          {
+            "raw": "     تصنيف أنماط الصفحات (Page Patterns) — مرجعي. لا قوالب جديدة في هذه المرحلة."
+          },
+          {
+            "raw": "     ----------------------------------------------------------------------------"
+          },
+          {
+            "raw": "       Showcase      → app/App.jsx                 (عرض النظام: chrome + أقسام)"
+          },
+          {
+            "raw": "       Landing+Form  → app/RequestsPage.jsx        (هيرو + مزايا + نموذج/قائمة)"
+          },
+          {
+            "raw": "       Tool+Preview  → app/ThemeBuilderPage.jsx    (ضبط + معاينة حيّة)"
+          },
+          {
+            "raw": "       Dashboard     → patterns/DashboardShell.jsx (شريط جانبي + إحصاءات + قائمة)"
+          },
+          {
+            "raw": "       Feature       → patterns/FeatureSection.jsx (شبكة مزايا)"
+          },
+          {
+            "raw": "       Empty         → components/.../EmptyState   (حالة فارغة قابلة للتركيب)"
+          },
+          {
+            "raw": "     أنماط مستقبلية (Admin List / Registration / Details / Settings) تُركّب من"
+          },
+          {
+            "raw": "     نفس الذرّات/الجزيئات القائمة عند الحاجة — تُوثّق في docs/TOKENS.md."
+          },
+          {
+            "raw": "     ============================================================================ */"
+          }
+        ]
+      }
+    },
+    "space-page": {
+      "$value": "var(--space-10)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--space-page:    var(--space-10);"
+        }
+      }
+    },
+    "space-section": {
+      "$value": "var(--space-24)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--space-section: var(--space-24);"
+        }
+      }
+    },
+    "space-card": {
+      "$value": "var(--space-7)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--space-card:    var(--space-7);"
+        }
+      }
+    },
+    "space-stack": {
+      "$value": "var(--space-4)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--space-stack:   var(--space-4);"
+        }
+      }
+    },
+    "space-field": {
+      "$value": "var(--space-3)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--space-field:   var(--space-3);"
+        }
+      }
+    },
+    "space-inline": {
+      "$value": "var(--space-2)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--space-inline:  var(--space-2);"
+        }
+      }
+    },
+    "page-max": {
+      "$type": "dimension",
+      "$value": "1120px",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--page-max:    1120px;"
+        }
+      }
+    },
+    "page-gutter": {
+      "$value": "var(--space-page)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--page-gutter: var(--space-page);"
+        }
+      }
+    }
+  }
+}
