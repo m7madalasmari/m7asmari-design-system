@@ -14,7 +14,7 @@ export default function SearchSliderSection() {
 <div><p className="subhead">حقل بحث</p><SearchField variant="pill" placeholder="ابحث عن أصل أو عنوان…" aria-label="بحث عن أصل أو عنوان" /></div>
 <ShowcasePanel><p className="subhead">منزلق — اسحب المقبض</p><div className="fx ac jb"><span className="t-sm">الرسوم</span><span className="tnum">{fee + '%'}</span></div>
 <Slider value={fee} onChange={setFee} ariaLabel="الرسوم" />
-<div className="fx ac jb" style={css('margin-top:14px')}><span className="t-sm">الانزلاق</span><span className="tnum">30%</span></div><div className="slider"><span className="fill" style={css('width:30%')}></span><span className="knob" style={css('right:30%')}></span></div></ShowcasePanel>
+<div className="fx ac jb" style={css('margin-top:14px')}><span className="t-sm">الانزلاق</span><span className="tnum">30%</span></div><div className="slider"><span className="fill" style={css('width:30%')}></span><span className="knob" style={css('inset-inline-end:30%')}></span></div></ShowcasePanel>
 </div>
 </section>
   );
