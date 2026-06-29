@@ -4,7 +4,8 @@
 يمنع انحدار البنية بعد مرحلة التنظيف المعماري:
   HARD FAIL → توكنز قديمة (legacy) · primitives مباشرة داخل المكوّنات · ألوان hex خام في الأنماط
               · استيرادات نسبية مكسورة · أسماء توكنز غير دلالية
-  WARN      → مسافات خارج السلّم · مدد حركة خارج التوكنز · خصائص RTL فيزيائية (backlog)
+  WARN      → مسافات خارج السلّم · مدد حركة خارج التوكنز · خصائص RTL فيزيائية في CSS
+              · خصائص RTL فيزيائية inline داخل JSX (style/css) · letter-spacing سالب (غير آمن على العربي)
 
 يُرجع رمز خروج 1 عند أي HARD FAIL. لا يتطلّب Node."""
 import os, re, sys, glob
@@ -131,7 +132,42 @@ if offd:
 PHYS = re.compile(r'(?<![\w-])(left|right|margin-left|margin-right|padding-left|padding-right|text-align)\s*:')
 nphys = sum(len(PHYS.findall(open(p, encoding='utf-8').read())) for p in STYLES)
 if nphys:
-    warns.append(('خصائص اتجاه فيزيائية (RTL backlog)', [f'{nphys} موضعًا (left/right/margin-*/padding-*/text-align)']))
+    warns.append(('خصائص اتجاه فيزيائية في CSS (RTL backlog)', [f'{nphys} موضعًا (left/right/margin-*/padding-*/text-align)']))
+
+# ---- WARN: خصائص اتجاه فيزيائية inline داخل JSX (style={{}} / css('...')) ----
+# فجوة ظهرت من اختبار m7-ui-foundation: الخصائص الفيزيائية المحقونة في style={} لا يلتقطها فحص styles/ أعلاه.
+CODE_JSX  = [p for p in CODE if p.endswith(('.jsx', '.tsx', '.js'))]
+CSS_CALL  = re.compile(r"""css\(\s*(['"])(.*?)\1""")
+STYLE_OBJ = re.compile(r"style=\{\{(.*?)\}\}")
+PHYS_PROP = re.compile(r'\b(padding-left|padding-right|margin-left|margin-right|border-left|border-right|paddingLeft|paddingRight|marginLeft|marginRight|borderLeft|borderRight)\s*:')
+PHYS_LR   = re.compile(r'\b(left|right)\s*:')
+PHYS_TALN = re.compile(r'\b(text-align|textAlign)\s*:\s*["\']?\s*(left|right)\b')
+inline_hits = []
+for p in CODE_JSX:
+    for i, ln in enumerate(open(p, encoding='utf-8'), 1):
+        segs = [m.group(2) for m in CSS_CALL.finditer(ln)] + [m.group(1) for m in STYLE_OBJ.finditer(ln)]
+        props = set()
+        for seg in segs:
+            props.update(m.group(1) for m in PHYS_PROP.finditer(seg))
+            props.update(m.group(1) for m in PHYS_LR.finditer(seg))
+            props.update(m.group(1) for m in PHYS_TALN.finditer(seg))
+        for pr in sorted(props):
+            inline_hits.append(f'{p}:{i}  {pr}')
+if inline_hits:
+    warns.append(('خصائص اتجاه فيزيائية inline في JSX (style/css — RTL backlog)',
+                  inline_hits[:14] + ([f'… (+{len(inline_hits)-14})'] if len(inline_hits) > 14 else [])))
+
+# ---- WARN: letter-spacing سالب — غير آمن على النص العربي (سكربت متّصل؛ يفكّك الحروف) ----
+NEGLS = re.compile(r'letter-spacing\s*:\s*-')
+ls_hits = [f'{p}:{i}' for p in STYLES + CODE_JSX
+           for i, ln in enumerate(open(p, encoding='utf-8'), 1) if NEGLS.search(ln)]
+if ls_hits:
+    warns.append(('letter-spacing سالب — راجِع سياق العربي/RTL',
+                  ls_hits[:14] + ([f'… (+{len(ls_hits)-14})'] if len(ls_hits) > 14 else [])))
+
+# ---- GAP (مفتوح، غير مُنفَّذ): غياب text-behavior (line-clamp) لعناوين متغيّرة النص داخل cards/tables ----
+# قاعدة m7-ui-foundation: عنوان الكرت = clamp سطرين. كشفه ثابتًا يحتاج معرفة كلاسات العناوين متغيّرة
+# النص؛ يُترك كفحص مستقبلي (heuristic) — موثّق هنا حتى لا يُنسى.
 
 # ===================== التقرير =====================
 print('\n' + '=' * 64)
