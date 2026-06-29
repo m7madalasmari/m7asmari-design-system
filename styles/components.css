@@ -730,6 +730,7 @@
 .cmdk{width:min(560px,92vw);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden}
 .cmdk-search{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);color:var(--text-muted)}
 .cmdk-search input{flex:1;border:none;outline:none;background:transparent;font-family:inherit;font-size:15px;color:var(--text-primary)}
+.ds .cmdk-search input:focus-visible{box-shadow:none} /* الحقل داخل لوحة مركّزة أصلًا — لا حلقة علامة ثقيلة (متّسق مع .search/.cmdfield) */
 .cmdk-kbd{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);background:var(--surface-muted);border-radius:var(--radius-sm);padding:2px 7px}
 .cmdk-list{max-height:320px;overflow-y:auto;padding:6px}
 .cmdk-item{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:none;background:none;border-radius:var(--radius-sm);cursor:pointer;color:var(--text-primary);font-family:inherit;font-size:14px}

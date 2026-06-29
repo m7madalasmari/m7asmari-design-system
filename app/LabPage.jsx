@@ -153,7 +153,7 @@ export default function LabPage() {
         </section>
 
         {/* Statistics — تنوّع في عرض الإحصاء */}
-        <section className="section" data-screen-label="Statistics">
+        <section className="section" id="lab-stats" data-screen-label="Statistics">
           <SectionHeader kicker="تنوّع الإحصاء" title="أفكار متعدّدة لعرض البيانات" desc="من المؤشّر البسيط إلى المقارنة والاتجاه والتركيب — كل فكرة تجيب سؤالًا مختلفًا عن البيانات." />
           <div className="grid cols4">
             {KPIS.map((k, i) => <StatTile key={i} icon={k.icon} value={k.value} label={k.label} delta={k.delta} trend={k.trend} color={k.color} />)}
@@ -187,7 +187,7 @@ export default function LabPage() {
         </section>
 
         {/* Deeper analytics */}
-        <section className="section" data-screen-label="Deeper analytics">
+        <section className="section" id="lab-deeper" data-screen-label="Deeper analytics">
           <SectionHeader kicker="تحليلات أعمق" title="مقارنة، هدف، ومسار التغيّر" desc="أفكار تحليلية تتجاوز المؤشّر الواحد: مقارنة سلاسل، أداء مقابل هدف، وتفكيك أسباب التغيّر." />
           <div className="grid cols2" style={css('align-items:start')}>
             <Demo title="خطّ متعدّد السلاسل (مقارنة فترتين)"><MultiLineChart series={MULTI} ariaLabel="مقارنة الإيراد بين عامين" /></Demo>
@@ -206,7 +206,7 @@ export default function LabPage() {
         </section>
 
         {/* Family 1 — viz */}
-        <section className="section" data-screen-label="Novel viz">
+        <section className="section" id="lab-viz" data-screen-label="Novel viz">
           <SectionHeader kicker="تصوّر بياني مبتكر" title="رسوم تتجاوز الخط والأعمدة" />
           <div className="grid cols2" style={css('align-items:start')}>
             <Demo title="قمع تحويل"><Funnel stages={FUNNEL} /></Demo>
@@ -220,7 +220,7 @@ export default function LabPage() {
         </section>
 
         {/* Family 2 — media */}
-        <section className="section" data-screen-label="Media">
+        <section className="section" id="lab-media" data-screen-label="Media">
           <SectionHeader kicker="وسائط ومحتوى" title="عائلة كانت غائبة تمامًا" />
           <div className="grid cols2" style={css('align-items:start')}>
             <Demo title="مقارنة قبل/بعد (اسحب المقبض)">
@@ -244,7 +244,7 @@ export default function LabPage() {
         </section>
 
         {/* Family 3 — social */}
-        <section className="section" data-screen-label="Social">
+        <section className="section" id="lab-social" data-screen-label="Social">
           <SectionHeader kicker="تواصل واجتماعي" title="مكوّنات الكيانات والمحادثة" />
           <div className="grid cols3" style={css('align-items:start')}>
             <Demo title="مجموعة أفاتارات">
@@ -263,7 +263,7 @@ export default function LabPage() {
         </section>
 
         {/* Family 4 — overlay/micro */}
-        <section className="section" data-screen-label="Overlay & micro">
+        <section className="section" id="lab-overlay" data-screen-label="Overlay & micro">
           <SectionHeader kicker="تراكب وتفاعل ولمسات" title="تفاعلات حديثة" />
           <div className="grid cols2" style={css('align-items:start')}>
             <Demo title="لوحة الأوامر (⌘K)">

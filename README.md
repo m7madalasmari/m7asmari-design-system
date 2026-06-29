@@ -22,10 +22,11 @@ app/        App.jsx (حالة الأقسام غير المُستخرَجة + ren
             lib/  css.js · a11y.js · sort.js · calendar.js · useTheme.js (سمة مشتركة) · navCommands.js (⌘K)
             chrome/ AppHeader (هيدر موحّد عبر كل الصفحات) · KitsMenu · DocsMenu · SideRail · Hero
 docs/       7 مكوّنات توثيق (SectionHeader, TokenTable, ColorSwatch, ColorScale, TypeSpecimen, ShowcasePanel, CodeBlock)
-components/ atoms/(8) Button Badge Avatar Card Alert StatCard Banner EmptyState
-            molecules/(11) ActivityItem FileRow FolderItem NavItem UserMenu SearchField Breadcrumb NotificationMenu CollapsibleSection StatTile Pagination
-            organisms/(7) Modal Drawer Tabs Accordion OtpInput Slider TagsInput
-sections/   foundations(9) · components(28) · reference(4)
+components/ atoms/(17) Button Badge Avatar Card Alert Banner StatCard EmptyState Input Textarea Checkbox Switch Radio PasswordInput FieldMessage Skeleton Icon
+            molecules/(34) Field NavItem Breadcrumb SearchField StatTile GoalCard RingStat Timeline RankList ProfileHeader PageHeader Toolbar FilterBar Rating … (حقول/إحصاء/تنقّل/كيانات)
+            organisms/(17) Modal Drawer Tabs Accordion Select Combobox DatePicker DataTable Kanban TreeView Carousel CompareSlider CommandPalette Popover OtpInput Slider TagsInput
+            charts/(12) Sparkline LineChart MultiLineChart BarChart StackedBarChart DonutChart WaterfallChart BulletChart Heatmap Gauge Funnel Legend
+sections/   foundations(9) · components(28) · reference(3)
 patterns/   FeatureSection · DashboardShell
 scripts/    أدوات بايثون (بلا Node): build-dev.py · build-requests-dev.py · audit.py · contrast.py · token_map.py
 test/       اختبارات Vitest (setup.js + *.test.{js,jsx})

@@ -10,7 +10,9 @@ export default function CommandPalette({ open, onClose, commands = [], placehold
   const [q, setQ] = React.useState('');
   const [active, setActive] = React.useState(0);
   const inputRef = React.useRef(null);
+  const lid = React.useId();
   const list = commands.filter((c) => !q || c.label.includes(q.trim()));
+  const optId = (i) => lid + '-opt-' + i;
 
   React.useEffect(() => {
     if (open) { setQ(''); setActive(0); const t = setTimeout(() => inputRef.current && inputRef.current.focus(), 30); return () => clearTimeout(t); }
@@ -28,19 +30,38 @@ export default function CommandPalette({ open, onClose, commands = [], placehold
     return () => document.removeEventListener('keydown', onKey);
   }, [open, list, active, onClose]);
 
+  // أبقِ العنصر النشط ظاهرًا عند التنقّل بالأسهم
+  React.useEffect(() => {
+    if (!open) return;
+    const el = document.getElementById(optId(active));
+    if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+  }, [open, active]);
+
   if (!open) return null;
   return (
     <div className="cmdk-scrim" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose && onClose(); }}>
       <div className="cmdk" role="dialog" aria-modal="true" aria-label={ariaLabel}>
         <div className="cmdk-search">
           <Icon name="search" size={18} />
-          <input ref={inputRef} value={q} onChange={(e) => { setQ(e.target.value); setActive(0); }} placeholder={placeholder} aria-label={placeholder} />
+          <input
+            ref={inputRef}
+            value={q}
+            onChange={(e) => { setQ(e.target.value); setActive(0); }}
+            placeholder={placeholder}
+            aria-label={placeholder}
+            role="combobox"
+            aria-expanded="true"
+            aria-controls={lid}
+            aria-autocomplete="list"
+            aria-activedescendant={list.length ? optId(active) : undefined}
+          />
           <span className="cmdk-kbd">ESC</span>
         </div>
-        <div className="cmdk-list" role="listbox" aria-label={ariaLabel}>
+        <div id={lid} className="cmdk-list" role="listbox" aria-label={ariaLabel}>
           {list.length ? list.map((c, i) => (
             <button
               key={c.id || i}
+              id={optId(i)}
               type="button"
               className={'cmdk-item' + (i === active ? ' active' : '')}
               role="option"

@@ -12,7 +12,7 @@ describe('AppHeader — الهيدر الموحّد', () => {
         breadcrumb={[{ label: 'الرئيسية', href: '/' }, 'النواة']} />
     );
     expect(screen.getByText('M7asmari')).toBeTruthy();
-    ['النواة', 'المجموعات', 'الكتالوج', 'المختبر', 'التوثيق'].forEach((t) => {
+    ['النواة', 'المجموعات', 'الكتالوج', 'المختبر'].forEach((t) => {
       expect(screen.getAllByText(t).length).toBeGreaterThan(0);
     });
     // الفتات يربط الرئيسية كرابط

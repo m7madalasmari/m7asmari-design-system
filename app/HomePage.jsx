@@ -12,8 +12,6 @@ import { navCommands } from './lib/navCommands.js';
  * طبقة تنقّل فقط فوق توكنز/أصناف النظام (panel/badge/topbar) — لا هوية أو CSS جديد.
  * إضافة Kit جديد لاحقًا = بطاقة جديدة في LAYERS فقط.
  */
-const GH = 'https://github.com/m7madalasmari/m7asmari-design-system/blob/main/';
-
 const LAYERS = [
   { title: 'النواة', tag: 'Core', icon: 'layers', href: '/core.html',
     desc: 'الأسس والمكوّنات والأنماط والمرجع — نظام التصميم الكامل.' },
@@ -25,8 +23,6 @@ const LAYERS = [
     desc: 'لوحات تحكّم RTL من كتالوج widgets محايد للمجال.' },
   { title: 'المختبر', tag: 'Lab', icon: 'sparkles', href: '/lab.html',
     desc: 'تجارب وعائلات widgets حديثة قبل ترقيتها إلى النواة.' },
-  { title: 'التوثيق', tag: 'Docs', icon: 'file-text', href: GH + 'ARCHITECTURE.md', external: true,
-    desc: 'المعمارية والتوكنز وتقارير الـKits وسجلّ التغييرات.' },
 ];
 
 export default function HomePage() {
@@ -79,7 +75,7 @@ export default function HomePage() {
                 <p className="subhead" style={css('margin:0;font-size:18px')}>{l.title}</p>
                 <p className="t-sm" style={css('margin:0;color:var(--text-secondary)')}>{l.desc}</p>
                 <span className="t-sm" style={css('margin-top:auto;color:var(--brand);font-weight:700')}>
-                  {l.external ? 'فتح ↗' : 'دخول ←'}
+                  {l.external ? 'فتح' : 'دخول'} <span aria-hidden="true">{l.external ? '↗' : '←'}</span>
                 </span>
               </a>
             ))}

@@ -3,7 +3,6 @@ import { css } from '../lib/css.js';
 import Icon from '../../components/atoms/Icon.jsx';
 import Breadcrumb from '../../components/molecules/Breadcrumb.jsx';
 import KitsMenu from './KitsMenu.jsx';
-import DocsMenu from './DocsMenu.jsx';
 
 /**
  * AppHeader — هيدر M7 الموحّد عبر كل صفحات MPA (النواة/المجموعات/المختبر).
@@ -32,7 +31,6 @@ export default function AppHeader({ active, dark, themeLabel, toggleTheme, onOpe
             <KitsMenu active={active} />
             <a href="/catalog.html" style={link(active === 'catalog')} aria-current={active === 'catalog' ? 'page' : undefined}>الكتالوج</a>
             <a href="/lab.html" style={link(active === 'lab')} aria-current={active === 'lab' ? 'page' : undefined}>المختبر</a>
-            <DocsMenu />
             <button className="themetoggle" onClick={toggleTheme} aria-label={dark ? 'الوضع الفاتح' : 'الوضع الداكن'}>
               <Icon name={dark ? 'sun' : 'moon'} /><span className="tb-lbl">{themeLabel}</span>
             </button>
