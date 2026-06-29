@@ -81,7 +81,7 @@ export default function CatalogPage() {
                     </div>
                     <p className="subhead" style={css('margin:0')}>{w.label}</p>
                     <p className="t-sm" style={css('margin:0;color:var(--text-secondary)')}>{w.desc}</p>
-                    <span className="t-sm" style={css('margin-top:auto;color:var(--brand);font-weight:700')}>عرض حيّ ↗</span>
+                    <span className="t-sm" style={css('margin-top:auto;color:var(--brand);font-weight:700')}>عرض حيّ <span aria-hidden="true">↗</span></span>
                   </a>
                 ))}
               </div>
