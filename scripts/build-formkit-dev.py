@@ -36,15 +36,15 @@ def rel(p):
     return os.path.relpath(p, ROOT)
 
 
-libs = ['app/lib/css.js', 'app/lib/a11y.js', 'app/lib/sort.js', 'app/lib/calendar.js',
-        'app/lib/validation.js', 'app/lib/countries.js', 'app/lib/themeTokens.js']
+libs = ['app/lib/css.js'] + sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'app', 'lib', '*.js')) if os.path.basename(p) != 'css.js')
 docs = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'docs', '*.jsx')))
 comps = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'components', '**', '*.jsx'), recursive=True))
+chrome = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'app', 'chrome', '*.jsx')))
 kit_lib = ['kits/form/useForm.js', 'kits/form/FormCard.jsx']
 recipes = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'kits', 'form', 'recipes', '*.jsx')))
 registry = ['kits/form/index.js']
 page = ['app/FormKitPage.jsx']
-order = libs + docs + comps + kit_lib + recipes + registry + page
+order = libs + docs + comps + chrome + kit_lib + recipes + registry + page
 
 parts = [strip(open(os.path.join(ROOT, p), encoding='utf-8').read()) for p in order]
 mount = ('\n\nconst { createRoot } = ReactDOM;\n'
