@@ -36,16 +36,16 @@ def rel(p):
     return os.path.relpath(p, ROOT)
 
 
-libs = ['app/lib/css.js', 'app/lib/a11y.js', 'app/lib/sort.js', 'app/lib/calendar.js',
-        'app/lib/validation.js', 'app/lib/countries.js', 'app/lib/themeTokens.js']
+libs = ['app/lib/css.js'] + sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'app', 'lib', '*.js')) if os.path.basename(p) != 'css.js')
 docs = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'docs', '*.jsx')))
 comps = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'components', '**', '*.jsx'), recursive=True))
+chrome = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'app', 'chrome', '*.jsx')))
 patterns = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'patterns', '*.jsx')))
 kit_data = ['kits/dashboard/data.js', 'kits/dashboard/DashboardCard.jsx']
 recipes = sorted(rel(p) for p in glob.glob(os.path.join(ROOT, 'kits', 'dashboard', 'recipes', '*.jsx')))
 registry = ['kits/dashboard/index.js']
 page = ['app/DashboardKitPage.jsx']
-order = libs + docs + comps + patterns + kit_data + recipes + registry + page
+order = libs + docs + comps + chrome + patterns + kit_data + recipes + registry + page
 
 parts = [strip(open(os.path.join(ROOT, p), encoding='utf-8').read()) for p in order]
 mount = ('\n\nconst { createRoot } = ReactDOM;\n'

@@ -3,6 +3,26 @@
 مجموعة Claude Code Skills لمراجعة وتطوير **M7 Design System** و **M7 Kits**.
 كل Skill يعمل **مدقّقًا/مراجعًا خبيرًا**: يبدأ بتقرير، ولا يعدّل الكود إلا إذا طُلب صراحةً.
 
+## قبل المراجعة: مهارة التصميم `m7-ui-foundation`
+
+كل الـ Skills في هذا المجلد **مراجِعة بعد البناء** (review-after). يقابلها مهارة
+**`m7-ui-foundation`** وهي **التصميم قبل البناء** (design-before): تفرض ترتيب أساس ثابت
+(tokens → layout → spacing → sizing → typography → text behavior → responsive → anatomy →
+states → implementation) قبل كتابة أي HTML/CSS/JSX، مع RTL عربي أولًا عبر الـ logical properties.
+
+الحلقة الكاملة:
+**صمّم بـ `m7-ui-foundation` ← ابنِ ← دقّق بـ `m7-auditor` / بوّابة الدمج `m7-qa`.**
+
+**التثبيت:** مصدر المهارة يُشحن مع هذا الريبو في `m7-ui-foundation.skill` (ملف ZIP في جذر
+المشروع). لتفعيلها، ثبّتها بنفسك في مجلد مهاراتك العام:
+
+```sh
+unzip -n m7-ui-foundation.skill -d ~/.claude/skills/
+```
+
+> ملاحظة: هذه المهارة **لا تُفعَّل تلقائيًا** لزملائك — كل شخص يثبّتها بنفسه من الـ ZIP.
+> وهي ليست جزءًا من مجلد `skills/` أدناه؛ تعيش في `~/.claude/skills/m7-ui-foundation/`.
+
 ## متى أستخدم كل Skill
 
 | Skill | استخدمها متى | النطاق |

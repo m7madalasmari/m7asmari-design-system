@@ -261,7 +261,7 @@ export default function ThemeBuilderSection() {
           <span className="tb-block-h">جدول</span>
           <div className="tablewrap">
             <table className="tbl">
-              <thead><tr><th>الأصل</th><th>الحالة</th><th style={css('text-align:left')}>القيمة</th></tr></thead>
+              <thead><tr><th>الأصل</th><th>الحالة</th><th style={css('text-align:end')}>القيمة</th></tr></thead>
               <tbody>
                 <tr><td><span className="cellname">إيثيريوم</span></td><td><Badge variant="green">مكتمل</Badge></td><td className="tnum">2.40</td></tr>
                 <tr><td><span className="cellname">USDC</span></td><td><Badge variant="gold">انتظار</Badge></td><td className="tnum">820.00</td></tr>

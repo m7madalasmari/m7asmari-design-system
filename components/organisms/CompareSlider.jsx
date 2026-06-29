@@ -9,6 +9,11 @@ import Icon from '../atoms/Icon.jsx';
 export default function CompareSlider({ before, after, beforeLabel, afterLabel, start = 50, ariaLabel = 'مقارنة قبل وبعد', className = '' }) {
   const [pos, setPos] = React.useState(start);
   const ref = React.useRef(null);
+  // ملاحظة (RTL): الإحداثيات هنا فيزيائية متعمَّدة وغير معكوسة.
+  // مقارنة «قبل/بعد» هي تحكّم مكاني بالصورة (مثل أدوات تشغيل الوسائط في قائمة
+  // do-not-mirror بالـskill) لا اتجاه قراءة — فلا تُحوَّل إلى منطقية/RTL.
+  // pos% فيزيائي من اليسار، (clientX - r.left) من حافة العنصر اليسرى، وclipPath
+  // يقصّ من اليمين الفيزيائي — متّسقة جميعًا مع نظام إحداثيات فيزيائي واحد.
   const move = (clientX) => {
     const el = ref.current;
     if (!el) return;

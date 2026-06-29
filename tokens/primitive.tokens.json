@@ -1,0 +1,264 @@
+{
+  "$description": "M7asmari Primitive Tokens (Layer 1/4) — DTCG / W3C Design Tokens source of truth. Regenerates tokens/primitive.css byte-identically via scripts/build-tokens.py. Primitive layer ONLY this pass: raw scales (color/radius/shadow/spacing/type/motion/z-index/breakpoints), never consumed directly in components — the semantic layer (semantic.css) is built on top of these. Values copied verbatim from the previous tokens.css (zero visual change).",
+  "$extensions": {
+    "com.m7asmari.css": {
+      "selector": ":root",
+      "header": [
+        "/* ============================================================================",
+        "   M7asmari — Primitive Tokens (Layer 1 / 4)",
+        "   ----------------------------------------------------------------------------",
+        "   مقاييس خام فقط: ألوان، حوافّ، ظلال، مسافات، طباعة، حركة، z-index.",
+        "   لا تُستهلك مباشرة داخل المكوّنات — تُبنى منها الطبقة الدلالية (semantic.css).",
+        "   الأسماء وظيفية (brand/success/warning/danger) لا شكلية (sky/emerald/amber/red).",
+        "   القيم منقولة حرفيًا من الإصدار السابق (tokens.css) — لا تغيير بصري.",
+        "   ============================================================================ */"
+      ],
+      "groupOrder": [
+        "color", "chart", "radius", "shadow", "spacing",
+        "fontFamily", "textSize", "leading", "weight", "motion", "zIndex", "breakpoint"
+      ]
+    }
+  },
+
+  "color": {
+    "$type": "color",
+    "$extensions": {
+      "com.m7asmari.css": {
+        "comments": ["/* ===== مقاييس الألوان (50 → 950) ===== */"],
+        "subgroupOrder": ["brand", "neutral", "success", "warning", "danger", "info"]
+      }
+    },
+    "brand": {
+      "$extensions": { "com.m7asmari.css": { "comment": "/* العلامة / Brand (كان sky) */", "prefix": "brand" } },
+      "50":  { "$value": "#ecf9ff" },
+      "100": { "$value": "#d3f0ff" },
+      "200": { "$value": "#b1e6ff" },
+      "300": { "$value": "#7dd6ff" },
+      "400": { "$value": "#38c0fb" },
+      "500": { "$value": "#00a6ef" },
+      "600": { "$value": "#0084c4" },
+      "700": { "$value": "#0a6a9e" },
+      "800": { "$value": "#115a82" },
+      "900": { "$value": "#15496c" },
+      "950": { "$value": "#0d2f47" }
+    },
+    "neutral": {
+      "$extensions": { "com.m7asmari.css": { "comment": "/* محايد دافئ / Neutral (0 = أبيض) */", "prefix": "neutral" } },
+      "0":   { "$value": "#ffffff" },
+      "50":  { "$value": "#fbfaf9" },
+      "100": { "$value": "#f3f1ed" },
+      "200": { "$value": "#eae7e1" },
+      "300": { "$value": "#dcd7ce" },
+      "400": { "$value": "#b8b2a8" },
+      "500": { "$value": "#8f8d86" },
+      "600": { "$value": "#6e6c66" },
+      "700": { "$value": "#54534e" },
+      "800": { "$value": "#3a3833" },
+      "900": { "$value": "#1b1b19" },
+      "950": { "$value": "#121210" }
+    },
+    "success": {
+      "$extensions": { "com.m7asmari.css": { "comment": "/* نجاح / Success (كان emerald) */", "prefix": "success" } },
+      "50":  { "$value": "#e6f9f0" },
+      "100": { "$value": "#c7f2dd" },
+      "200": { "$value": "#93e6bf" },
+      "300": { "$value": "#57d59c" },
+      "400": { "$value": "#28c885" },
+      "500": { "$value": "#16bd74" },
+      "600": { "$value": "#0e9a5d" },
+      "700": { "$value": "#0c7c4c" },
+      "800": { "$value": "#0c623d" },
+      "900": { "$value": "#0a4f33" },
+      "950": { "$value": "#042c1c" }
+    },
+    "warning": {
+      "$extensions": { "com.m7asmari.css": { "comment": "/* تحذير / Warning (كان amber) */", "prefix": "warning" } },
+      "50":  { "$value": "#fef7e7" },
+      "100": { "$value": "#fdedc4" },
+      "200": { "$value": "#fbdb8c" },
+      "300": { "$value": "#f9c652" },
+      "400": { "$value": "#f7b332" },
+      "500": { "$value": "#f5a623" },
+      "600": { "$value": "#c97f06" },
+      "700": { "$value": "#a3640a" },
+      "800": { "$value": "#854f0f" },
+      "900": { "$value": "#6f4210" },
+      "950": { "$value": "#3f2305" }
+    },
+    "danger": {
+      "$extensions": { "com.m7asmari.css": { "comment": "/* خطر / Danger (كان red) */", "prefix": "danger" } },
+      "50":  { "$value": "#ffeee9" },
+      "100": { "$value": "#ffd6cb" },
+      "200": { "$value": "#ffb3a1" },
+      "300": { "$value": "#ff8a6e" },
+      "400": { "$value": "#fd5e3a" },
+      "500": { "$value": "#fb3d18" },
+      "600": { "$value": "#d22d0d" },
+      "700": { "$value": "#ad2410" },
+      "800": { "$value": "#8e2113" },
+      "900": { "$value": "#761f14" },
+      "950": { "$value": "#400b05" }
+    },
+    "info": {
+      "$extensions": { "com.m7asmari.css": { "comment": "/* معلومة / Info (جديد — أزرق ثابت مستقلّ عن لون العلامة القابل للتخصيص) */", "prefix": "info" } },
+      "50":  { "$value": "#ecf6ff" },
+      "100": { "$value": "#d4ebff" },
+      "200": { "$value": "#b8e6fb" },
+      "300": { "$value": "#86cdf2" },
+      "400": { "$value": "#4ab3e8" },
+      "500": { "$value": "#1f95d6" },
+      "600": { "$value": "#0a6f9e" },
+      "700": { "$value": "#0a5a80" },
+      "800": { "$value": "#0d4a68" },
+      "900": { "$value": "#103d56" },
+      "950": { "$value": "#0a2436" }
+    }
+  },
+
+  "chart": {
+    "$type": "color",
+    "$extensions": {
+      "com.m7asmari.css": {
+        "comments": [
+          "/* ===== لوحة تصنيفية للرسوم/البيانات (كان cat) — تُستهلك مباشرة كقيم بيانات =====",
+          "   ثابتة عبر السمتين عمدًا (لا نسخة .dark): قيم مشبعة/زاهية تقرأ بتباين كافٍ على",
+          "   سطح الفاتح والداكن، وتحافظ على ثبات هوية تصوّر البيانات بين الوضعين (مؤكَّد بصريًا). */"
+        ],
+        "prefix": "chart"
+      }
+    },
+    "1": { "$value": "#00a6ef" },
+    "2": { "$value": "#16bd74" },
+    "3": { "$value": "#f5a623" },
+    "4": { "$value": "#fb3d18" },
+    "5": { "$value": "#8b5cf6" },
+    "6": { "$value": "#ec4899" },
+    "7": { "$value": "#0ea5a4" },
+    "8": { "$value": "#6366f1" }
+  },
+
+  "radius": {
+    "$type": "dimension",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* ===== الحوافّ (Radius) (كان --r-*) ===== */"], "prefix": "radius" } },
+    "xs":   { "$value": "7px" },
+    "sm":   { "$value": "10px" },
+    "md":   { "$value": "14px" },
+    "lg":   { "$value": "20px" },
+    "xl":   { "$value": "28px" },
+    "full": { "$value": "999px" }
+  },
+
+  "shadow": {
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* ===== الظلال المحايدة (Shadow) (كان --sh-*) — حلقة التركيز --focus-ring دلالية ===== */"], "prefix": "shadow", "oneTokenPerLine": true } },
+    "sm": { "$type": "shadow", "$value": "0 1px 2px rgba(27,27,25,.06),0 1px 1px rgba(27,27,25,.04)" },
+    "md": { "$type": "shadow", "$value": "0 6px 20px rgba(27,27,25,.07),0 2px 5px rgba(27,27,25,.05)" },
+    "lg": { "$type": "shadow", "$value": "0 18px 44px rgba(27,27,25,.11),0 4px 12px rgba(27,27,25,.06)" }
+  },
+
+  "spacing": {
+    "$type": "dimension",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* ===== سلّم المسافات (Spacing) — جديد. خطوة الأساس 4px (+ خطوة 12 الشائعة) ===== */"], "prefix": "space" } },
+    "0":  { "$value": "0" },
+    "1":  { "$value": "4px" },
+    "2":  { "$value": "8px" },
+    "3":  { "$value": "12px" },
+    "4":  { "$value": "16px" },
+    "5":  { "$value": "20px" },
+    "6":  { "$value": "24px" },
+    "7":  { "$value": "28px" },
+    "8":  { "$value": "32px" },
+    "9":  { "$value": "36px" },
+    "10": { "$value": "40px" },
+    "12": { "$value": "48px" },
+    "14": { "$value": "56px" },
+    "16": { "$value": "64px" },
+    "20": { "$value": "80px" },
+    "24": { "$value": "96px" }
+  },
+
+  "fontFamily": {
+    "$type": "fontFamily",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* ===== الطباعة (Typography) ===== */"], "prefix": "font", "oneTokenPerLine": true } },
+    "ui":      { "$value": "'Thmanyah Sans',system-ui,-apple-system,sans-serif" },
+    "display": { "$value": "'Thmanyah Serif','Thmanyah Sans',Georgia,serif" },
+    "mono":    { "$value": "'JetBrains Mono',ui-monospace,monospace" }
+  },
+
+  "textSize": {
+    "$type": "dimension",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* مقياس الأحجام (جديد — مطابق لقيم أصناف .t-*) */"], "prefix": "text", "noBlankBefore": true } },
+    "xs":   { "$value": "12px" },
+    "sm":   { "$value": "14px" },
+    "base": { "$value": "16px" },
+    "lg":   { "$value": "18px" },
+    "xl":   { "$value": "22px" },
+    "2xl":  { "$value": "30px" },
+    "3xl":  { "$value": "40px" },
+    "4xl":  { "$value": "54px" }
+  },
+
+  "leading": {
+    "$type": "number",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* ارتفاعات الأسطر (جديد) */"], "prefix": "leading", "noBlankBefore": true } },
+    "tight":   { "$value": "1.15" },
+    "snug":    { "$value": "1.25" },
+    "normal":  { "$value": "1.5" },
+    "relaxed": { "$value": "1.65" },
+    "loose":   { "$value": "1.7" }
+  },
+
+  "weight": {
+    "$type": "fontWeight",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* أوزان الخطّ (جديد) */"], "prefix": "weight", "noBlankBefore": true } },
+    "light":    { "$value": "300" },
+    "regular":  { "$value": "400" },
+    "medium":   { "$value": "500" },
+    "semibold": { "$value": "600" },
+    "bold":     { "$value": "700" },
+    "black":    { "$value": "800" }
+  },
+
+  "motion": {
+    "$extensions": {
+      "com.m7asmari.css": {
+        "comments": ["/* ===== الحركة (Motion) ===== */"],
+        "subgroupOrder": ["duration", "easing"]
+      }
+    },
+    "duration": {
+      "$type": "duration",
+      "$extensions": { "com.m7asmari.css": { "prefix": "" } },
+      "dur-fast": { "$value": "120ms" },
+      "dur":      { "$value": "180ms" },
+      "dur-slow": { "$value": "320ms" }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "$extensions": { "com.m7asmari.css": { "prefix": "" } },
+      "ease":        { "$value": "cubic-bezier(.4,0,.2,1)" },
+      "ease-out":    { "$value": "cubic-bezier(0,0,.2,1)" },
+      "ease-spring": { "$value": "cubic-bezier(.34,1.56,.64,1)" }
+    }
+  },
+
+  "zIndex": {
+    "$type": "number",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* ===== فهرس الطبقات (Z-index) ===== */"], "prefix": "z" } },
+    "base":     { "$value": "1" },
+    "dropdown": { "$value": "1000" },
+    "sticky":   { "$value": "1100" },
+    "drawer":   { "$value": "1200" },
+    "modal":    { "$value": "1300" },
+    "toast":    { "$value": "1400" },
+    "tooltip":  { "$value": "1500" }
+  },
+
+  "breakpoint": {
+    "$type": "dimension",
+    "$extensions": { "com.m7asmari.css": { "comments": ["/* ===== نقاط التوقّف (Breakpoints) — توثيقية (لا تُستهلك في @media مباشرة) ===== */"], "prefix": "bp" } },
+    "sm": { "$value": "480px" },
+    "md": { "$value": "768px" },
+    "lg": { "$value": "1024px" },
+    "xl": { "$value": "1320px" }
+  }
+}

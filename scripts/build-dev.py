@@ -35,8 +35,9 @@ _c = sorted(os.path.relpath(p, ROOT) for p in _glob0.glob(os.path.join(ROOT,'com
 import glob as _glob
 _s = sorted(os.path.relpath(p, ROOT) for p in _glob.glob(os.path.join(ROOT,'sections','**','*.jsx'), recursive=True))
 _p = sorted('patterns/'+x for x in os.listdir(os.path.join(ROOT,'patterns')) if x.endswith('.jsx')) if os.path.isdir(os.path.join(ROOT,'patterns')) else []
-_lib = ['app/lib/css.js', 'app/lib/a11y.js', 'app/lib/sort.js', 'app/lib/calendar.js', 'app/lib/themeTokens.js']
-order = _lib + _d + _c + _p + _s + ['app/chrome/TopBar.jsx','app/chrome/SideRail.jsx','app/chrome/Hero.jsx','app/chrome/CommandPalette.jsx','app/App.jsx']
+_lib = ['app/lib/css.js'] + sorted('app/lib/'+x for x in os.listdir(os.path.join(ROOT,'app','lib')) if x.endswith('.js') and x != 'css.js')
+_chrome = sorted('app/chrome/'+x for x in os.listdir(os.path.join(ROOT,'app','chrome')) if x.endswith('.jsx'))
+order = _lib + _d + _c + _p + _s + _chrome + ['app/App.jsx']
 parts = [strip(open(os.path.join(ROOT, p)).read()) for p in order]
 mount = '\n\nconst { createRoot } = ReactDOM;\ncreateRoot(document.getElementById("root")).render(<App />);\n'
 bundle = '\n\n'.join(parts) + mount

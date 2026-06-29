@@ -57,7 +57,7 @@ export default function Slider({ value, onChange, min = 0, max = 100, step = 1, 
         <span className="fill" style={{ width: pct + '%' }}></span>
         <span
           className="knob"
-          style={{ right: pct + '%' }}
+          style={{ insetInlineEnd: pct + '%' }}
           role="slider"
           tabIndex={0}
           aria-valuemin={min}

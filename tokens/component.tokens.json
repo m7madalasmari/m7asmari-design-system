@@ -1,0 +1,1276 @@
+{
+  "$description": "M7asmari Component Tokens (Layer 3/4) — DTCG / W3C Design Tokens source of truth. Regenerates tokens/component.css byte-identically via scripts/build-tokens.py. Component-scoped tokens derived from the semantic layer; applied to BOTH :root and .dark together (and a .dark override block) so semantic-referencing tokens re-resolve in dark mode. $value holds the exact CSS value (var()/color-mix()/hex verbatim); $extensions.com.m7asmari.css captures per-block selector, declaration order, exact declaration text and interleaved comments for byte-reproducibility. Values copied verbatim from the previous CSS (zero visual change).",
+  "$extensions": {
+    "com.m7asmari.css": {
+      "format": "blocks",
+      "header": [
+        "/* ============================================================================",
+        "   M7asmari — Component Tokens (Layer 3 / 4)",
+        "   ----------------------------------------------------------------------------",
+        "   توكنز مرتبطة بالمكوّنات، مشتقّة من الطبقة الدلالية (semantic.css).",
+        "   تستهلكها قواعد styles/components.css — فلا تشير المكوّنات لـ primitives/hex مباشرة.",
+        "   القيم المضبوطة يدويًا (حدود/نصوص التنبيهات) تُحفظ هنا في طبقة التوكنز، لا في القواعد."
+      ],
+      "blockOrder": [
+        "block-0",
+        "block-1"
+      ]
+    }
+  },
+  "block-0": {
+    "$extensions": {
+      "com.m7asmari.css": {
+        "selector": ":root, .dark",
+        "pre": [
+          "   مهم: يُطبَّق على `:root, .dark` معًا — لأن التوكنز التي تشير لدلاليّ متفاعل",
+          "   (var(--surface)…) تُحسب مرّة واحدة عند تعريفها؛ فلو عُرّفت في :root فقط لتجمّدت",
+          "   على قيم الوضع الفاتح ولم تتبع الوضع الداكن. إعادة تعريفها على .dark تُجبر",
+          "   إعادة حلّها مقابل دلاليّات الدارك.",
+          "   ============================================================================ */",
+          ""
+        ],
+        "lines": [
+          {
+            "raw": "  /* لون النص فوق التعبئات الزاهية (علامة/نجاح/ذهبي) — ثابت داكن لضمان التباين بالوضعين */"
+          },
+          {
+            "decls": [
+              "fg-on-accent"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== الزر (Button) ===== */"
+          },
+          {
+            "decls": [
+              "btn-radius"
+            ]
+          },
+          {
+            "decls": [
+              "btn-weight"
+            ]
+          },
+          {
+            "decls": [
+              "btn-primary-bg",
+              "btn-primary-fg",
+              "btn-primary-bg-hover"
+            ]
+          },
+          {
+            "raw": "  /* أزرار الإجراء: لون أعمق + نص أبيض (CTA واضح يمرّ WCAG AA — الأبيض على الزاهي يفشل) */"
+          },
+          {
+            "decls": [
+              "btn-brand-bg",
+              "btn-brand-fg",
+              "btn-brand-bg-hover"
+            ]
+          },
+          {
+            "decls": [
+              "btn-secondary-bg",
+              "btn-secondary-fg",
+              "btn-secondary-border",
+              "btn-secondary-bg-hover"
+            ]
+          },
+          {
+            "decls": [
+              "btn-ghost-fg",
+              "btn-ghost-bg-hover"
+            ]
+          },
+          {
+            "decls": [
+              "btn-outline-border",
+              "btn-outline-border-hover"
+            ]
+          },
+          {
+            "decls": [
+              "btn-danger-bg",
+              "btn-danger-fg",
+              "btn-danger-bg-hover"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== البطاقة (Card) ===== */"
+          },
+          {
+            "decls": [
+              "card-bg"
+            ]
+          },
+          {
+            "decls": [
+              "card-border"
+            ]
+          },
+          {
+            "decls": [
+              "card-radius"
+            ]
+          },
+          {
+            "decls": [
+              "card-shadow"
+            ]
+          },
+          {
+            "decls": [
+              "card-pad"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== الإدخال (Input) ===== */"
+          },
+          {
+            "decls": [
+              "input-bg"
+            ]
+          },
+          {
+            "decls": [
+              "input-fg"
+            ]
+          },
+          {
+            "decls": [
+              "input-border"
+            ]
+          },
+          {
+            "decls": [
+              "input-border-hover"
+            ]
+          },
+          {
+            "decls": [
+              "input-border-focus"
+            ]
+          },
+          {
+            "decls": [
+              "input-placeholder"
+            ]
+          },
+          {
+            "decls": [
+              "input-radius"
+            ]
+          },
+          {
+            "decls": [
+              "input-ring"
+            ]
+          },
+          {
+            "raw": "  /* حلقات التحقّق (خطأ/نجاح) — مشتقّة من حالة النظام بنسبة شفافية ثابتة (لا rgba خام في القواعد) */"
+          },
+          {
+            "decls": [
+              "input-ring-error"
+            ]
+          },
+          {
+            "decls": [
+              "input-ring-success"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== الجدول (Table) ===== */"
+          },
+          {
+            "decls": [
+              "table-header-bg"
+            ]
+          },
+          {
+            "decls": [
+              "table-header-fg"
+            ]
+          },
+          {
+            "decls": [
+              "table-cell-fg"
+            ]
+          },
+          {
+            "decls": [
+              "table-border"
+            ]
+          },
+          {
+            "decls": [
+              "table-row-hover"
+            ]
+          },
+          {
+            "decls": [
+              "table-radius"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== الشارة (Badge) ===== */"
+          },
+          {
+            "decls": [
+              "badge-radius"
+            ]
+          },
+          {
+            "decls": [
+              "badge-solid-fg"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== مؤشّر الاتجاه في بطاقة الإحصاء (Stat trend) ===== */"
+          },
+          {
+            "decls": [
+              "stat-trend-up"
+            ]
+          },
+          {
+            "decls": [
+              "stat-trend-flat"
+            ],
+            "trailing": "  /* أمبر أعمق من الأساس — مضبوط يدويًا */"
+          },
+          {
+            "decls": [
+              "stat-trend-down"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== التنقّل (Navigation) ===== */"
+          },
+          {
+            "decls": [
+              "nav-fg"
+            ]
+          },
+          {
+            "decls": [
+              "nav-hover-bg"
+            ]
+          },
+          {
+            "decls": [
+              "nav-hover-fg"
+            ]
+          },
+          {
+            "decls": [
+              "nav-active-bg"
+            ]
+          },
+          {
+            "decls": [
+              "nav-active-fg"
+            ]
+          },
+          {
+            "decls": [
+              "nav-radius"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== التنبيه (Alert) — تحمل الطبقة القيم المضبوطة يدويًا (border/text) ===== */"
+          },
+          {
+            "decls": [
+              "alert-radius"
+            ]
+          },
+          {
+            "decls": [
+              "alert-ok-bg",
+              "alert-ok-border",
+              "alert-ok-icon",
+              "alert-ok-title",
+              "alert-ok-text"
+            ]
+          },
+          {
+            "decls": [
+              "alert-warn-bg",
+              "alert-warn-border",
+              "alert-warn-icon",
+              "alert-warn-icon-fg",
+              "alert-warn-title",
+              "alert-warn-text"
+            ]
+          },
+          {
+            "decls": [
+              "alert-err-bg",
+              "alert-err-border",
+              "alert-err-icon",
+              "alert-err-title",
+              "alert-err-text"
+            ]
+          },
+          {
+            "decls": [
+              "alert-info-bg",
+              "alert-info-border",
+              "alert-info-icon",
+              "alert-info-title",
+              "alert-info-text"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== نص داكن على تعبئة الذهبي/التحذير ===== */"
+          },
+          {
+            "decls": [
+              "fg-on-warning"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== إشعار (Banner) + إرشادات افعل/لا تفعل — حدود مضبوطة يدويًا ===== */"
+          },
+          {
+            "decls": [
+              "banner-brand-border",
+              "banner-ok-border",
+              "banner-warn-border"
+            ]
+          },
+          {
+            "decls": [
+              "guide-do-border",
+              "guide-dont-border"
+            ]
+          },
+          {
+            "blank": true
+          },
+          {
+            "raw": "  /* ===== كتلة الكود — سطح داكن ثابت (مستقلّ عن السمة) ===== */"
+          },
+          {
+            "decls": [
+              "code-bg",
+              "code-fg",
+              "code-c1",
+              "code-c2",
+              "code-c3"
+            ]
+          }
+        ]
+      }
+    },
+    "fg-on-accent": {
+      "$value": "var(--neutral-900)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--fg-on-accent: var(--neutral-900);"
+        }
+      }
+    },
+    "btn-radius": {
+      "$value": "var(--radius-full)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-radius: var(--radius-full);"
+        }
+      }
+    },
+    "btn-weight": {
+      "$value": "var(--weight-bold)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-weight: var(--weight-bold);"
+        }
+      }
+    },
+    "btn-primary-bg": {
+      "$value": "var(--text-primary)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-primary-bg: var(--text-primary);  "
+        }
+      }
+    },
+    "btn-primary-fg": {
+      "$value": "var(--background)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-primary-fg: var(--background); "
+        }
+      }
+    },
+    "btn-primary-bg-hover": {
+      "$type": "color",
+      "$value": "#000",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-primary-bg-hover:#000;"
+        }
+      }
+    },
+    "btn-brand-bg": {
+      "$value": "var(--brand-700)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-brand-bg: var(--brand-700);       "
+        }
+      }
+    },
+    "btn-brand-fg": {
+      "$value": "var(--neutral-0)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-brand-fg: var(--neutral-0); "
+        }
+      }
+    },
+    "btn-brand-bg-hover": {
+      "$value": "var(--brand-800)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-brand-bg-hover: var(--brand-800);"
+        }
+      }
+    },
+    "btn-secondary-bg": {
+      "$value": "var(--surface-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-secondary-bg: var(--surface-muted); "
+        }
+      }
+    },
+    "btn-secondary-fg": {
+      "$value": "var(--text-primary)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-secondary-fg: var(--text-primary); "
+        }
+      }
+    },
+    "btn-secondary-border": {
+      "$value": "var(--border)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-secondary-border: var(--border); "
+        }
+      }
+    },
+    "btn-secondary-bg-hover": {
+      "$value": "var(--surface-elevated)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-secondary-bg-hover: var(--surface-elevated);"
+        }
+      }
+    },
+    "btn-ghost-fg": {
+      "$value": "var(--text-primary)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-ghost-fg: var(--text-primary);    "
+        }
+      }
+    },
+    "btn-ghost-bg-hover": {
+      "$value": "var(--surface-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-ghost-bg-hover: var(--surface-muted);"
+        }
+      }
+    },
+    "btn-outline-border": {
+      "$value": "var(--border-strong)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-outline-border: var(--border-strong); "
+        }
+      }
+    },
+    "btn-outline-border-hover": {
+      "$value": "var(--text-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-outline-border-hover: var(--text-muted);"
+        }
+      }
+    },
+    "btn-danger-bg": {
+      "$value": "var(--danger-600)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-danger-bg: var(--danger-600);     "
+        }
+      }
+    },
+    "btn-danger-fg": {
+      "$value": "var(--neutral-0)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-danger-fg: var(--neutral-0); "
+        }
+      }
+    },
+    "btn-danger-bg-hover": {
+      "$value": "var(--danger-700)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-danger-bg-hover: var(--danger-700);"
+        }
+      }
+    },
+    "card-bg": {
+      "$value": "var(--surface)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--card-bg: var(--surface);"
+        }
+      }
+    },
+    "card-border": {
+      "$value": "var(--border)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--card-border: var(--border);"
+        }
+      }
+    },
+    "card-radius": {
+      "$value": "var(--radius-lg)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--card-radius: var(--radius-lg);"
+        }
+      }
+    },
+    "card-shadow": {
+      "$value": "var(--shadow-sm)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--card-shadow: var(--shadow-sm);"
+        }
+      }
+    },
+    "card-pad": {
+      "$value": "var(--space-7)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--card-pad: var(--space-7);"
+        }
+      }
+    },
+    "input-bg": {
+      "$value": "var(--surface)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-bg: var(--surface);"
+        }
+      }
+    },
+    "input-fg": {
+      "$value": "var(--text-primary)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-fg: var(--text-primary);"
+        }
+      }
+    },
+    "input-border": {
+      "$value": "var(--border-strong)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-border: var(--border-strong);"
+        }
+      }
+    },
+    "input-border-hover": {
+      "$value": "var(--text-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-border-hover: var(--text-muted);"
+        }
+      }
+    },
+    "input-border-focus": {
+      "$value": "var(--brand)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-border-focus: var(--brand);"
+        }
+      }
+    },
+    "input-placeholder": {
+      "$value": "var(--text-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-placeholder: var(--text-muted);"
+        }
+      }
+    },
+    "input-radius": {
+      "$value": "var(--radius-md)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-radius: var(--radius-md);"
+        }
+      }
+    },
+    "input-ring": {
+      "$value": "var(--focus-ring)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-ring: var(--focus-ring);"
+        }
+      }
+    },
+    "input-ring-error": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, var(--danger) 10%, transparent)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-ring-error: color-mix(in srgb, var(--danger) 10%, transparent);"
+        }
+      }
+    },
+    "input-ring-success": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, var(--success) 10%, transparent)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--input-ring-success: color-mix(in srgb, var(--success) 10%, transparent);"
+        }
+      }
+    },
+    "table-header-bg": {
+      "$value": "var(--surface-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--table-header-bg: var(--surface-muted);"
+        }
+      }
+    },
+    "table-header-fg": {
+      "$value": "var(--text-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--table-header-fg: var(--text-muted);"
+        }
+      }
+    },
+    "table-cell-fg": {
+      "$value": "var(--text-secondary)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--table-cell-fg: var(--text-secondary);"
+        }
+      }
+    },
+    "table-border": {
+      "$value": "var(--border)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--table-border: var(--border);"
+        }
+      }
+    },
+    "table-row-hover": {
+      "$value": "var(--surface-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--table-row-hover: var(--surface-muted);"
+        }
+      }
+    },
+    "table-radius": {
+      "$value": "var(--radius-lg)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--table-radius: var(--radius-lg);"
+        }
+      }
+    },
+    "badge-radius": {
+      "$value": "var(--radius-full)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--badge-radius: var(--radius-full);"
+        }
+      }
+    },
+    "badge-solid-fg": {
+      "$value": "var(--fg-on-accent)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--badge-solid-fg: var(--fg-on-accent);"
+        }
+      }
+    },
+    "stat-trend-up": {
+      "$value": "var(--success)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--stat-trend-up:   var(--success);"
+        }
+      }
+    },
+    "stat-trend-flat": {
+      "$value": "var(--warning-600)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--stat-trend-flat: var(--warning-600);"
+        }
+      }
+    },
+    "stat-trend-down": {
+      "$value": "var(--danger)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--stat-trend-down: var(--danger);"
+        }
+      }
+    },
+    "nav-fg": {
+      "$value": "var(--text-secondary)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--nav-fg: var(--text-secondary);"
+        }
+      }
+    },
+    "nav-hover-bg": {
+      "$value": "var(--surface-muted)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--nav-hover-bg: var(--surface-muted);"
+        }
+      }
+    },
+    "nav-hover-fg": {
+      "$value": "var(--text-primary)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--nav-hover-fg: var(--text-primary);"
+        }
+      }
+    },
+    "nav-active-bg": {
+      "$value": "var(--brand-soft)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--nav-active-bg: var(--brand-soft);"
+        }
+      }
+    },
+    "nav-active-fg": {
+      "$value": "var(--brand-ink)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--nav-active-fg: var(--brand-ink);"
+        }
+      }
+    },
+    "nav-radius": {
+      "$value": "var(--radius-md)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--nav-radius: var(--radius-md);"
+        }
+      }
+    },
+    "alert-radius": {
+      "$value": "var(--radius-md)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-radius: var(--radius-md);"
+        }
+      }
+    },
+    "alert-ok-bg": {
+      "$value": "var(--success-soft)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-ok-bg: var(--success-soft);   "
+        }
+      }
+    },
+    "alert-ok-border": {
+      "$type": "color",
+      "$value": "#bfe9d3",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-ok-border:#bfe9d3;   "
+        }
+      }
+    },
+    "alert-ok-icon": {
+      "$value": "var(--success)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-ok-icon: var(--success);   "
+        }
+      }
+    },
+    "alert-ok-title": {
+      "$value": "var(--success-ink)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-ok-title: var(--success-ink);   "
+        }
+      }
+    },
+    "alert-ok-text": {
+      "$value": "var(--success-ink)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-ok-text: var(--success-ink);"
+        }
+      }
+    },
+    "alert-warn-bg": {
+      "$value": "var(--warning-soft)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-bg: var(--warning-soft); "
+        }
+      }
+    },
+    "alert-warn-border": {
+      "$type": "color",
+      "$value": "#f3dca5",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-border:#f3dca5; "
+        }
+      }
+    },
+    "alert-warn-icon": {
+      "$value": "var(--warning)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-icon: var(--warning); "
+        }
+      }
+    },
+    "alert-warn-icon-fg": {
+      "$type": "color",
+      "$value": "#3f2305",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-icon-fg:#3f2305; "
+        }
+      }
+    },
+    "alert-warn-title": {
+      "$value": "var(--warning-ink)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-title: var(--warning-ink); "
+        }
+      }
+    },
+    "alert-warn-text": {
+      "$value": "var(--warning-800)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-text: var(--warning-800);"
+        }
+      }
+    },
+    "alert-err-bg": {
+      "$value": "var(--danger-soft)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-err-bg: var(--danger-soft);   "
+        }
+      }
+    },
+    "alert-err-border": {
+      "$type": "color",
+      "$value": "#fbc9bc",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-err-border:#fbc9bc;  "
+        }
+      }
+    },
+    "alert-err-icon": {
+      "$value": "var(--danger)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-err-icon: var(--danger);   "
+        }
+      }
+    },
+    "alert-err-title": {
+      "$value": "var(--danger-ink)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-err-title: var(--danger-ink);   "
+        }
+      }
+    },
+    "alert-err-text": {
+      "$type": "color",
+      "$value": "#b8290c",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-err-text:#b8290c;"
+        }
+      }
+    },
+    "alert-info-bg": {
+      "$value": "var(--brand-soft)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-info-bg: var(--brand-soft);   "
+        }
+      }
+    },
+    "alert-info-border": {
+      "$type": "color",
+      "$value": "#b8e6fb",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-info-border:#b8e6fb; "
+        }
+      }
+    },
+    "alert-info-icon": {
+      "$value": "var(--brand)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-info-icon: var(--brand);   "
+        }
+      }
+    },
+    "alert-info-title": {
+      "$value": "var(--brand-ink)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-info-title: var(--brand-ink);   "
+        }
+      }
+    },
+    "alert-info-text": {
+      "$type": "color",
+      "$value": "#0a6f9e",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-info-text:#0a6f9e;"
+        }
+      }
+    },
+    "fg-on-warning": {
+      "$value": "var(--warning-950)",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--fg-on-warning: var(--warning-950);"
+        }
+      }
+    },
+    "banner-brand-border": {
+      "$type": "color",
+      "$value": "#9bd8f7",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--banner-brand-border:#9bd8f7; "
+        }
+      }
+    },
+    "banner-ok-border": {
+      "$type": "color",
+      "$value": "#aee3c8",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--banner-ok-border:#aee3c8; "
+        }
+      }
+    },
+    "banner-warn-border": {
+      "$type": "color",
+      "$value": "#f0d28f",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--banner-warn-border:#f0d28f;"
+        }
+      }
+    },
+    "guide-do-border": {
+      "$type": "color",
+      "$value": "#aee3c8",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--guide-do-border:#aee3c8; "
+        }
+      }
+    },
+    "guide-dont-border": {
+      "$type": "color",
+      "$value": "#f6c4b6",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--guide-dont-border:#f6c4b6;"
+        }
+      }
+    },
+    "code-bg": {
+      "$type": "color",
+      "$value": "#16161a",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--code-bg:#16161a; "
+        }
+      }
+    },
+    "code-fg": {
+      "$type": "color",
+      "$value": "#e8e6e0",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--code-fg:#e8e6e0; "
+        }
+      }
+    },
+    "code-c1": {
+      "$type": "color",
+      "$value": "#7fd0ff",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--code-c1:#7fd0ff; "
+        }
+      }
+    },
+    "code-c2": {
+      "$type": "color",
+      "$value": "#16bd74",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--code-c2:#16bd74; "
+        }
+      }
+    },
+    "code-c3": {
+      "$type": "color",
+      "$value": "#f5a623",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--code-c3:#f5a623;"
+        }
+      }
+    }
+  },
+  "block-1": {
+    "$extensions": {
+      "com.m7asmari.css": {
+        "selector": ".dark",
+        "pre": [
+          "/* الوضع الداكن: قيم مكوّنات خاصّة بالداكن */"
+        ],
+        "lines": [
+          {
+            "decls": [
+              "btn-primary-bg-hover"
+            ]
+          },
+          {
+            "decls": [
+              "alert-ok-text",
+              "alert-warn-text",
+              "alert-err-text",
+              "alert-info-text"
+            ]
+          },
+          {
+            "raw": "  /* حدود التنبيهات: نغمة داكنة ملائمة بدل اللون الفاتح الثابت */"
+          },
+          {
+            "decls": [
+              "alert-ok-border",
+              "alert-warn-border",
+              "alert-err-border",
+              "alert-info-border"
+            ]
+          },
+          {
+            "raw": "  /* حدود البانر + افعل/لا تفعل: نفس منطق الدارك (لا تتجمّد على الفاتح فوق خلفيات داكنة) */"
+          },
+          {
+            "decls": [
+              "banner-brand-border",
+              "banner-ok-border",
+              "banner-warn-border"
+            ]
+          },
+          {
+            "decls": [
+              "guide-do-border",
+              "guide-dont-border"
+            ]
+          }
+        ]
+      }
+    },
+    "btn-primary-bg-hover": {
+      "$type": "color",
+      "$value": "#d8d4cc",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--btn-primary-bg-hover:#d8d4cc;"
+        }
+      }
+    },
+    "alert-ok-text": {
+      "$type": "color",
+      "$value": "#8fd9b3",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-ok-text:#8fd9b3; "
+        }
+      }
+    },
+    "alert-warn-text": {
+      "$type": "color",
+      "$value": "#ecca82",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-text:#ecca82; "
+        }
+      }
+    },
+    "alert-err-text": {
+      "$type": "color",
+      "$value": "#f5a892",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-err-text:#f5a892; "
+        }
+      }
+    },
+    "alert-info-text": {
+      "$type": "color",
+      "$value": "#93cdf0",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-info-text:#93cdf0;"
+        }
+      }
+    },
+    "alert-ok-border": {
+      "$type": "color",
+      "$value": "#1d4d33",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-ok-border:#1d4d33; "
+        }
+      }
+    },
+    "alert-warn-border": {
+      "$type": "color",
+      "$value": "#4d3a12",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-warn-border:#4d3a12; "
+        }
+      }
+    },
+    "alert-err-border": {
+      "$type": "color",
+      "$value": "#5c2418",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-err-border:#5c2418; "
+        }
+      }
+    },
+    "alert-info-border": {
+      "$type": "color",
+      "$value": "#1d4a6b",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--alert-info-border:#1d4a6b;"
+        }
+      }
+    },
+    "banner-brand-border": {
+      "$type": "color",
+      "$value": "#1d4a6b",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--banner-brand-border:#1d4a6b; "
+        }
+      }
+    },
+    "banner-ok-border": {
+      "$type": "color",
+      "$value": "#1d4d33",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--banner-ok-border:#1d4d33; "
+        }
+      }
+    },
+    "banner-warn-border": {
+      "$type": "color",
+      "$value": "#4d3a12",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--banner-warn-border:#4d3a12;"
+        }
+      }
+    },
+    "guide-do-border": {
+      "$type": "color",
+      "$value": "#1d4d33",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--guide-do-border:#1d4d33; "
+        }
+      }
+    },
+    "guide-dont-border": {
+      "$type": "color",
+      "$value": "#5c2418",
+      "$extensions": {
+        "com.m7asmari.css": {
+          "decl": "--guide-dont-border:#5c2418;"
+        }
+      }
+    }
+  }
+}
